@@ -1,0 +1,5 @@
+# sourced from .bashrc
+alias vi=nvim
+alias vim=nvim
+alias cm=chezmoi
+alias gs="git status"

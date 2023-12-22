@@ -1,0 +1,32 @@
+# Sample .bashrc for SUSE Linux
+# Copyright (c) SUSE Software Solutions Germany GmbH
+
+# There are 3 different types of shells in bash: the login shell, normal shell
+# and interactive shell. Login shells read ~/.profile and interactive shells
+# read ~/.bashrc; in our setup, /etc/profile sources ~/.bashrc - thus all
+# settings made here will also take effect in a login shell.
+#
+# NOTE: It is recommended to make language settings in ~/.profile rather than
+# here, since multilingual X sessions would not work properly if LANG is over-
+# ridden in every subshell.
+
+test -s ~/.alias && . ~/.alias || true
+
+# don't otherwise muck with root's environment, we shouldn't be running
+# user apps from there anyway
+if [ $USER != "root" ]; then
+	# nodejs - global packages per user, avoids need for sudo in: npm i -g <pkgname>
+	# https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally
+	# export NPM_CONFIG_PREFIX=~/.npm-global
+
+	mkdir -p $HOME/go/bin
+	# mkdir -p $HOME/go/bin $HOME/.cargo/bin
+	# PATH="$PATH:$HOME/go/bin:$NPM_CONFIG_PREFIX/bin:$HOME/.local/bin:$HOME/.cargo/bin"
+	PATH="$PATH:$HOME/go/bin"
+	export PATH
+
+	# source any private keys and such
+	if [ -f "$HOME/.env" ]; then
+		. $HOME/.env
+	fi
+fi

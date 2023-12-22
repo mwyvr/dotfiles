@@ -1,0 +1,14 @@
+# vim
+.sw[a-p]
+.*.sw[a-p]
+Session.vim
+.netrwhist
+spell.en.add
+
+# never add .env
+.env
+
+# nonsense gtk file
+.config/gtk-3.0/bookmarks
+
+node_modules
