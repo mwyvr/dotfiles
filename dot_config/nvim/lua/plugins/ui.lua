@@ -5,7 +5,7 @@ return {
     config = function()
       require("nightfox").setup({
         options = {
-          transparent = true, -- dotfiles/wallpaper/darkblue-left.jpg
+          -- transparent = true, -- dotfiles/wallpaper/darkblue-left.jpg
           styles = {
             comments = "italic",
             -- keywords = "bold",
@@ -19,12 +19,11 @@ return {
         },
         groups = {
           nordfox = {
-            CursorLine = { bg = "#20242c" }, -- works with transparent bg
+            -- CursorLine = { bg = "#20242c" }, -- works with transparent bg
+            CursorLine = { bg = "#10141c" }, -- works with non-trans bg
           },
         },
       })
-      -- non LazyVim way to do it:
-      -- vim.cmd([[colorscheme nordfox]])
     end,
   },
 
