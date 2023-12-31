@@ -19,8 +19,7 @@ return {
         },
         groups = {
           nordfox = {
-            -- CursorLine = { bg = "#20242c" }, -- works with transparent bg
-            CursorLine = { bg = "#10141c" }, -- works with non-trans bg
+            CursorLine = { bg = "#1a1d23" }, -- 10% darker than bg, works with non-trans bg
           },
         },
       })
@@ -31,7 +30,7 @@ return {
   {
     "rcarriga/nvim-notify",
     opts = {
-      background_colour = "#20242c",
+      background_colour = "#1a1d23",
       -- default causes too many popups, making it easy to end up with focus
       -- in the notify window itself, so dial it back to more important notices
       level = vim.log.levels.WARN,
