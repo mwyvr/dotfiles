@@ -30,3 +30,6 @@ if [ $USER != "root" ]; then
 		. $HOME/.env
 	fi
 fi
+
+# used in libvirtd-container
+export LIBVIRT_DEFAULT_URI='qemu:///system'
