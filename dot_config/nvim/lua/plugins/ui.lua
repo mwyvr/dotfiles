@@ -5,7 +5,7 @@ return {
     config = function()
       require("nightfox").setup({
         options = {
-          -- transparent = true, -- dotfiles/wallpaper/darkblue-left.jpg
+          transparent = true, -- dotfiles/wallpaper/darkblue-left.jpg
           styles = {
             comments = "italic",
             -- keywords = "bold",
