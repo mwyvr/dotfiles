@@ -3,9 +3,22 @@ return {
     "williamboman/mason.nvim",
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
+      -- golang
       vim.list_extend(opts.ensure_installed, { "goimports", "gofumpt" })
-      vim.list_extend(opts.ensure_installed, { "gomodifytags", "impl", "json-lsp" })
+      vim.list_extend(opts.ensure_installed, { "gomodifytags", "impl" })
       vim.list_extend(opts.ensure_installed, { "delve" })
+    end,
+  },
+  {
+    "nvimtools/none-ls.nvim",
+    opts = function(_, opts)
+      local nls = require("null-ls")
+      opts.sources = vim.list_extend(opts.sources or {}, {
+        nls.builtins.code_actions.gomodifytags,
+        nls.builtins.code_actions.impl,
+        nls.builtins.formatting.goimports,
+        nls.builtins.formatting.gofumpt,
+      })
     end,
   },
   -- {
@@ -68,4 +81,3 @@ return {
 --       },
 --     },
 --   },
--- }
