@@ -1,5 +1,4 @@
 # sourced from .bashrc
-alias vi=nvim
-alias vim=nvim
+alias la='ls -la --color=auto' 2>/dev/null
 alias cm=chezmoi
 alias gs="git status"
