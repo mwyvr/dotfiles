@@ -1,4 +1,5 @@
-# User-specific environment
+# User-specific environment and PATHs, sourced by bash and other shells
+#
 # if not root
 if [ "$(id -u)" -ne 0 ]; then
 	# nodejs - global packages per user, avoids need for sudo in: npm i -g <pkgname>
