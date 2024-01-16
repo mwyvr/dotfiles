@@ -5,8 +5,10 @@ Session.vim
 .netrwhist
 spell.en.add
 
-# never add .env
+# never add .env, may contain secrets or local-only config
 .env
+# ensure chezmoi  dot_ file doesn't accidentally get pushed or added
+dot_env
 
 # nonsense gtk file
 .config/gtk-3.0/bookmarks
