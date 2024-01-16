@@ -1,4 +1,5 @@
-# User-specific environment and PATHs, sourced by bash and other shells
+# User-specific environment and PATHs, sourced by bash and other shells.
+# See notes in ~/.bash_profile.
 #
 # if not root
 if [ "$(id -u)" -ne 0 ]; then

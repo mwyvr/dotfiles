@@ -1,12 +1,25 @@
-# .bash_profile 
+# .bash_profile for Void Linux (and others)
 #
-# When Bash is invoked as an interactive login shell, or as a non-interactive
-# shell with the --login option, it first reads and executes commands from the
-# file /etc/profile, if that file exists. After reading that file, it looks for
-# ~/.bash_profile, ~/.bash_login, and ~/.profile, in that order, and reads and
-# executes commands from the first one that exists and is readable. 
+# Non-bash related setup (i.e. PATH, env variables and functions to be
+# available in any shell) should be defined in either a user ~/.profile or the
+# system /etc/profile.
 #
-# Paths and variables, not specific to bash
+# When invoked as an interactive login shell, or as a non-interactive shell
+# with the --login option, Bash reads and executes commands from the first file
+# (if any exist) found in the following order:
+#
+#   /etc/profile
+#   ~/.bash_profile
+#   ~/.bash_login
+#   ~/.profile
+#
+# Because of this read-only-the-first behaviour, we include ~/.profile.
+#
+# When invoked as an interactive non-login shell, such as a terminal window
+# within Gnome, Bash reads and executes ~/.bashrc.
+
+# Paths and variables, not specific to bash or any other shell
 [ -f "$HOME/.profile" ] && . "$HOME/.profile"
-# Get the aliases and functions
+
+# Source for our aliases and functions
 [ -f $HOME/.bashrc ] && . $HOME/.bashrc

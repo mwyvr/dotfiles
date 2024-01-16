@@ -1,6 +1,5 @@
 # .bashrc for Void Linux (and others)
-#
-# PATH and env variables should be defined in ~/.profile and system profile
+# See notes in ~/.bash_profile.
 #
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -8,4 +7,5 @@
 # source alias
 test -s ~/.alias && . ~/.alias || true
 
+# prompt
 PS1='[\u@\h \W]\$ '
