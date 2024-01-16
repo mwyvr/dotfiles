@@ -7,5 +7,5 @@ alias ls='ls --color=auto' 2>/dev/null
 alias cm=chezmoi
 alias gs="git status"
 alias gc="git commit"
-alias gp="git pull"
-alias gu="git push"
+alias gu="git pull" # "think git update local"
+alias gp="git push"
