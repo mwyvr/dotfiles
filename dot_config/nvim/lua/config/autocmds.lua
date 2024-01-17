@@ -10,3 +10,9 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.tabstop = 2
   end,
 })
+
+-- run `chezmoi apply` on save
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = { "~/.local/share/chezmoi/*" },
+  command = 'chezmoi apply --source-path "%"',
+})
