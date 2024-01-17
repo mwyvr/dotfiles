@@ -1,0 +1,18 @@
+$include /etc/inputrc
+
+# All that really matters: vi mode for the win
+set editing-mode vi
+# avoid accidentally popping into vi when editing commandline 
+set keymap vi-command
+v: ""
+
+# do not beep or flash at me when I have an "error"
+set bell-style none
+
+set colored-stats On
+set completion-ignore-case On
+set completion-prefix-display-length 3
+set mark-symlinked-directories On
+set show-all-if-ambiguous On
+set show-all-if-unmodified On
+set visible-stats On
