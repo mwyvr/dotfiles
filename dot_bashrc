@@ -8,4 +8,8 @@
 test -s ~/.alias && . ~/.alias || true
 
 # prompt
-PS1='[\u@\h \W]\$ '
+if [ "$(id -u)" -ne 0 ]; then
+  PS1='[\u@\h \w]\$ '
+else
+  PS1='[\[\e[31m\]\u@\h \w\[\e[0m\]]'
+fi
