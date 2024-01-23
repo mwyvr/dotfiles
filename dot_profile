@@ -12,7 +12,7 @@ if [ "$(id -u)" -ne 0 ]; then
 	mkdir -p $HOME/go/bin
 	# mkdir -p $HOME/go/bin $HOME/.cargo/bin
 	# PATH="$PATH:$HOME/go/bin:$NPM_CONFIG_PREFIX/bin:$HOME/.local/bin:$HOME/.cargo/bin"
-	PATH="$PATH:$HOME/go/bin"
+	PATH="$PATH:$HOME/go/bin:$HOME/.local/bin"
 	export PATH
 
 	# source any private keys and such
