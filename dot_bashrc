@@ -10,8 +10,8 @@ test -s ~/.alias && . ~/.alias || true
 
 # prompt
 if [ "$(id -u)" -ne 0 ]; then
-	#root``
-	PS1='[\[\e[32m\]\u@\h \w\[\e[0m\]]\\# '
+	PS1='[\[\e[32m\]\u@\h \w\[\e[0m\]]\\$ '
 else
-	PS1='[\[\e[31m\]\u@\h \w\[\e[0m\]]\\$ '
+	#root
+	PS1='[\[\e[31m\]\u@\h \w\[\e[0m\]]\# '
 fi
