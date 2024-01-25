@@ -1,10 +1,11 @@
 # User-specific environment and PATHs, sourced by bash and other shells.
 # See notes in ~/.bash_profile.
-#
+
+export LIBVIRT_DEFAULT_URI="qemu:///system"
+
 # if not root
 if [ "$(id -u)" -ne 0 ]; then
-    ADW_DISABLE_PORTAL=1
-    export ADW_DISABLE_PORTAL
+    export ADW_DISABLE_PORTAL=1
 	# nodejs - global packages per user, avoids need for sudo in: npm i -g <pkgname>
 	# https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally
 	# export NPM_CONFIG_PREFIX=~/.npm-global
@@ -21,5 +22,3 @@ if [ "$(id -u)" -ne 0 ]; then
 	fi
 fi
 
-# used in libvirtd-container when running the core from a container
-# export LIBVIRT_DEFAULT_URI='qemu:///system'
