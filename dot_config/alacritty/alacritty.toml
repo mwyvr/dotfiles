@@ -7,7 +7,7 @@ opacity = 0.95
 [cursor]
 style = "Block"
 [font]
-size = 10
+size = 11
 
 [font.normal]
 family = "Roboto Mono Nerd Font Mono"
@@ -22,7 +22,7 @@ style = "Bold Italic"
 [font.italic]
 style = "Italic"
 
-# [font.offset]
+[font.offset]
 # # vertical spacing, some fonts need a bit of compression
-# y = -1
+y = -2
 #
