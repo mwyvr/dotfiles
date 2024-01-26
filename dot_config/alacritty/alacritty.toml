@@ -11,18 +11,8 @@ size = 11
 
 [font.normal]
 family = "monospace"
-style = "Regular"
-
-[font.bold]
-style = "Bold"
-
-[font.bold_italic]
-style = "Bold Italic"
-
-[font.italic]
-style = "Italic"
 
 [font.offset]
-# # vertical spacing, some fonts need a bit of compression
-# y = -2
+# # vertical spacing, normalizing with foot setup
+y = -2
 #
