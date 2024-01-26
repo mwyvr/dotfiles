@@ -1,6 +1,8 @@
 #!/bin/bash
 # emptty text mode display manager (Void Linux: xbps-install emptty)
 # https://github.com/tvrzna/emptty
+# TODO move this to a script called by a dwl.desktop file
+#
 # Starts the dwl window manager and supporting services
 Environment=wayland
 
@@ -9,11 +11,8 @@ eval $(/usr/bin/gnome-keyring-daemon --start)
 export SSH_AUTH_SOCK
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 
-# audio, screen sharing and more
 pipewire &
-# custom content for status bar
+# content for status bar
 someblocks &
-#~ wallpaper - link defaultbg to your choice
 wbg $HOME/.config/wallpaper/defaultbg &
-# dwl window manager and status bar
-dbus-launch dwl -s somebar
+dbus-run-session dwl -s somebar
