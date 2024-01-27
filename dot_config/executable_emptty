@@ -11,8 +11,7 @@ eval $(/usr/bin/gnome-keyring-daemon --start)
 export SSH_AUTH_SOCK
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 
-pipewire &
 # content for status bar
-someblocks &
-wbg $HOME/.config/wallpaper/defaultbg &
+# someblocks &
+# wbg $HOME/.config/wallpaper/defaultbg &
 dbus-run-session dwl -s somebar
