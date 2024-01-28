@@ -6,12 +6,14 @@
 # Starts the dwl window manager and supporting services
 Environment=wayland
 
+# cleanup of any stragglers
+pkill pipewire
+
 # --start connects to already running daemon or starts it
 eval $(/usr/bin/gnome-keyring-daemon --start)
 export SSH_AUTH_SOCK
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 
 # content for status bar
-# someblocks &
-# wbg $HOME/.config/wallpaper/defaultbg &
+# swaybg --image=$HOME/.config/wallpaper/defaultbg &
 dbus-run-session dwl -s somebar
