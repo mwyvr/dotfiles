@@ -15,4 +15,4 @@ family = "monospace"
 [font.offset]
 # # vertical spacing, normalizing with foot setup
 y = -2
-#
+
