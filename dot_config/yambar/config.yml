@@ -1,0 +1,244 @@
+bar:
+  height: 32
+  location: top
+  background: 1f232caa
+  foreground: 81a1c1ff
+  spacing: 8
+  font: sans:size=15
+
+
+  right:
+    - pipewire:
+        content:
+          - map:
+              conditions:
+                muted: {string: {text: "󰖁"}}
+    - network:
+        name: enp0s20f0u3
+        poll-interval: 30000
+        content:
+          - map:
+              default: {empty: {}}
+              conditions:
+                ~carrier: {empty: {}}
+                carrier:
+                    - string: {text: "󰈁"}
+    - network:
+        name: wlp0s20f3
+        poll-interval: 30000
+        content:
+          - map:
+              conditions:
+                state == down:
+                  - string: {text: "󰤮"}
+                state == up:
+                  - ramp:
+                      tag: signal
+                      min: -90
+                      max: -30
+                      items:
+                        - string: {text: "󰤯"}
+                        - string: {text: "󰤟"}
+                        - string: {text: "󰤢"}
+                        - string: {text: "󰤥"}
+                        - string: {text: "󰤨"}
+                  - string: {text: " {ssid}", left-margin: 2}
+    - battery:
+        name: BAT0
+        poll-interval: 30000
+        anchors:
+          discharging: &discharging
+            list:
+              items:
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: 󰂎, foreground: ff0000ff, }
+                      - string: {text: 󰁺, foreground: ffa600ff, }
+                      - string: {text: 󰁻, }
+                      - string: {text: 󰁼, }
+                      - string: {text: 󰁽, }
+                      - string: {text: 󰁾, }
+                      - string: {text: 󰁿, }
+                      - string: {text: 󰂀, }
+                      - string: {text: 󰂁, }
+                      - string: {text: 󰂂, }
+                      - string: {text: 󰁹, }
+                - string: {text: " {capacity}%"}
+        content:
+          map:
+            conditions:
+              state == unknown:
+                <<: *discharging
+              state == discharging:
+                <<: *discharging
+              state == charging:
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: 󰢜, foreground: bf616aff, }
+                      - string: {text: 󰂆, foreground: d06f79ff, }
+                      - string: {text: 󰂇, foreground: d9b262ff}
+                      - string: {text: 󰂈, }
+                      - string: {text: 󰢝, }
+                      - string: {text: 󰂉, }
+                      - string: {text: 󰢞, }
+                      - string: {text: 󰂊, }
+                      - string: {text: 󰂋, }
+                      - string: {text: 󰂅, }
+                - string: {text: " {capacity}%"}
+              state == full:
+                - string: {text: 󰁹}
+                - string: {text: " {capacity}%"}
+              state == "not charging":
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: 󰢜, }
+                      - string: {text: 󰂆, }
+                      - string: {text: 󰂇, }
+                      - string: {text: 󰂈, }
+                      - string: {text: 󰢝, }
+                      - string: {text: 󰂉, }
+                      - string: {text: 󰢞, }
+                      - string: {text: 󰂊, }
+                      - string: {text: 󰂋, }
+                      - string: {text: 󰂅, }
+                      - string: {text: 󰁹, }
+                - string: {text: " {capacity}%"}
+    - clock:
+        date-format: "%A %b %e %H:%M"
+        content:
+          - string: {text: " {date}", right-margin: 2 }
+  left:
+    - script:
+        path: /home/mw/.local/bin/dwl-tags.sh
+        args: [1]
+        anchors:
+          - occupied: &occupied {foreground: 668aabff}
+          - focused: &focused {foreground: ebcb8bff}
+          - default: &default {foreground: 668aab55}
+        content:
+          - map:
+              margin: 4
+              conditions:
+                tag_0_occupied:
+                  map:
+                    conditions:
+                      tag_0_focused: {string: {text: "{tag_0}", <<: *focused}}
+                      ~tag_0_focused: {string: {text: "{tag_0}", <<: *occupied}}
+                ~tag_0_occupied:
+                  map:
+                    conditions:
+                      tag_0_focused: {string: {text: "{tag_0}", <<: *focused}}
+                      ~tag_0_focused: {string: {text: "{tag_0}", <<: *default}}
+          - map:
+              margin: 4
+              conditions:
+                tag_1_occupied:
+                  map:
+                    conditions:
+                      tag_1_focused: {string: {text: "{tag_1}", <<: *focused}}
+                      ~tag_1_focused: {string: {text: "{tag_1}", <<: *occupied}}
+                ~tag_1_occupied:
+                  map:
+                    conditions:
+                      tag_1_focused: {string: {text: "{tag_1}", <<: *focused}}
+                      ~tag_1_focused: {string: {text: "{tag_1}", <<: *default}}
+          - map:
+              margin: 4
+              conditions:
+                tag_2_occupied:
+                  map:
+                    conditions:
+                      tag_2_focused: {string: {text: "{tag_2}", <<: *focused}}
+                      ~tag_2_focused: {string: {text: "{tag_2}", <<: *occupied}}
+                ~tag_2_occupied:
+                  map:
+                    conditions:
+                      tag_2_focused: {string: {text: "{tag_2}", <<: *focused}}
+                      ~tag_2_focused: {string: {text: "{tag_2}", <<: *default}}
+          - map:
+              margin: 4
+              conditions:
+                tag_3_occupied:
+                  map:
+                    conditions:
+                      tag_3_focused: {string: {text: "{tag_3}", <<: *focused}}
+                      ~tag_3_focused: {string: {text: "{tag_3}", <<: *occupied}}
+                ~tag_3_occupied:
+                  map:
+                    conditions:
+                      tag_3_focused: {string: {text: "{tag_3}", <<: *focused}}
+                      ~tag_3_focused: {string: {text: "{tag_3}", <<: *default}}
+          - map:
+              margin: 4
+              conditions:
+                tag_4_occupied:
+                  map:
+                    conditions:
+                      tag_4_focused: {string: {text: "{tag_4}", <<: *focused}}
+                      ~tag_4_focused: {string: {text: "{tag_4}", <<: *occupied}}
+                ~tag_4_occupied:
+                  map:
+                    conditions:
+                      tag_4_focused: {string: {text: "{tag_4}", <<: *focused}}
+                      ~tag_4_focused: {string: {text: "{tag_4}", <<: *default}}
+          - map:
+              margin: 4
+              conditions:
+                tag_5_occupied:
+                  map:
+                    conditions:
+                      tag_5_focused: {string: {text: "{tag_5}", <<: *focused}}
+                      ~tag_5_focused: {string: {text: "{tag_5}", <<: *occupied}}
+                ~tag_5_occupied:
+                  map:
+                    conditions:
+                      tag_5_focused: {string: {text: "{tag_5}", <<: *focused}}
+                      ~tag_5_focused: {string: {text: "{tag_5}", <<: *default}}
+          - map:
+              margin: 4
+              conditions:
+                tag_6_occupied:
+                  map:
+                    conditions:
+                      tag_6_focused: {string: {text: "{tag_6}", <<: *focused}}
+                      ~tag_6_focused: {string: {text: "{tag_6}", <<: *occupied}}
+                ~tag_6_occupied:
+                  map:
+                    conditions:
+                      tag_6_focused: {string: {text: "{tag_6}", <<: *focused}}
+                      ~tag_6_focused: {string: {text: "{tag_6}", <<: *default}}
+          - map:
+              margin: 4
+              conditions:
+                tag_7_occupied:
+                  map:
+                    conditions:
+                      tag_7_focused: {string: {text: "{tag_7}", <<: *focused}}
+                      ~tag_7_focused: {string: {text: "{tag_7}", <<: *occupied}}
+                ~tag_7_occupied:
+                  map:
+                    conditions:
+                      tag_7_focused: {string: {text: "{tag_7}", <<: *focused}}
+                      ~tag_7_focused: {string: {text: "{tag_7}", <<: *default}}
+          - map:
+              margin: 4
+              conditions:
+                tag_8_occupied:
+                  map:
+                    conditions:
+                      tag_8_focused: {string: {text: "{tag_8}", <<: *focused}}
+                      ~tag_8_focused: {string: {text: "{tag_8}", <<: *occupied}}
+                ~tag_8_occupied:
+                  map:
+                    conditions:
+                      tag_8_focused: {string: {text: "{tag_8}", <<: *focused}}
+                      ~tag_8_focused: {string: {text: "{tag_8}", <<: *default}}
+          - list:
+              spacing: 3
+              items:
+                  - string: {text: "{layout}"}
+                  # - string: {text: "{title}"}
+
