@@ -33,7 +33,7 @@
 			"prefix": " ",
 			"updateSignal": "35",
 			"command": "#Date",		
-			"format": "Monday Feb 1 15:04",		
+			"format": "Monday Jan 2 15:04",		
 			"timer": "1s"
 		}
 	]
