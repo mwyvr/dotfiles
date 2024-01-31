@@ -21,3 +21,5 @@
 [user]
 	email = github@mikewatkins.ca
 	name = Mike Watkins
+[init]
+	defaultBranch = main
