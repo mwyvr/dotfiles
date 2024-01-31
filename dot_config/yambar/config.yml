@@ -14,6 +14,16 @@ bar:
               conditions:
                 muted: {string: {text: "󰖁"}}
     - network:
+        name: enp5s0
+        poll-interval: 30000
+        content:
+          - map:
+              default: {empty: {}}
+              conditions:
+                ~carrier: {empty: {}}
+                carrier:
+                    - string: {text: "󰈁"}
+    - network:
         name: enp0s20f0u3
         poll-interval: 30000
         content:
