@@ -10,8 +10,8 @@
 		},
         {
 			"updateSignal": "39",
-			"command": "curl \"wttr.in\/Vancouver?format=1\"",		
-			"timer": "45m"
+			"command": "wxo -lat 49.123 -long -123.78",		
+			"timer": "10m"
 		},
 		{
 			"prefix": "  ",
@@ -22,7 +22,7 @@
 			"timer": "10s"
 		},
 		{
-			"prefix": "󱐋  ",
+			"prefix": "󱐋 ",
 			"updateSignal": "38",
 			"command": "#Cpu",
 			"suffix": "%",
