@@ -6,6 +6,9 @@
 # Starts the dwl window manager and supporting services
 Environment=wayland
 
+# ensure /etc/profile is sourced
+LoginShell=/bin/bash --login
+
 # cleanup of any stragglers
 pkill pipewire
 
