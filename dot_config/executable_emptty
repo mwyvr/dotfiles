@@ -13,5 +13,4 @@ eval $(/usr/bin/gnome-keyring-daemon --start)
 export SSH_AUTH_SOCK
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 
-# dwltags is read by yambar
-dbus-run-session dwl >~/.cache/dwltags
+dbus-run-session dwl -s somebar
