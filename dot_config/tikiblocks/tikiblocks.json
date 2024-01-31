@@ -26,7 +26,12 @@
 		},
         {
 			"updateSignal": "40",
-			"command": "(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d ' ' -f 3 | sed  -e 's/^$/󰕾/;s/\\[MUTED\\]/󰝟/' && kill -40 $(pidof tikiblocks))",
+			"command": "(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d ' ' -f 3 | sed  's/^$/󰕾/;s/\\[MUTED\\]/󰝟/' && kill -40 $(pidof tikiblocks))",
+			"timer": "0"
+		},
+        {
+			"updateSignal": "41",
+            "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep -v externally | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/ \\1/;s/^wifi:unavailable.*/󰖪/' && kill -41 $(pidof tikiblocks))",
 			"timer": "0"
 		},
 		{
