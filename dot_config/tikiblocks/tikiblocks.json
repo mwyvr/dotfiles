@@ -1,6 +1,6 @@
 {
 	"separator": " ",
-	"bartype": "somebar",
+	"bartype": "overbar",
 	"actions": 
 	[
         {
@@ -9,7 +9,7 @@
 			"timer": "5m"
 		},
 		{
-			"prefix": " ",
+			"prefix": "  ",
 			"updateSignal": "37",
 			"command": "#MemoryUsed",
 			"suffix": "G",
@@ -22,11 +22,11 @@
 			"command": "#Cpu",
 			"suffix": "%",
 			"format": "%.2f",		
-			"timer": "10s"
+			"timer": "5s"
 		},
         {
 			"updateSignal": "41",
-            "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep -v externally | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/ \\1/;s/^wifi:unavailable.*/󰖪/')",
+            "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep ':connected:' | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/ \\1/;s/^wifi:unavailable.*/󰖪/')",
 			"timer": "0"
 		},
         {
