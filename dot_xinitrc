@@ -1,0 +1,52 @@
+#!/bin/sh
+# Xorg startup script for dwm
+# for ID
+. /etc/os-release
+HOSTNAME=$(uname -n)
+export XDG_CURRENT_DESKTOP="X-Generic"
+
+# While I mostly run Void Linux as a daily driver...
+case "$ID" in
+void)
+	# not started as a service on Void
+	pipewire &
+	;;
+opensuse-tumbleweed) ;;
+arch) ;;
+esac
+
+# xrdb -merge ~/.config/xinit/.Xresources-${HOSTNAME}
+
+# case "$HOSTNAME" in
+# elron)
+# 	# allow alacritty to scale similarly to laptop
+# 	export WINIT_X11_SCALE_FACTOR="1.5"
+# 	# redshift &
+# 	# sudo ddcutil -d 2 setvcp 60 0x0f
+# 	# xrandr --output HDMI-A-1 --primary --output DisplayPort-2 --right-of HDMI-A-1
+# 	;;
+# # colour temp of screen
+# lapin) ;;
+# pika) ;;
+# hoppy) ;;
+# esac
+
+# init keyring
+eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
+# export keyring globals
+export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
+
+setxkbmap -option ctrl:nocaps # CAPSLOCK should never exist, make it a ctrl key
+xset +dpms                    # enable display power management system
+xset dpms 600 1200 2400       # standby, suspend, off; xset q to see values
+xset s blank                  # blank screen on time out
+xset s 120 0                  # 2 minute blank screen timeout
+xss-lock slock &              # set slock as the lock handler
+
+# Status bar for dwm, see https://github.com/solutionroute/suckless-patches
+# slstatus &
+
+picom -b --backend glx --sync                            # more than just eye candy
+feh --no-fehbg --bg-center ~/.config/wallpaper/defaultbg # background
+dunst &                                                  # dbus-aware notification daemon
+dbus-run-session dwm                                     # start dwm in dbus session context
