@@ -19,6 +19,7 @@ esac
 
 case "$HOSTNAME" in
 elron)
+	picom -b --backend glx --vsync # more than just eye candy
 	# colour temp of screen
 	# redshift &
 	# sudo ddcutil -d 2 setvcp 60 0x0f
@@ -28,6 +29,7 @@ lapin) ;;
 pika) ;;
 hoppy)
 	export WINIT_X11_SCALE_FACTOR="1" # allow alacritty to scale same on elron (hidpi) and laptop (1980)
+	picom -b                          # laptop doesn't like --sync; more than just eye candy
 	;;
 esac
 
@@ -48,5 +50,4 @@ xss-lock slock &              # set slock as the lock handler
 
 feh --no-fehbg --bg-center ~/.config/wallpaper/defaultbg # background
 dunst &                                                  # dbus-aware notification daemon
-picom -b --backend glx --vsync                           # more than just eye candy
 dbus-run-session dwm                                     # start dwm in dbus session context
