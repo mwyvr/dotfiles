@@ -10,16 +10,11 @@ index = 16
 color = "0xbf88bc"
 index = 17
 
-[colors.bright]
-black = "0x465780"
-blue = "0x8cafd2"
-cyan = "0x93ccdc"
-green = "0xb1d196"
-magenta = "0xc895bf"
-red = "0xd06f79"
-white = "0xe7ecf4"
-yellow = "0xf0d399"
+[colors.primary]
+background = "0x1f232c"
+foreground = "0xcdcecf"
 
+## Normal/regular colors (color palette 0-7)
 [colors.normal]
 black = "0x3b4252"
 blue = "0x81a1c1"
@@ -30,6 +25,14 @@ red = "0xbf616a"
 white = "0xe5e9f0"
 yellow = "0xebcb8b"
 
-[colors.primary]
-background = "0x20242c"
-foreground = "0xd8dee9"
+## Bright colors (color palette 8-15)
+[colors.bright]
+black = "0x465780"
+blue = "0x8cafd2"
+cyan = "0x93ccdc"
+green = "0xb1d196"
+magenta = "0xc895bf"
+red = "0xd06f79"
+white = "0xe7ecf4"
+yellow = "0xf0d399"
+
