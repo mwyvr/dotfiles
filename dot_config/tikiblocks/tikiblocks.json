@@ -1,12 +1,12 @@
 {
-	"separator": " ",
-	"bartype": "overbar",
+	"separator": "   ",
+	"bartype": "somebar",
 	"actions": 
 	[
         {
 			"updateSignal": "39",
 			"command": "wxo -lat 49.123 -long -123.78",		
-			"timer": "5m"
+			"timer": "10m"
 		},
 		{
 			"prefix": "  ",
