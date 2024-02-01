@@ -1,3 +1,0 @@
-#!/bin/sh
-# Starts the Google Chrome on Wayland (needed on a window manager)
-exec google-chrome-stable --ozone-platform=wayland
