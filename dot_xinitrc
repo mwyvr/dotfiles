@@ -39,7 +39,7 @@ export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
 
 setxkbmap -option ctrl:nocaps # CAPSLOCK should never exist, make it a ctrl key
 xset +dpms                    # enable display power management system
-xset dpms 120 1200 2400       # standby, suspend, off; xset q to see values
+xset dpms 120 600 1200        # standby, suspend, off; xset q to see values
 xset s blank                  # blank screen on time out
 xset s 600 0                  # blank tied to slock
 xss-lock slock &              # set slock as the lock handler
