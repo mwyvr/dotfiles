@@ -17,19 +17,20 @@ esac
 
 # xrdb -merge ~/.config/xinit/.Xresources-${HOSTNAME}
 
-# case "$HOSTNAME" in
-# elron)
-# 	# allow alacritty to scale similarly to laptop
-# 	export WINIT_X11_SCALE_FACTOR="1.5"
-# 	# redshift &
-# 	# sudo ddcutil -d 2 setvcp 60 0x0f
-# 	# xrandr --output HDMI-A-1 --primary --output DisplayPort-2 --right-of HDMI-A-1
-# 	;;
-# # colour temp of screen
-# lapin) ;;
-# pika) ;;
-# hoppy) ;;
-# esac
+case "$HOSTNAME" in
+elron)
+	# colour temp of screen
+	# redshift &
+	# sudo ddcutil -d 2 setvcp 60 0x0f
+	# xrandr --output HDMI-A-1 --primary --output DisplayPort-2 --right-of HDMI-A-1
+	;;
+lapin) ;;
+pika) ;;
+hoppy)
+	# allow alacritty to scale same on elron (hidpi) and laptop (1980)
+	export WINIT_X11_SCALE_FACTOR="1"
+	;;
+esac
 
 # init keyring
 eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
@@ -38,9 +39,9 @@ export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
 
 setxkbmap -option ctrl:nocaps # CAPSLOCK should never exist, make it a ctrl key
 xset +dpms                    # enable display power management system
-xset dpms 600 1200 2400       # standby, suspend, off; xset q to see values
+xset dpms 120 1200 2400       # standby, suspend, off; xset q to see values
 xset s blank                  # blank screen on time out
-xset s 120 0                  # 2 minute blank screen timeout
+xset s 600 0                  # blank tied to slock
 xss-lock slock &              # set slock as the lock handler
 
 # Status bar for dwm, see https://github.com/solutionroute/suckless-patches
