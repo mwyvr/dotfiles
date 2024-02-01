@@ -27,8 +27,7 @@ elron)
 lapin) ;;
 pika) ;;
 hoppy)
-	# allow alacritty to scale same on elron (hidpi) and laptop (1980)
-	export WINIT_X11_SCALE_FACTOR="1"
+	export WINIT_X11_SCALE_FACTOR="1" # allow alacritty to scale same on elron (hidpi) and laptop (1980)
 	;;
 esac
 
@@ -39,15 +38,15 @@ export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
 
 setxkbmap -option ctrl:nocaps # CAPSLOCK should never exist, make it a ctrl key
 xset +dpms                    # enable display power management system
-xset dpms 120 600 1200        # standby, suspend, off; xset q to see values
+xset dpms 300 600 1200        # standby, suspend, off; xset q to see values
 xset s blank                  # blank screen on time out
-xset s 600 0                  # blank tied to slock
+xset s 180 120                # blank tied to slock
 xss-lock slock &              # set slock as the lock handler
 
 # Status bar for dwm, see https://github.com/solutionroute/suckless-patches
 # slstatus &
 
-picom -b --backend glx --sync                            # more than just eye candy
 feh --no-fehbg --bg-center ~/.config/wallpaper/defaultbg # background
 dunst &                                                  # dbus-aware notification daemon
+picom -b --backend glx --vsync                           # more than just eye candy
 dbus-run-session dwm                                     # start dwm in dbus session context
