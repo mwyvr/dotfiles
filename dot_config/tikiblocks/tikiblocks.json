@@ -1,6 +1,6 @@
 {
 	"separator": " ",
-	"bartype": "stdout",
+	"bartype": "somebar",
 	"actions": 
 	[
         {
