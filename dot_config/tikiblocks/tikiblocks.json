@@ -1,15 +1,15 @@
 {
-	"separator": "  ",
-	"bartype": "somebar",
+	"separator": " ",
+	"bartype": "stdout",
 	"actions": 
 	[
         {
 			"updateSignal": "39",
 			"command": "wxo -lat 49.123 -long -123.78",		
-			"timer": "10m"
+			"timer": "5m"
 		},
 		{
-			"prefix": "  ",
+			"prefix": " ",
 			"updateSignal": "37",
 			"command": "#MemoryUsed",
 			"suffix": "G",
@@ -22,16 +22,16 @@
 			"command": "#Cpu",
 			"suffix": "%",
 			"format": "%.2f",		
-			"timer": "5s"
-		},
-        {
-			"updateSignal": "40",
-			"command": "(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d ' ' -f 3 | sed  's/^$/󰕾/;s/\\[MUTED\\]/󰝟/' && kill -40 $(pidof tikiblocks))",
-			"timer": "0"
+			"timer": "10s"
 		},
         {
 			"updateSignal": "41",
-            "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep -v externally | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/ \\1/;s/^wifi:unavailable.*/󰖪/' && kill -41 $(pidof tikiblocks))",
+            "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep -v externally | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/ \\1/;s/^wifi:unavailable.*/󰖪/')",
+			"timer": "0"
+		},
+        {
+			"updateSignal": "40",
+			"command": "(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d ' ' -f 3 | sed  's/^$/󰕾/;s/\\[MUTED\\]/󰝟/')",
 			"timer": "0"
 		},
 		{
