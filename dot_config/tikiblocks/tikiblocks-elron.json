@@ -25,6 +25,13 @@
 			"timer": "5s"
 		},
         {
+			"updateSignal": "42",
+            "prefix": "󰂎 ",
+            "command": "cat /sys/class/power_supply/BAT0/capacity | awk '{print $1}'",
+			"suffix": "%",
+			"timer": "0"
+		},
+        {
 			"updateSignal": "41",
             "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep ':connected:' | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/  \\1/;s/^wifi:unavailable.*/󰖪/')",
 			"timer": "0"
