@@ -1,15 +1,21 @@
 # dotfiles
 
-Configuration files for Neovim and a number of tools and apps in daily use.
+This repo contains configuration files for Neovim and a number of tools and apps in daily use.
 
  [chezmoi](https://www.chezmoi.io/quick-start/) makes managing personal configuration 
  files across multiple machines and distributions a ~~little~~ **lot** easier.
 
 ## Inclusions of note
 
-I mostly run dwm or dwl window managers rather than the Gnome desktop environment; I've configured dwm and dwl to act as similarly as possible. There's nothing distribution-specific in here; fwiw I run [Void Linux](https://voidlinux.org/) on desktop and laptops and some office machines.
+I mostly run dwm or dwl window managers rather than the Gnome desktop
+environment; I've configured dwm and dwl to act as similarly as possible. Those
+configurations will be available here as patch files *soon*.
+
+There's nothing distribution-specific in here; fwiw I run [Void
+Linux](https://voidlinux.org/) on desktop and laptops and some office machines.
 
 
+* LazyVim based configuration for NeoVim.
 * .config/gnome-terminal: nordfox.sh script to add the colour palette for those rare times I'm in Gnome
 * .config/nvim: LazyVim based Neovim configuration
 * fuzzel menu, foot terminal for `dwl` (dwm for Wayland)
