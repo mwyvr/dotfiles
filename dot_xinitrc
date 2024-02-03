@@ -16,7 +16,6 @@ esac
 
 # xrdb -merge ~/.config/xinit/.Xresources-${HOSTNAME}
 
-<<<<<<< Updated upstream
 case "$HOSTNAME" in
 elron)
 	# redshift &
@@ -25,25 +24,9 @@ elron)
 	;;
 hoppy)
 	# allow alacritty to scale same on elron (2 hidpi monitors) and laptop (1980x1080)
-	export WINIT_X11_SCALE_FACTOR="1"
+	export WINIT_X11_SCALE_FACTOR="1.15"
 	;;
 esac
-=======
-# case "$HOSTNAME" in
-# elron)
-# 	# allow alacritty to scale similarly to laptop
-# 	export WINIT_X11_SCALE_FACTOR="1.5"
-# 	# redshift &
-# 	# sudo ddcutil -d 2 setvcp 60 0x0f
-# 	# xrandr --output HDMI-A-1 --primary --output DisplayPort-2 --right-of HDMI-A-1
-# 	;;
-# # colour temp of screen
-# lapin) ;;
-# pika) ;;
-# hoppy) ;;
-# esac
-export WINIT_X11_SCALE_FACTOR="1.5"
->>>>>>> Stashed changes
 
 # init keyring
 eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
