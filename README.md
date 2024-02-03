@@ -15,6 +15,7 @@ There's nothing distribution-specific in here; fwiw I run [Void
 Linux](https://voidlinux.org/) on desktop and laptops and some office machines.
 
 
+* Sane and simple bash prompt, indication when root, and Window Title updating for terminals
 * LazyVim based configuration for NeoVim.
 * .config/gnome-terminal: nordfox.sh script to add the colour palette for those rare times I'm in Gnome
 * .config/nvim: LazyVim based Neovim configuration
@@ -25,10 +26,10 @@ Linux](https://voidlinux.org/) on desktop and laptops and some office machines.
 
 To set up a new machine or user account:
 
-    # git write access for me
-    chezmoi init git@github.com:solutionroute/dotfiles.git
-    # git read only (I use this on remote machines, all tweaks are done on laptop/desktop)
-    chezmoi init https://github.com/solutionroute/dotfiles.git
+    # git write 
+    chezmoi init git@github.com:mwyvr/dotfiles.git
+    # git read only (I use this on remote servers, all tweaks are done on my laptop/desktop)
+    chezmoi init https://github.com/mwyvr/dotfiles.git
 
 Edit files within `chezmoi edit` to avoid confusion or missing updates.
 
