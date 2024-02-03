@@ -6,3 +6,4 @@
 vim.opt.shiftwidth = 4 -- Size of an indent
 vim.opt.tabstop = 4 -- Number of spaces tabs count for
 vim.opt.swapfile = false -- more annoying than helpful
+vim.opt.title = true -- update titlebar with doc path
