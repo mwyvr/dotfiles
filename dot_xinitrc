@@ -11,7 +11,7 @@ void)
 	pipewire &
 	;;
 opensuse-tumbleweed) ;;
-arch) ;;
+debian) ;;
 esac
 
 # xrdb -merge ~/.config/xinit/.Xresources-${HOSTNAME}
@@ -23,11 +23,9 @@ elron)
 	# xrandr --output HDMI-A-1 --primary --output DisplayPort-2 --right-of HDMI-A-1
 	;;
 hoppy)
-	export WINIT_X11_SCALE_FACTOR="1" # allow alacritty to scale same on elron (hidpi) and laptop (1980)
+	# allow alacritty to scale same on elron (2 hidpi monitors) and laptop (1980x1080)
+	export WINIT_X11_SCALE_FACTOR="1"
 	;;
-wabbit) ;;
-lapin) ;;
-pika) ;;
 esac
 
 # init keyring
@@ -35,17 +33,14 @@ eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh
 # export keyring globals
 export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
 
-setxkbmap -option ctrl:nocaps # CAPSLOCK should never exist, make it a ctrl key
-xset +dpms                    # enable display power management system
-xset dpms 300 600 1200        # standby, suspend, off; xset q to see values
-xset s blank                  # blank screen on time out
-xset s 180 120                # blank tied to slock
-xss-lock slock &              # set slock as the lock handler
+xset +dpms             # enable display power management system
+xset dpms 300 600 1200 # standby, suspend, off; xset q to see values
+xset s blank           # blank screen on time out
+xset s 180 120         # blank tied to slock
+xss-lock slock &       # set slock as the lock handler
 
-# Status bar for dwm, see https://github.com/solutionroute/suckless-patches
-# slstatus &
 picom -b --backend glx --vsync                           # picom is more than just eye candy
 feh --no-fehbg --bg-center ~/.config/wallpaper/defaultbg # background
-dunst &                                                  # dbus-aware notification daemon
+dunst &                                                  # notification daemon for X
 slstatus &                                               # status bar updates
-dbus-run-session dwm                                     # start dwm in dbus session context
+dbus-run-session dwm 2>~/.cache/dwm.log                  # start dwm in dbus session context
