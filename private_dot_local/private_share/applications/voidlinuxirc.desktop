@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Void Linux IRC
+GenericName=IRC
+Comment=Connected to #voidlinux
+Icon=irssi
+Exec=ssh wabbit -t tmux attach
+Terminal=true
+Categories=ConsoleOnly;
+Keywords=irc;void;
