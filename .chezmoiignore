@@ -1,2 +1,4 @@
 README.md
 LICENSE
+# secrets may be in here:
+.env
