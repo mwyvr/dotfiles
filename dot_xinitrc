@@ -25,6 +25,10 @@ elron)
 hoppy)
 	# allow alacritty to scale same on elron (2 hidpi monitors) and laptop (1980x1080)
 	export WINIT_X11_SCALE_FACTOR="1.15"
+	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "Tapping Enabled" 1
+	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Natural Scrolling Enabled" 1
+	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Disable While Typing Enabled" 1
+	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Accel Speed" 0.85
 	;;
 esac
 
