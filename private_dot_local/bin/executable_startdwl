@@ -1,4 +1,9 @@
 #!/bin/sh
 # Kinda like .xprofile
+pkill pipewire
+pkill dbus-launch
 . ~/.wlrprofile
-exec /usr/bin/dwl -s /usr/bin/somebar
+/usr/bin/dwl -s /usr/bin/somebar
+# noting sessions kicking around after dwl quits. Brute force:
+pkill pipewire
+pkill dbus-launch
