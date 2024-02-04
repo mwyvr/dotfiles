@@ -31,9 +31,10 @@ esac
 case "$HOSTNAME" in
 elron)
 	# desktop workstation
+	xrandr --output DisplayPort-0 --mode 2560x1440 --left-of HDMI-A-0
+	xrandr --output HDMI-A-0 --primary --mode 2560x1440 --rate 143.91
 	# redshift &
 	# sudo ddcutil -d 2 setvcp 60 0x0f
-	# xrandr --output HDMI-A-1 --primary --output DisplayPort-2 --right-of HDMI-A-1
 	xset +dpms               # enable display power management system
 	xset dpms 1200 2400 3600 # standby, suspend, off; xset q to see values
 	xset s blank             # blank screen on time out
