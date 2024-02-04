@@ -29,16 +29,21 @@ To set up a new machine or user account:
     # git write 
     chezmoi init git@github.com:mwyvr/dotfiles.git
     # git read only (I use this on remote servers, all tweaks are done on my laptop/desktop)
-    chezmoi init https://github.com/mwyvr/dotfiles.git
+    chezmoi init --apply https://github.com/mwyvr/dotfiles.git
 
 Edit files within `chezmoi edit` to avoid confusion or missing updates.
 
     chezmoi edit # launch your editor in ~/.local/share/chezmoi/
+    # then commit and push in git
+
+Don't forget to push your changes to your repo.    
 
 *You can use [chezmoi re-add](https://www.chezmoi.io/user-guide/frequently-asked-questions/usage/#how-do-i-edit-my-dotfiles-with-chezmoi) for files you have edited outside of chezmoi.*
 
-Apply the changes to your running config.
+Apply future changes to your running config.
 
     chezmoi apply
+    # or pull and apply in one go
+    chezmoi update
 
-Don't forget to push your changes to your repo.
+You won't want to live with bare git again.
