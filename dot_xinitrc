@@ -1,53 +1,5 @@
 #!/bin/sh
-# Xorg startup script for dwm
-# for ID
-. /etc/os-release
-HOSTNAME=$(uname -n)
-export XDG_CURRENT_DESKTOP="X-Generic"
-
-case "$ID" in
-void)
-	# void isn't a systemd distribution
-	pipewire &
-	;;
-opensuse-tumbleweed) ;;
-debian) ;;
-esac
-
-# xrdb -merge ~/.config/xinit/.Xresources-${HOSTNAME}
-
-case "$HOSTNAME" in
-elron)
-	# redshift &
-	# sudo ddcutil -d 2 setvcp 60 0x0f
-	# xrandr --output HDMI-A-1 --primary --output DisplayPort-2 --right-of HDMI-A-1
-	;;
-hoppy)
-	# allow alacritty to scale same on elron (2 hidpi monitors) and laptop (1980x1080)
-	export WINIT_X11_SCALE_FACTOR="1.15"
-	# tune mousepad
-	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Tapping Enabled" 1
-	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Natural Scrolling Enabled" 1
-	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Disable While Typing Enabled" 1
-	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Accel Speed" 0.5
-	# save a bit of power
-	rfkill block bluetooth
-	;;
-esac
-
-# init keyring
-eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
-# export keyring globals
-export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
-
-xset +dpms             # enable display power management system
-xset dpms 300 600 1200 # standby, suspend, off; xset q to see values
-xset s blank           # blank screen on time out
-xset s 180 120         # blank tied to slock
-xss-lock slock &       # set slock as the lock handler
-
-picom -b --backend glx --vsync                           # picom is more than just eye candy
-feh --no-fehbg --bg-center ~/.config/wallpaper/defaultbg # background
-dunst &                                                  # notification daemon for X
-slstatus &                                               # status bar updates
-dbus-run-session dwm 2>~/.cache/dwm.log                  # start dwm in dbus session context
+# startx/Xorg startup script for dwm
+# See ~/.local/bin/startdwl for an equivalent
+. ~/.xprofile
+exec dwm 2>~/.cache/dwm.log
