@@ -37,5 +37,6 @@ hoppy)
 esac
 
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps # nocaps for the win
-/usr/libexec/xfce-polkit &             # polkit agent for gui when app needs to acquire permission
+pipewire &
+/usr/libexec/xfce-polkit & # polkit agent for gui when app needs to acquire permission
 # the Wayland compositor sources this script.
