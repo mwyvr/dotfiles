@@ -1,0 +1,41 @@
+#!/bin/sh
+# Session configuration for wl-roots compositors like dwl
+# This script follows the general approac in ~/.xprofile for XOrg
+# Scripts calling this:
+# ~/.local/bin/startdwl
+
+. /etc/os-release # for ID
+HOSTNAME=$(uname -n)
+export XDG_CURRENT_DESKTOP="X-Generic"
+
+# establish a DBUS session if not already running
+[ -z "$DBUS_SESSION_BUS_ADDRESS" ] && eval $(/usr/bin/dbus-launch --exit-with-session --sh-syntax)
+dbus-update-activation-environment --verbose --all
+
+# init keyring
+eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
+# export keyring globals
+export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
+
+# OS specific
+case "$ID" in
+void) ;;
+opensuse-tumbleweed) ;;
+debian) ;;
+esac
+
+# Host specific
+case "$HOSTNAME" in
+elron) ;;
+hoppy)
+	# laptop
+	# allow alacritty to scale same on elron (2 hidpi monitors) and laptop (1980x1080)
+	export WINIT_X11_SCALE_FACTOR="1.15"
+	# save a bit of power
+	rfkill block bluetooth
+	;;
+esac
+
+export XKB_DEFAULT_OPTIONS=ctrl:nocaps # nocaps for the win
+/usr/libexec/xfce-polkit &             # polkit agent for gui when app needs to acquire permission
+# the Wayland compositor sources this script.
