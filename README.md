@@ -12,8 +12,8 @@ environment; I've configured dwm and dwl to act as similarly as possible. Those
 configurations will be available here as patch files *soon*.
 
 There's nothing distribution-specific in here; fwiw I run [Void
-Linux](https://voidlinux.org/) on desktop and laptops and some office machines.
-
+Linux](https://voidlinux.org/) on desktop and laptops and and openSUSE MicroOS for 
+containerized workloads elsewhere.
 
 * Sane and simple bash prompt, indication when root, and Window Title updating for terminals
 * LazyVim based configuration for NeoVim.
