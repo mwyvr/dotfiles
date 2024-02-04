@@ -1,0 +1,4 @@
+#!/bin/sh
+# Kinda like .xprofile
+. ~/.wlrprofile
+exec /usr/bin/dwl -s /usr/bin/somebar
