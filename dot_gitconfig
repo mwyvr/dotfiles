@@ -6,6 +6,8 @@
 
 [delta]
     features = decorations
+    navigate = true    # use n and N to move between diff sections
+    light = false
 
 [delta "interactive"]
     keep-plus-minus-markers = false
@@ -18,8 +20,16 @@
     hunk-header-file-style = red
     hunk-header-line-number-style = "#067a00"
     hunk-header-style = file line-number syntax
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
 [user]
 	email = git@mikewatkins.ca
 	name = Mike Watkins
+
 [init]
 	defaultBranch = main
