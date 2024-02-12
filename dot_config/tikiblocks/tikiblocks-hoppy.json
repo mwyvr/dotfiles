@@ -1,6 +1,6 @@
 {
-	"separator": "   ",
-	"bartype": "somebar",
+	"separator": "  ",
+	"barType": "stdout",
 	"actions": 
 	[
         {
@@ -9,11 +9,11 @@
 			"timer": "10m"
 		},
 		{
-			"prefix": "  ",
+			"prefix": "",
 			"updateSignal": "37",
 			"command": "#MemoryUsed",
 			"suffix": "G",
-			"format": "%.2f/%.0f",		
+			"format": "%.2f/%.0f",
 			"timer": "10s"
 		},
 		{
@@ -21,7 +21,7 @@
 			"updateSignal": "38",
 			"command": "#Cpu",
 			"suffix": "%",
-			"format": "%.2f",		
+			"format": "%0.2f",		
 			"timer": "5s"
 		},
         {
@@ -32,8 +32,9 @@
 			"timer": "0"
 		},
         {
+            "prefix": "",
 			"updateSignal": "41",
-            "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep ':connected:' | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/  \\1/;s/^wifi:unavailable.*/󰖪/')",
+            "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep ':connected:' | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/ \\1/;s/^wifi:unavailable.*/󰖪/')",
 			"timer": "0"
 		},
         {
@@ -42,10 +43,10 @@
 			"timer": "0"
 		},
 		{
-			"prefix": " ",
+			"prefix": "",
 			"updateSignal": "35",
 			"command": "#Date",		
-			"format": "Monday Jan 2 15:04",		
+			"format": "Monday Jan 2 15:04",
 			"timer": "1s"
 		}
 	]
