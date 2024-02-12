@@ -62,6 +62,6 @@ xss-lock slock &                                         # set slock as the lock
 picom -b --backend glx --vsync                           # picom provides more than eye candy
 feh --no-fehbg --bg-center ~/.config/wallpaper/defaultbg # background, a symlink
 dunst &                                                  # notification daemon for X
-slstatus &                                               # status bar updates
+tikiblocks -o xsetroot &                                 # status bar updates
 /usr/libexec/xfce-polkit &                               # polkit agent for gui when app needs to acquire permission
 # the window manager is started by startx/.xinitrc or a display manager
