@@ -1,20 +1,14 @@
 {
-	"separator": "  ",
-	"barType": "stdout",
+	"separator": " ",
 	"actions": 
 	[
-        {
-			"updateSignal": "39",
-			"command": "wxo -lat 49.123 -long -123.78",		
-			"timer": "10m"
-		},
 		{
-			"prefix": "",
+			"prefix": "",
 			"updateSignal": "37",
 			"command": "#MemoryUsed",
 			"suffix": "G",
 			"format": "%.2f/%.0f",
-			"timer": "10s"
+			"timer": "5s"
 		},
 		{
 			"prefix": "󱐋 ",
@@ -29,17 +23,17 @@
             "prefix": "󰂎 ",
             "command": "cat /sys/class/power_supply/BAT0/capacity | awk '{print $1}'",
 			"suffix": "%",
-			"timer": "0"
+			"timer": "30s"
 		},
         {
             "prefix": "",
 			"updateSignal": "41",
-            "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep ':connected:' | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/ \\1/;s/^wifi:unavailable.*/󰖪/')",
+            "command": "(nmcli -t -f TYPE,STATE,CONNECTION -m tab dev | grep ':connected:' | sed -r 's/^ethernet:disconnected.*/󰲛/;s/^ethernet:connected:(.*)/󰛳 \\1/;s/^wifi:connected:(.?)/󰤨 \\1/;s/^wifi:unavailable.*/󰤮/')",
 			"timer": "0"
 		},
         {
 			"updateSignal": "40",
-			"command": "(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d ' ' -f 3 | sed  's/^$/󰕾/;s/\\[MUTED\\]/󰝟/')",
+			"command": "(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d ' ' -f 3 | sed  's/^$/󰕾/;s/\\[MUTED\\]/󰸈/')",
 			"timer": "0"
 		},
 		{
@@ -47,6 +41,7 @@
 			"updateSignal": "35",
 			"command": "#Date",		
 			"format": "Monday Jan 2 15:04",
+			"suffix": "",
 			"timer": "1s"
 		}
 	]

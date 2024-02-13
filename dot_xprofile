@@ -27,7 +27,6 @@ debian) ;;
 esac
 
 # Host specific
-# xrdb -merge ~/.config/xinit/.Xresources-${HOSTNAME}
 case "$HOSTNAME" in
 elron)
 	# desktop workstation
@@ -62,6 +61,6 @@ xss-lock slock &                                         # set slock as the lock
 picom -b --backend glx --vsync                           # picom provides more than eye candy
 feh --no-fehbg --bg-center ~/.config/wallpaper/defaultbg # background, a symlink
 dunst &                                                  # notification daemon for X
-tikiblocks -o xsetroot &                                 # status bar updates
 /usr/libexec/xfce-polkit &                               # polkit agent for gui when app needs to acquire permission
+tikiblocks -o xsetroot &                                 # status bar setting xname property (in dwm that is status bar)
 # the window manager is started by startx/.xinitrc or a display manager
