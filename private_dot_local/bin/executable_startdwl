@@ -1,14 +1,4 @@
 #!/bin/sh
-# Kinda like .xprofile
-# noting sessions kicking around after dwl quits. Brute force:
-pkill pipewire
-pkill dbus-launch
-
-# both started here:
+# Kinda like .xprofile but with configuration for wlroots compositor like dwl
 . ~/.wlrprofile
-# launch!
-/usr/bin/dwl -s /usr/bin/somebar
-
-# noting sessions kicking around after dwl quits. Brute force:
-pkill pipewire
-pkill dbus-launch
+exec /usr/bin/dwl -s /usr/bin/somebar

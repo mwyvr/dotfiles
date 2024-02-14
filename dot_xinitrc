@@ -2,4 +2,4 @@
 # startx/Xorg startup script for dwm
 # See ~/.local/bin/startdwl for an equivalent
 . ~/.xprofile
-exec dwm 2>~/.cache/dwm.log
+exec dwm

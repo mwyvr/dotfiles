@@ -1,30 +1,9 @@
 #!/bin/sh
-# Xorg session configuration for dwm
-# Display managers (most Xorg-aware anyway) source script.
-# startx via .xinitrc sources this script.
+# Xorg session configuration
+# ~/.xinitrc sources this
 
 . /etc/os-release # for ID
 HOSTNAME=$(uname -n)
-export XDG_CURRENT_DESKTOP="X-Generic"
-
-# establish a DBUS session if not already running
-[ -z "$DBUS_SESSION_BUS_ADDRESS" ] && eval $(/usr/bin/dbus-launch --exit-with-session --sh-syntax)
-dbus-update-activation-environment --verbose --all
-
-# init keyring
-eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
-# export keyring globals
-export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
-
-# OS specific
-case "$ID" in
-void)
-	# void isn't a systemd distribution
-	pipewire &
-	;;
-opensuse-tumbleweed) ;;
-debian) ;;
-esac
 
 # Host specific
 case "$HOSTNAME" in
@@ -41,7 +20,7 @@ elron)
 	;;
 hoppy)
 	# laptop
-	# allow alacritty to scale same on elron (2 hidpi monitors) and laptop (1980x1080)
+	# force alacritty to scale same on elron (2 hidpi monitors) and laptop (1980x1080)
 	export WINIT_X11_SCALE_FACTOR="1.15"
 	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Tapping Enabled" 1
 	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Natural Scrolling Enabled" 1
@@ -49,7 +28,7 @@ hoppy)
 	xinput set-prop "DELL0A36:00 0488:101A Touchpad" "libinput Accel Speed" 0.5
 	# save a bit of power
 	rfkill block bluetooth
-	# bit more aggressive on shutting display off on the laptop
+	# more aggressive on shutting display off on the laptop
 	xset +dpms             # enable display power management system
 	xset dpms 300 600 1200 # standby, suspend, off; xset q to see values
 	xset s blank           # blank screen on time out
@@ -57,10 +36,26 @@ hoppy)
 	;;
 esac
 
+# OS specific
+case "$ID" in
+void)
+	# void isn't a systemd distribution
+	# per-user dbus setup as Void runit service
+	# https://dpaste.com/7SP7MKFD6
+	export DBUS_SESSION_BUS_ADDRESS="$(cat $HOME/.cache/dbus-address)"
+	eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
+
+	export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
+	/usr/libexec/xfce-polkit & # gui polkit agent
+	pipewire &                 # configured to launch wireplumber
+	dunst &                    # notification daemon for X
+	;;
+opensuse-tumbleweed) ;;
+debian) ;;
+esac
+
 xss-lock slock &                                         # set slock as the lock handler
-picom -b --backend glx --vsync                           # picom provides more than eye candy
+picom -b --vsync                                         # picom provides more than eye candy
 feh --no-fehbg --bg-center ~/.config/wallpaper/defaultbg # background, a symlink
-dunst &                                                  # notification daemon for X
-/usr/libexec/xfce-polkit &                               # polkit agent for gui when app needs to acquire permission
-tikiblocks -o xsetroot &                                 # status bar setting xname property (in dwm that is status bar)
+tikiblocks -o xprop &                                    # status bar setting dwm's xname property
 # the window manager is started by startx/.xinitrc or a display manager

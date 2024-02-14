@@ -1,21 +1,27 @@
 {
-	"separator": " ",
+	"separator": "   ",
 	"actions": 
 	[
 		{
-			"prefix": "",
+            "prefix": " ",
+			"updateSignal": "42",
+			"command": "#Uptime",
+			"format": "%s",		
+			"timer": "1s"
+		},
+		{
+            "prefix": " ",
+			"updateSignal": "41",
+			"command": "#Load",
+			"format": "%0.2f %0.2f %0.2f",		
+			"timer": "5s"
+		},
+		{
+			"prefix": "󰍛 ",
 			"updateSignal": "37",
 			"command": "#MemoryUsed",
 			"suffix": "G",
 			"format": "%.2f/%.0f",
-			"timer": "5s"
-		},
-		{
-			"prefix": "󱐋 ",
-			"updateSignal": "38",
-			"command": "#Cpu",
-			"suffix": "%",
-			"format": "%0.2f",		
 			"timer": "5s"
 		},
         {
@@ -37,11 +43,9 @@
 			"timer": "0"
 		},
 		{
-			"prefix": "",
 			"updateSignal": "35",
 			"command": "#Date",		
 			"format": "Monday Jan 2 15:04",
-			"suffix": "",
 			"timer": "1s"
 		}
 	]
