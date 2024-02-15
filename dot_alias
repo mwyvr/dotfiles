@@ -10,3 +10,5 @@ alias gc="git commit"
 alias gu="git pull" # "think git update local"
 alias gp="git push"
 alias forkup="git pull --rebase upstream master"
+
+alias pst="ps -o pid,ppid,stat,user,comm -AH"
