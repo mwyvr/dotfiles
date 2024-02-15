@@ -12,27 +12,26 @@ if [ "$#" -eq 0 ]; then
 	exit
 fi
 
-if [ "$(id -u)" -ne "0" ]; then
-	echo "Error: Must be run as root/sudo"
-	exit
-fi
-
 case $1 in
 "list")
 	cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	exit
 	;;
 "watch")
-	watch cat /sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_cur_freq
+	watch -n 1 cat /sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_cur_freq
 	exit
 	;;
 "powersave") ;;
 "performance") ;;
 *)
-	echo "Invalid mode: [$1]"
+	echo "Error: Invalid mode: [$1]"
 	usage
 	exit
 	;;
 esac
 
+if [ "$(id -u)" -ne "0" ]; then
+	echo "Error: Must be run as root/sudo"
+	exit
+fi
 echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
