@@ -1,15 +1,18 @@
 #!/usr/bin/sh
+# shrc is for sh, originally written by Kenneth Almquist
+# Managed within chezmoi https://github.com/mwyvr/dotfiles
 
 . $HOME/.alias
 
-{{ if eq .chezmoi.os "darwin" }}
-	# unlikely for me
-{{ else if eq .chezmoi.os "linux" }}
-	if [ "$(id -u)" -ne 0 ]; then
-		PS1='[\[\e[32m\]\u@\h \w\[\e[0m\]]\$ '
-	else
-		#root
-		PS1='[\[\e[31m\]\u@\h \w\[\e[0m\]]# '
-	fi
-{{ end }}
+export EDITOR=hx
 
+{{- if eq .chezmoi.os "darwin" }}
+{{ else if eq .chezmoi.os "linux" }}
+set -V # vi mode
+if [ "$(id -u)" -ne 0 ]; then
+	PS1='[\[\e[32m\]\u@\h \W\[\e[0m\]]\$ '
+else
+	#root
+	PS1='[\[\e[31m\]\u@\h \w\[\e[0m\]]# '
+fi
+{{- end }}
