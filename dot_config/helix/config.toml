@@ -26,4 +26,4 @@ select = "underline"
 [keys.normal.space]
 "," = ":buffer-previous"
 "." = ":buffer-next"
-"c" = "toggle_comments"
+"l" = ":run-shell-command $TERM -m lazygit"
