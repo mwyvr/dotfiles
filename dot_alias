@@ -4,11 +4,17 @@ alias ll='ls -l --color=auto' 2>/dev/null
 alias l.='ls -d .* --color=auto' 2>/dev/null
 alias ls='ls --color=auto' 2>/dev/null
 
+# chezmoi
 alias cm=chezmoi
+# git
 alias gs="git status"
 alias gc="git commit"
 alias gu="git pull" # "think git update local"
 alias gp="git push"
 alias forkup="git pull --rebase upstream master"
 
+# processes
 alias pst="ps -o pid,ppid,stat,user,comm -AH"
+
+# migrating to helix
+alias vi="hx"

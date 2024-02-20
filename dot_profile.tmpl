@@ -1,0 +1,42 @@
+#!/bin/sh
+# User-specific environment sourced by shells
+# See notes in ~/.bash_profile.
+
+{{ if eq .chezmoi.os "darwin" }}
+	# unlikely for me
+{{ else if eq .chezmoi.os "linux" }}
+	# blast that caps lock away in Wayland too
+	export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+
+	if [ "$(id -u)" -ne 0 ]; then
+		mkdir -p $HOME/go/bin $HOME/.local/bin
+		PATH="$PATH:$HOME/go/bin:$HOME/.local/bin"; export PATH
+		# source any private environment vars
+		if [ -f "$HOME/.env" ]; then
+			. $HOME/.env
+		fi
+	fi
+
+	{{   if eq .chezmoi.osRelease.id "chimera" }}
+		# chimera linux uses bsdutils not gnu
+	  # using the default sh shell, not bash
+		set -V # vi mode
+		ENV=$HOME/.shrc; export ENV
+		export EDITOR=hx
+
+	{{   else if eq .chezmoi.osRelease.id "void" }}
+		# per-user dbus setup as runit service
+		export DBUS_SESSION_BUS_ADDRESS="$(cat $HOME/.cache/dbus-address)"
+		# default for local users; allows non-root to do `virsh list` and see all vms
+			export LIBVIRT_DEFAULT_URI="qemu:///system"
+			export MOZ_ENABLE_WAYLAND=1
+		ADW_DISABLE_PORTAL=1
+		export ADW_DISABLE_PORTAL
+		# nodejs - global packages per user, avoids need for sudo in: npm i -g <pkgname>
+		# https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally
+		# export NPM_CONFIG_PREFIX=~/.npm-global
+
+	{{   end }}
+{{ end }}
+
+

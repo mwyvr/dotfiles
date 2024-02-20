@@ -1,0 +1,29 @@
+theme="nord-night"
+
+[editor]
+# Show currently open buffers, only when more than one exists.
+bufferline = "multiple"
+# Highlight all lines with a cursor
+cursorline = true
+
+# Use relative line numbers
+# line-number = "relative"
+
+# Force the theme to show colors
+true-color = true
+
+[editor.indent-guides]
+render = true
+
+[editor.statusline]
+left = ["mode", "spinner", "version-control", "file-name"]
+
+[editor.cursor-shape]
+insert = "block"
+normal = "block"
+select = "underline"
+
+[keys.normal.space]
+"," = ":buffer-previous"
+"." = ":buffer-next"
+"c" = "toggle_comments"
