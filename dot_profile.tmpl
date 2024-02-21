@@ -6,6 +6,7 @@
 {{ else if eq .chezmoi.os "linux" }}
 # blast that caps lock away in Wayland too 
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+export TERM=alacritty
 
 if [ "$(id -u)" -ne 0 ]; then
 	mkdir -p $HOME/go/bin $HOME/.local/bin
