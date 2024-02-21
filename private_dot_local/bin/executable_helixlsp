@@ -1,14 +1,15 @@
 #!/usr/bin/sh
 # install language servers for use in Helix editor
-go install golang.org/x/tools/gopls@latest # golang
-go install github.com/go-delve/delve/cmd/dlv@latest # Debugger
-go install golang.org/x/tools/cmd/goimports@latest  # Formatter
-npm i -g @ansible/ansible-language-server # ansible
-npm i -g bash-language-server #bash
+go install golang.org/x/tools/gopls@latest                      # golang
+go install github.com/go-delve/delve/cmd/dlv@latest             # Debugger
+go install golang.org/x/tools/cmd/goimports@latest              # Formatter
+npm i -g @ansible/ansible-language-server                       # ansible
+npm i -g bash-language-server                                   #bash
 pip install -U 'python-lsp-server[all]' --break-system-packages # python
-pip install python-lsp-ruff --break-system-packages # plugin to support linter
-pip install ruff-lsp --break-system-packages # lsp for ruff
-pip install ruff --break-system-packages # python linter
+pip install python-lsp-ruff --break-system-packages             # plugin to support linter
+pip install ruff-lsp --break-system-packages                    # lsp for ruff
+pip install ruff --break-system-packages                        # python linter
+pip install black --break-system-packages                       # python formatter
 
 # not lsp components; not in chimera cports (yet)
 go install github.com/jesseduffield/lazygit@latest
