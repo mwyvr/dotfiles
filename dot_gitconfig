@@ -3,6 +3,7 @@
 
 [interactive]
     diffFilter = delta --color-only --features=interactive
+    editor = hx
 
 [delta]
     features = decorations
