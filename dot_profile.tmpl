@@ -7,8 +7,7 @@
 {{ if eq .chezmoi.os "darwin" }}
 {{/* no op */}}
 {{ else if eq .chezmoi.os "linux" }}
-# Set our rc file for interactive shells (sh, dash, bash)
-export ENV=$HOME/.shrc
+export EDITOR=hx 
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps # wlr-roots
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -29,4 +28,7 @@ export LIBVIRT_DEFAULT_URI="qemu:///system"
 # ADW_DISABLE_PORTAL=1
 # export ADW_DISABLE_PORTAL
 	{{- end }}
+# Sets rc file for POSIX (or POSIX mode) (sh, dash)
+# ~/.shrc is symlinked to .bashrc for simplicity
+export ENV=$HOME/.shrc
 {{- end }}
