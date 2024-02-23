@@ -13,7 +13,6 @@ export XKB_DEFAULT_OPTIONS=ctrl:nocaps # wlr-roots
 if [ "$(id -u)" -ne 0 ]; then
 	mkdir -p $HOME/go/bin $HOME/.local/bin
 	PATH="$PATH:$HOME/go/bin:$HOME/.local/bin"; export PATH
-	# source any private environment vars
 	if [ -f "$HOME/.env" ]; then
 		. $HOME/.env
 	fi
@@ -21,14 +20,14 @@ fi
 	{{-   if eq .chezmoi.osRelease.id "chimera" }}
     {{/* no op */}}
 	{{- else if eq .chezmoi.osRelease.id "void" }}
-	# per-user dbus setup as runit service
-# TODO: CLEANUP
 export LIBVIRT_DEFAULT_URI="qemu:///system"
-# export MOZ_ENABLE_WAYLAND=1
-# ADW_DISABLE_PORTAL=1
-# export ADW_DISABLE_PORTAL
 	{{- end }}
-# Sets rc file for POSIX (or POSIX mode) (sh, dash)
-# ~/.shrc is symlinked to .bashrc for simplicity
-export ENV=$HOME/.shrc
+echo $SHELL | grep -q bash 
+if [ $? -eq 0 ]; then 
+	# .bashrc is symlinked to .shrc
+	. $HOME/.bashrc
+else
+	# Sets rc file for POSIX (or POSIX mode) shells (sh, dash)
+	export ENV=$HOME/.shrc
+fi
 {{- end }}
