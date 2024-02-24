@@ -3,11 +3,10 @@
 #
 # ~/.shrc is set for interactive shells in ~/.profile
 
-# hard to find a portable way to do this
-# case  $- in
-#  *i*) ;; # interactive shell
-#  *) return;;
-#esac
+case  $- in
+ *i*) ;; # interactive shell
+ *) return;;
+esac
 
 test -s ~/.alias && . ~/.alias || true
 set -o vi
@@ -15,7 +14,7 @@ set -o vi
 {{- if eq .chezmoi.os "darwin" }}
 {{/* no op */}}
 {{ else if eq .chezmoi.os "linux" }}
-# freebsd/chimera linux sh, bash: set prompt
+# freebsd/chimera linux almquist sh, and bash: set prompt
 if [ "$(id -u)" -ne 0 ]; then
 	PS1='[\[\e[32m\]\u@\h \W\[\e[0m\]]\$ '
 else
