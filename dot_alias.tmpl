@@ -10,6 +10,8 @@ alias ll='ls -l --color=auto' 2>/dev/null
 alias l.='ls -d .* --color=auto' 2>/dev/null
 alias ls='ls --color=auto' 2>/dev/null
 	{{ else }}
+# Chimera currently doesn't support nvim wtih LuaJIY so use helix
+alias vi=hx
 alias la='ls -la -G' 2>/dev/null
 alias ll='ls -l -G' 2>/dev/null
 alias l.='ls -d .* -G' 2>/dev/null
@@ -29,5 +31,3 @@ alias forkup="git pull --rebase upstream master"
 # processes
 alias pst="ps -o pid,ppid,stat,user,comm -AH"
 
-# migrating to helix from neovim
-alias vi=hx

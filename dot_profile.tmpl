@@ -3,12 +3,16 @@
 #
 # ~/.profile is read by login shells after /etc/profile, and should contain
 # commands to be executed only at login time. ~/.shrc is set for both
-# almquist-derived sh, and bash.
+# almquist-derived sh, and bash. 
 
 {{ if eq .chezmoi.os "darwin" }}
 {{/* no op */}}
 {{ else if eq .chezmoi.os "linux" }}
-export EDITOR=hx 
+# There is, intentionally, no ~/.bash_profile on my system.
+if [ -f "$HOME/.bash_profile" ]; then
+    rm $HOME/.bash_profile
+fi
+
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps # wlr-roots
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -19,8 +23,9 @@ if [ "$(id -u)" -ne 0 ]; then
 	fi
 fi
 	{{-   if eq .chezmoi.osRelease.id "chimera" }}
-    {{/* no op */}}
+export EDITOR=hx 
 	{{- else if eq .chezmoi.osRelease.id "void" }}
+export EDITOR=nvim
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 	{{- end }}
 echo $SHELL | grep -q bash 
