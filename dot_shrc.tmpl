@@ -11,16 +11,18 @@ esac
 test -s ~/.alias && . ~/.alias || true
 set -o vi
 
-{{- if eq .chezmoi.os "darwin" }}
-{{/* no op */}}
-{{ else if eq .chezmoi.os "linux" }}
-# freebsd/chimera linux almquist sh, and bash: set prompt
+{{- if eq .chezmoi.osRelease.id "void" "chimera" }}
+{{- /*
+# setup coloured prompts and window titles for
+# void/freebsd/chimera; openSUSE does this in /etc/...
+*/ -}}
 if [ "$(id -u)" -ne 0 ]; then
 	PS1='[\[\e[32m\]\u@\h \W\[\e[0m\]]\$ '
 else
 	PS1='[\[\e[31m\]\u@\h \w\[\e[0m\]]# ' #root
 fi
-
+export PS1
+ 
  # bash only: set window titles
  echo $SHELL | grep -q bash 
  if [ $? -eq 0 ]; then 

@@ -5,29 +5,27 @@
 # commands to be executed only at login time. ~/.shrc is set for both
 # almquist-derived sh, and bash. 
 
-{{ if eq .chezmoi.os "darwin" }}
-{{/* no op */}}
-{{ else if eq .chezmoi.os "linux" }}
-# There is, intentionally, no ~/.bash_profile on my system.
+test -z "$PROFILEREAD" && . /etc/profile || true
+
+# There is, intentionally, no ~/.bash_profile on my systems.
 if [ -f "$HOME/.bash_profile" ]; then
     rm $HOME/.bash_profile
 fi
 
-export XKB_DEFAULT_OPTIONS=ctrl:nocaps # wlr-roots
-
+# add path(s)
 if [ "$(id -u)" -ne 0 ]; then
-	mkdir -p $HOME/go/bin $HOME/.local/bin
-	PATH="$PATH:$HOME/go/bin:$HOME/.local/bin"; export PATH
+	mkdir -p $HOME/go/bin 
+	PATH="$PATH:$HOME/go/bin"
+{{- if eq .chezmoi.osRelease.id "void" "chimera" }}
+	PATH="$PATH:$HOME/.local/bin"
+{{- end }}
+    export PATH
 	if [ -f "$HOME/.env" ]; then
 		. $HOME/.env
 	fi
 fi
-	{{-   if eq .chezmoi.osRelease.id "chimera" }}
-export EDITOR=hx 
-	{{- else if eq .chezmoi.osRelease.id "void" }}
-export EDITOR=nvim
-export LIBVIRT_DEFAULT_URI="qemu:///system"
-	{{- end }}
+
+# if shell is bash, force it to use ~/.shrc rather than bashrc
 echo $SHELL | grep -q bash 
 if [ $? -eq 0 ]; then 
 	export BASH_ENV=$HOME/.shrc
@@ -35,4 +33,13 @@ if [ $? -eq 0 ]; then
 else
 	export ENV=$HOME/.shrc
 fi
+
+export LIBVIRT_DEFAULT_URI="qemu:///system"
+export XKB_DEFAULT_OPTIONS=ctrl:nocaps # wlr-roots
+
+{{- if eq .chezmoi.osRelease.id "chimera" }}
+# chimera doesn't ship neovim with LuaJIT
+export EDITOR=hx 
+{{ else }}
+export EDITOR=nvim
 {{- end }}
