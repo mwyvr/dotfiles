@@ -1,2 +1,6 @@
 #!/bin/sh
-wine ~/.local/bin/winbox64.exe
+FP="$HOME/.local/bin/winbox64.exe"
+if [ ! -f "$FP" ]; then
+	wget https://mt.lv/winbox64 -O $FP
+fi
+wine $FP
