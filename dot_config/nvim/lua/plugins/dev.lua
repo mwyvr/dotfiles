@@ -5,7 +5,7 @@ return {
       opts.ensure_installed = opts.ensure_installed or {}
       -- golang
       vim.list_extend(opts.ensure_installed, { "goimports", "gofumpt" })
-      vim.list_extend(opts.ensure_installed, { "gomodifytags", "impl" })
+      vim.list_extend(opts.ensure_installed, { "gomodifytags", "impl", "templ" })
       vim.list_extend(opts.ensure_installed, { "delve" })
     end,
   },

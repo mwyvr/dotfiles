@@ -34,6 +34,7 @@ return {
       -- default causes too many popups, making it easy to end up with focus
       -- in the notify window itself, so dial it back to more important notices
       level = vim.log.levels.WARN,
+      timeout = 500,
     },
   },
 
