@@ -1,0 +1,11 @@
+{
+  "extras": [
+    "lazyvim.plugins.extras.editor.mini-files",
+    "lazyvim.plugins.extras.editor.outline",
+    "lazyvim.plugins.extras.ui.mini-starter"
+  ],
+  "news": {
+    "NEWS.md": "2123"
+  },
+  "version": 3
+}
