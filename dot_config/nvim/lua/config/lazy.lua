@@ -11,9 +11,9 @@ require("lazy").setup({
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
     -- import any extras modules here
-    { import = "lazyvim.plugins.extras.lang.go" },
-    { import = "lazyvim.plugins.extras.lang.markdown" },
-    { import = "lazyvim.plugins.extras.lang.python" },
+    -- { import = "lazyvim.plugins.extras.lang.go" },
+    -- { import = "lazyvim.plugins.extras.lang.markdown" },
+    -- { import = "lazyvim.plugins.extras.lang.python" },
     -- { import = "lazyvim.plugins.formatting.prettier" },
     -- { import = "lazyvim.plugins.extras.lsp.none-ls" }, -- only include if plugins require none-ls
     -- { import = "lazyvim.plugins.extras.lang.typescript" },
