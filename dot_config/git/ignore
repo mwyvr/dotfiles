@@ -7,7 +7,7 @@ spell.en.add
 
 # never add .env, may contain secrets or local-only config
 .env
-# ensure chezmoi  dot_ file doesn't accidentally get pushed or added
+# ensure chezmoi  dot_env file doesn't accidentally get added to a repo
 dot_env
 
 # nonsense gtk file
