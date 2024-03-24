@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Adds country (use country code) to iptables without purging iptables
 BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
 URL_SUFFIX="-aggregated.zone"

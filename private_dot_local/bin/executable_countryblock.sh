@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Uses ipdeny.com aggregated country block lists and iptables to block the
 # worst offending countries, hosting bots, exploit scripts, spam and scammers.
 #
