@@ -1,5 +1,6 @@
 #!/bin/sh
 # NOTE: Use countryblock.sh to block the worst offenders
+# Parses maillog, blocking auth violators and specific scam/spammers
 for ip in $(grep "mox.*failed auth" /var/log/socklog/messages/* | awk '{print $13}' | cut -d "=" -f 2 | sort | uniq); do
 	iptables -A INPUT -s $ip -j DROP
 	echo $ip

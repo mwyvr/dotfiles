@@ -8,7 +8,10 @@ COUNTRIES="cn ru in kr vn tw sg ua br ro il do tn bd ga tj ng md"
 BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
 URL_SUFFIX="-aggregated.zone"
 
-# WARNING: emptying iptables
+echo "WARNING: iptables will be flushed."
+echo "countryblock.sh adds thousands of netblocks for the following countries:"
+echo "$COUNTRIES"
+read -p "This script takes many minutes to complete. Press any key to continue"
 iptables -F
 for code in $COUNTRIES; do
 	URL="$BASE_URL$code$URL_SUFFIX"
