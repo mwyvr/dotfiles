@@ -4,7 +4,7 @@
 #
 # NOTE: This script can take many minutes to process as thousands of netblocks
 # are added to iptables.
-COUNTRIES="cn ru in kr vn tw sg ua br ro il do tn bd ga tj ng md"
+COUNTRIES="cn ru in kr vn tw sg ua br ro il do tn bd ga tj ng md pa ar"
 BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
 URL_SUFFIX="-aggregated.zone"
 
