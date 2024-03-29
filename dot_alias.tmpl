@@ -1,15 +1,10 @@
 #!/usr/bin/sh
 # Managed within chezmoi https://github.com/mwyvr/dotfiles
 
-{{- if ne .chezmoi.osRelease.id "chimera" }}
 alias la='ls -la --color=auto' 2>/dev/null
 alias ll='ls -l --color=auto' 2>/dev/null
 alias l.='ls -d .* --color=auto' 2>/dev/null
 alias ls='ls --color=auto' 2>/dev/null
-	{{ else }}
-{{- /* Chimera currently doesn't support nvim with LuaJIT */ -}}
-alias vi=hx
-{{ end }}
 # dotfiles management
 alias cm=chezmoi
 
@@ -22,3 +17,9 @@ alias forkup="git pull --rebase upstream master"
 
 # processes
 alias pst="ps -o pid,ppid,stat,user,comm -AH"
+
+# editor
+{{- if eq .chezmoi.osRelease.id "chimera" }}
+{{- /* some current issues with neovim on chimera and I want to try hx */ -}}
+alias vi=hx
+{{ end }}
