@@ -1,5 +1,8 @@
 #!/usr/bin/sh
 # install language servers for use in Helix editor
+INSTALL=""
+INSTALLER=""
+
 . /etc/os-release
 if [ $ID = "chimera" ]; then
   INSTALLER="doas apk add"
@@ -7,8 +10,6 @@ elif [ $ID = "void" ]; then
   INSTALLER="sudo xbps-install -S"
 fi
 
-INSTALL=""
-INSTALLER=""
 
 if ! command -v go &> /dev/null; then
   INSTALL="${INSTALL} go"
@@ -20,7 +21,7 @@ if ! command -v pip &> /dev/null; then
   INSTALL="${INSTALL} python-pip"
 fi
 for c in $INSTALL; do
-  doas apk add $c
+  $INSTALLER $c
 done
 
 npm i -g @ansible/ansible-language-server                       # ansible
