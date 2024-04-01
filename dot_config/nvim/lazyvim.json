@@ -1,14 +1,14 @@
 {
   "extras": [
     "lazyvim.plugins.extras.editor.mini-files",
-    "lazyvim.plugins.extras.editor.outline",
     "lazyvim.plugins.extras.lang.go",
     "lazyvim.plugins.extras.lang.markdown",
     "lazyvim.plugins.extras.lang.python",
-    "lazyvim.plugins.extras.ui.mini-starter"
+    "lazyvim.plugins.extras.ui.mini-starter",
+    "lazyvim.plugins.extras.editor.outline"
   ],
   "news": {
-    "NEWS.md": "2123"
+    "NEWS.md": "2850"
   },
   "version": 3
 }

@@ -1,2 +1,2 @@
 #!/bin/sh
-nmcli connection down "Wireguard-Home"
+nmcli connection down "wg0"

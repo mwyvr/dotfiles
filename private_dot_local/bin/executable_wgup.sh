@@ -1,4 +1,4 @@
 #!/bin/sh
-# establish network connection to home
+# establish network connection via wg0
 knockknock.sh
-nmcli connection up "Wireguard-Home"
+nmcli connection up "wg0"
