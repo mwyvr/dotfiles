@@ -1,27 +1,15 @@
 #!/usr/bin/sh
 # install language servers for use in Helix editor
+
 . /etc/os-release
 if [ $ID = "chimera" ]; then
-  INSTALLER="doas apk add"
+  doas apk add go nodejs python-pip
 elif [ $ID = "void" ]; then
-  INSTALLER="sudo xbps-install -S"
+  sudo xbps-install -Su go nodejs python3-pip
+else
+  echo "Unknown Linux distribution, terminating."
+  exit 1
 fi
-
-INSTALL=""
-INSTALLER=""
-
-if ! command -v go &> /dev/null; then
-  INSTALL="${INSTALL} go"
-fi
-if ! command -v npm &> /dev/null; then
-  INSTALL="${INSTALL} nodejs"
-fi
-if ! command -v pip &> /dev/null; then
-  INSTALL="${INSTALL} python-pip"
-fi
-for c in $INSTALL; do
-  doas apk add $c
-done
 
 npm i -g @ansible/ansible-language-server                       # ansible
 npm i -g bash-language-server                                   # bash
