@@ -20,6 +20,6 @@ alias pst="ps -o pid,ppid,stat,user,comm -AH"
 
 # editor
 {{- if eq .chezmoi.osRelease.id "chimera" "void" -}}
-{{/* trying to migrate to hx but sure miss a file explorer */}}
-alias vi=hx
+{{/* trying to migrate to hx but sure miss a file explorer, sessions */}}
+alias vi=nvim
 {{ end }}
