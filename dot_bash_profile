@@ -1,3 +1,4 @@
+#!/bin/sh
 # .bash_profile
 
 # ~/.profile not read by default by bash
