@@ -1,3 +1,0 @@
-#!/bin/sh
-# perform Chimera Linux repo update and package upgrade
-doas apk update && doas apk upgrade

@@ -19,10 +19,4 @@ fi
 
 export LIBVIRT_DEFAULT_URI="qemu:///system"
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps # wlr-roots
-
-{{- if eq .chezmoi.osRelease.id "chimera" }}
-# chimera doesn't ship neovim with LuaJIT
-export EDITOR=hx 
-{{ else }}
 export EDITOR=nvim
-{{- end }}
