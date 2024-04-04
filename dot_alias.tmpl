@@ -7,19 +7,20 @@ alias l.='ls -d .* --color=auto' 2>/dev/null
 alias ls='ls --color=auto' 2>/dev/null
 # dotfiles management
 alias cm=chezmoi
-
+# editor
+alias vi=nvim
 # git
 alias gs="git status"
 alias gc="git commit"
 alias gu="git pull" # "think git update local"
 alias gp="git push"
 alias forkup="git pull --rebase upstream master"
-
 # processes
 alias pst="ps -o pid,ppid,stat,user,comm -AH"
-
-# editor
-{{- if eq .chezmoi.osRelease.id "chimera" "void" -}}
-{{/* trying to migrate to hx but sure miss a file explorer, sessions */}}
-alias vi=nvim
+# system updates
+{{- if eq .chezmoi.osRelease.id "chimera" }}
+alias update="doas apk update && apk upgrade"
+{{ end }}
+{{- if eq .chezmoi.osRelease.id "void" }}
+alias update="sudo xbps-install -Su"
 {{ end }}
