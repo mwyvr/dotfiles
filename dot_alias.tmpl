@@ -19,7 +19,7 @@ alias forkup="git pull --rebase upstream master"
 alias pst="ps -o pid,ppid,stat,user,comm -AH"
 # system updates
 {{- if eq .chezmoi.osRelease.id "chimera" }}
-alias update="doas apk update && apk upgrade"
+alias update="doas apk update && doas apk upgrade"
 {{ end }}
 {{- if eq .chezmoi.osRelease.id "void" }}
 alias update="sudo xbps-install -Su"
