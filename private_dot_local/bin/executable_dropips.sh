@@ -25,7 +25,7 @@ DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | so
 
 # mail system
 echo "DROP smtp auth exploiters"
-for ip in $(grep "mox.*failed auth" /var/log/socklog/messages/* | awk '{print $13}' | cut -d "=" -f 2 | sort | uniq); do
+for ip in $(cat /var/log/socklog/messages/* | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
 	case $ip in
 	$DONTBLOCK)
 		iptables -I INPUT -s $ip -j ACCEPT
@@ -38,9 +38,9 @@ for ip in $(grep "mox.*failed auth" /var/log/socklog/messages/* | awk '{print $1
 	esac
 done
 
-# http server
+# http server; some are legit internet intel scans but who cares
 echo "DROP TLS exploit seekers"
-for ip in $(grep "TLS handshake error.*unsupported" /var/log/socklog/messages/current | awk '{print $15}' | cut -d ":" -f 1 | sort | uniq); do
+for ip in $(cat /var/log/socklog/messages/* | grep "TLS handshake error.*unsupported" | awk '{ sub(/.* handshake error from /,""); sub(/:.*/,""); print }' | sort | uniq); do
 	case $ip in
 	$DONTBLOCK)
 		iptables -I INPUT -s $ip -j ACCEPT
@@ -65,6 +65,7 @@ iptables -A INPUT -j DROP -s 185.49.69.0/24   # gb leaseweb
 iptables -A INPUT -j DROP -s 5.79.64.0/18     # NL - Leaseweb
 iptables -A INPUT -j DROP -s 178.162.128.0/18 # NL - Leaseweb
 iptables -A INPUT -j DROP -s 81.171.0.0/19    # NL - Leaseweb
+iptables -A INPUT -j DROP -s 37.48.78.87      # NL - Leaseweb
 # spf and dmarc violators
 iptables -A INPUT -j DROP -s 191.180.0.0/14  # br
 iptables -A INPUT -j DROP -s 103.31.179.0/24 # bd
