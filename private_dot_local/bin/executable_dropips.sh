@@ -12,10 +12,16 @@ This script scans logfiles for the following:
 
 ... and adds a DROP rule to iptables.
 
+NOTE: Scans only *current* logs by default. To scan all logs break out of the 
+script and restart as:
+
+    dropips.sh all # or any argument
+
 In addition the script adds some hard coded IP addresses or address blocks
 for prolific spammers.
 
-The script attempts to insert an ACCEPT rule for your IP address.
+The script attempts to insert an ACCEPT rule for your IP address to avoid
+locking out an admin.
 EOF
 
 read -p "Press any key to continue"
@@ -23,9 +29,15 @@ read -p "Press any key to continue"
 # don't block us/assumes only the sysadmin(s) or other authorized users have ssh access
 DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
 
+SCOPE="/var/log/socklog/messages/current"
+
+if [ ! $# -eq 0 ]; then
+	SCOPE="/var/log/socklog/messages/*"
+fi
+
 # mail system
 echo "DROP smtp auth exploiters"
-for ip in $(cat /var/log/socklog/messages/* | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
+for ip in $(cat $SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
 	case $ip in
 	$DONTBLOCK)
 		iptables -I INPUT -s $ip -j ACCEPT
@@ -40,7 +52,7 @@ done
 
 # http server; some are legit internet intel scans but who cares
 echo "DROP TLS exploit seekers"
-for ip in $(cat /var/log/socklog/messages/* | grep "TLS handshake error.*unsupported" | awk '{ sub(/.* handshake error from /,""); sub(/:.*/,""); print }' | sort | uniq); do
+for ip in $(cat $SCOPE | grep "TLS handshake error.*unsupported" | awk '{ sub(/.* handshake error from /,""); sub(/:.*/,""); print }' | sort | uniq); do
 	case $ip in
 	$DONTBLOCK)
 		iptables -I INPUT -s $ip -j ACCEPT
