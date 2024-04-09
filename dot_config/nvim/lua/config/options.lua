@@ -7,6 +7,7 @@ vim.opt.shiftwidth = 4 -- Size of an indent
 vim.opt.tabstop = 4 -- Number of spaces tabs count for
 vim.opt.swapfile = false -- more annoying than helpful
 vim.opt.title = true -- update titlebar with doc path
+vim.opt.relativenumber = false -- true if you use motions frequently
 
 -- go templ template system
 -- https://templ.guide/commands-and-tools/ide-support/
