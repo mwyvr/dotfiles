@@ -78,6 +78,7 @@ iptables -A INPUT -j DROP -s 5.79.64.0/18     # NL - Leaseweb
 iptables -A INPUT -j DROP -s 178.162.128.0/18 # NL - Leaseweb
 iptables -A INPUT -j DROP -s 81.171.0.0/19    # NL - Leaseweb
 iptables -A INPUT -j DROP -s 37.48.78.87      # NL - Leaseweb
+iptables -A INPUT -j DROP -s 62.210.0.0/16    # fr - Scaleway hosts malware, dns blocklisted
 # spf and dmarc violators
 iptables -A INPUT -j DROP -s 191.180.0.0/14  # br
 iptables -A INPUT -j DROP -s 103.31.179.0/24 # bd
