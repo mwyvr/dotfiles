@@ -7,3 +7,11 @@ function fish_title
     echo $argv[1] (prompt_pwd)
     pwd
 end
+
+fish_add_path -m ~/.local/bin
+fish_add_path ~/go/bin
+
+set -U EDITOR nvim
+set -U LIBVIRT_DEFAULT_URI qemu:///system
+# for wlroots
+set -U XKB_DEFAULT_OPTIONS ctrl:nocaps
