@@ -1,6 +1,4 @@
 #!/usr/bin/sh
-# install language servers for use in Helix editor
-
 . /etc/os-release
 if [ $ID = "chimera" ]; then
   doas apk add go nodejs python-pip
@@ -11,20 +9,23 @@ else
   exit 1
 fi
 
+echo "Installing language servers for use in Helix editor"
+
+npm update -g
 npm i -g @ansible/ansible-language-server                       # ansible
 npm i -g bash-language-server                                   # bash
 # go
-go install golang.org/x/tools/gopls@latest                      # language server
-go install github.com/go-delve/delve/cmd/dlv@latest             # Debugger
-go install golang.org/x/tools/cmd/goimports@latest              # Formatter
+go install -a golang.org/x/tools/gopls@latest                      # language server
+go install -a github.com/go-delve/delve/cmd/dlv@latest             # Debugger
+go install -a golang.org/x/tools/cmd/goimports@latest              # Formatter
 # html, css, json, scss
 npm i -g vscode-langservers-extracted 
 # python
 pip install -U 'python-lsp-server[all]' --break-system-packages # python
-pip install python-lsp-ruff --break-system-packages             # plugin to support linter
-pip install ruff --break-system-packages                        # python linter
-pip install ruff-lsp --break-system-packages                    # lsp for ruff
-pip install black --break-system-packages                       # python formatter
+pip install -U python-lsp-ruff --break-system-packages             # plugin to support linter
+pip install -U ruff --break-system-packages                        # python linter
+pip install -U ruff-lsp --break-system-packages                    # lsp for ruff
+pip install -U black --break-system-packages                       # python formatter
 
 # not lsp components; not in chimera cports (yet), mapped to space-l
-go install github.com/jesseduffield/lazygit@latest
+go install -a github.com/jesseduffield/lazygit@latest
