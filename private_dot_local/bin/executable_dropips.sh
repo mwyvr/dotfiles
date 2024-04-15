@@ -68,11 +68,11 @@ done
 # prolific spammers
 iptables -A INPUT -j DROP -s 194.169.175.0/24 # gb
 iptables -A INPUT -j DROP -s 194.169.175.0/24 # gb
-
 iptables -A INPUT -j DROP -s 41.211.128.0/19  # ga porn bitcoin scam
 iptables -A INPUT -j DROP -s 179.152.0.0/14   # br porn bitcoin scam
 iptables -A INPUT -j DROP -s 196.176.0.0/14   # tn bitcoin porn scam
-iptables -A INPUT -j DROP -s 157.245.0.0/16   # US - digital ocean
+iptables -A INPUT -j DROP -s 190.42.0.0/17    # pe bitcoin porn scam
+iptables -A INPUT -j DROP -s 102.210.41.0/24  # ke bitcoin porn scam
 iptables -A INPUT -j DROP -s 185.49.69.0/24   # gb - leaseweb
 iptables -A INPUT -j DROP -s 5.79.64.0/18     # NL - Leaseweb
 iptables -A INPUT -j DROP -s 178.162.128.0/18 # NL - Leaseweb
