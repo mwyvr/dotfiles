@@ -10,6 +10,10 @@ vim.keymap.set("n", "<leader>l", "<cmd>:Lazy<cr>", { desc = "Lazyvim" })
 
 local ts = require("telescope.builtin")
 vim.keymap.set("n", "<leader>f", ts.find_files, { desc = "Open File Picker" })
+vim.keymap.set("n", "<leader>b", ts.buffers, { desc = "Open Buffer Picker" })
 vim.keymap.set("n", "<leader>o", ts.oldfiles, { desc = "Open Old/Recent Files" })
 vim.keymap.set("n", "<leader>/", ts.live_grep, { desc = "Global search" })
 vim.keymap.set("n", "<leader>w", "<cmd>:w<cr>", { desc = "Write file" })
+
+-- search
+vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
