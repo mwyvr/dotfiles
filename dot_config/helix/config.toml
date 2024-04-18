@@ -1,7 +1,7 @@
 theme="nord-night"
 
 [editor]
-bufferline = "multiple" # Show currently open buffers, only when more than one exists.
+# bufferline = "multiple" # Show currently open buffers, only when more than one exists.
 cursorline = true # Highlight all lines with a cursor
 true-color = true
 
