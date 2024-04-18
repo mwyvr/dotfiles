@@ -32,11 +32,11 @@ vim.api.nvim_create_autocmd("QuitPre", {
 -- /gf will apply LSP formatting to the current buffer for others
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = augroup("formatonsave"),
-  -- see config/options.lua
+	-- see config/options.lua
 	pattern = vim.g.format_on_save,
 	callback = function()
-	vim.lsp.buf.format({})
-	end
+		vim.lsp.buf.format({})
+	end,
 })
 
 -- restore cursor at last location
