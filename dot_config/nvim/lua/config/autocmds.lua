@@ -19,18 +19,17 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	command = 'chezmoi apply --source-path "%"',
 })
 
--- ensure Neotree buffer not saved in sessions
-vim.api.nvim_create_autocmd("QuitPre", {
+-- ensure Neotree buffer not saved in sessions/shada file
+vim.api.nvim_create_autocmd("VimLeavePre", {
 	group = augroup("neotreeclose"),
-  callback = function()
-    vim.cmd("Neotree close")
-    vim.cmd("qa")
-  end
+	callback = function()
+		vim.cmd("Neotree close")
+	end,
 })
 
 -- format on save only for certain filetypes
 -- /gf will apply LSP formatting to the current buffer for others
-vim.api.nvim_create_autocmd("BufWritePost", {
+vim.api.nvim_create_autocmd("BufWritePre", {
 	group = augroup("formatonsave"),
 	-- see config/options.lua
 	pattern = vim.g.format_on_save,
