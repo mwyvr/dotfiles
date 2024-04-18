@@ -16,4 +16,4 @@ vim.keymap.set("n", "<leader>/", ts.live_grep, { desc = "Global search" })
 vim.keymap.set("n", "<leader>w", "<cmd>:w<cr>", { desc = "Write file" })
 
 -- search
-vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
+vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>")
