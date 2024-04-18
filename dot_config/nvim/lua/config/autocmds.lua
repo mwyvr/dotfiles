@@ -12,11 +12,13 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- run `chezmoi apply` on save
+-- chezmoi dotfile manager - run `chezmoi apply` on save
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = augroup("chezmoi"),
-	pattern = { "~/.local/share/chezmoi/*" },
-	command = 'chezmoi apply --source-path "%"',
+	pattern = { "*/.local/share/chezmoi/*" },
+	callback = function()
+		os.execute("chezmoi apply")
+	end,
 })
 
 -- ensure Neotree buffer not saved in sessions/shada file
