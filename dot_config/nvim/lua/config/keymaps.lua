@@ -17,3 +17,6 @@ vim.keymap.set("n", "<leader>w", "<cmd>:w<cr>", { desc = "Write file" })
 
 -- search
 vim.keymap.set("n", "<leader>h", ":nohlsearch<CR>")
+
+-- git
+vim.keymap.set("n", "<leader>w", "<cmd>:w<cr>", { desc = "Write file" })
