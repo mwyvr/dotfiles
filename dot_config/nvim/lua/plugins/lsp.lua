@@ -229,6 +229,8 @@ return {
 					-- formatting
 					formatting.prettier,
 					formatting.stylua,
+					null_ls.builtins.formatting.gofumpt,
+					null_ls.builtins.formatting.goimports,
 
 					-- diagnostics
 					--		diagnostics.eslint_d.with({
@@ -245,6 +247,7 @@ return {
 					--	}),
 				},
 			})
+			vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
 
 			-- Configure borderd for LspInfo ui
 			require("lspconfig.ui.windows").default_options.border = "rounded"
