@@ -11,7 +11,9 @@ set -o vi
 {{/*
 # set coloured prompts and window titles for
 # void/freebsd/chimera; openSUSE does this in /etc/...
+# TODO: cleanup. April 2024, applying to all
 */}}
+{{- end }}
 if [ "$(id -u)" -ne 0 ]; then
 	PS1='[\[\e[32m\]\u@\h \W\[\e[0m\]]\$ '
 else
@@ -29,4 +31,3 @@ tmux* | screen*)
     PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033]0;%s\007"   "tmux: ${PWD/#$HOME/\~}"'
     ;;
 esac
-{{- end }}
