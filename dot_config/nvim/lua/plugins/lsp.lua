@@ -168,7 +168,13 @@ return {
 				cssls = {},
 				html = {},
 				htmx = {},
-				gopls = {},
+				gopls = {
+					settings = {
+						gopls = {
+							filetypes = { "go", "gomod", "gowork", "gotmpl", "tmpl" },
+						},
+					},
+				},
 				templ = {},
 				jsonls = {},
 				lua_ls = {
