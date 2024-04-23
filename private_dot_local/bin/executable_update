@@ -13,6 +13,8 @@ case $ID in
 	    sudo zypper dup
         ;;
     opensuse-aeon)
+        echo "This system runs immutable openSUSE Aeon; run 'transactional-update dup' if you must."
+        ;;
     opensuse-microos)
         echo "This system runs immutable openSUSE Aeon; run 'transactional-update dup' if you must."
         ;;

@@ -11,14 +11,17 @@ case $ID in
     void)
 	    sudo xbps-install -Su go nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard base-devel
         ;;
-    opensuse-tumbleweed)
+    "opensuse-tumbleweed")
+        sudo zypper refresh
 	    sudo zypper in go1.22 nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make awk
         ;;
-    opensuse-aeon)
-    opensuse-microos)
+    "opensuse-aeon")
         echo "This system runs immutable openSUSE Aeon; run this script in a container."
         ;;
-    default)
+    "opensuse-microos")
+        echo "This system runs immutable openSUSE Aeon; run this script in a container."
+        ;;
+    *)
         echo "Unknown Linux distribution, terminating."
         exit 1
         ;;
