@@ -17,14 +17,15 @@ alias gp="git push"
 alias forkup="git pull --rebase upstream master"
 # processes
 alias pst="ps -o pid,ppid,stat,user,comm -AH"
-# system updates
+
+# system updates & other system specific
 {{- if eq .chezmoi.osRelease.id "chimera" }}
 alias update="doas apk update && doas apk upgrade"
 alias make="cmake"
-{{ end }}
-{{- if eq .chezmoi.osRelease.id "void" }}
+{{- else if eq .chezmoi.osRelease.id "void" }}
 alias update="sudo xbps-install -Su"
-{{ end }}
-{{- if eq .chezmoi.osRelease.id "opensuse-tumbleweed" "opensuse-aeon" }}
+{{- else if eq .chezmoi.osRelease.id "opensuse-tumbleweed" }}
 alias update="sudo zypper dup"
+{{- else if eq .chezmoi.osRelease.id "opensuse-aeon" }}
+alias update="sudo transactional-update"
 {{ end }}
