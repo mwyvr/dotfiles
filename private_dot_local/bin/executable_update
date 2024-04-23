@@ -1,0 +1,23 @@
+#!/usr/bin/sh
+# install supports for neovim on various Linux distributions (Chimera Linux, Void Linux, openSUSE)
+. /etc/os-release
+case $ID in
+    chimera)
+        doas apk update
+        doas apk upgrade
+        ;;
+    void)
+	    sudo xbps-install -Su
+        ;;
+    opensuse-tumbleweed)
+	    sudo zypper dup
+        ;;
+    opensuse-aeon)
+    opensuse-microos)
+        echo "This system runs immutable openSUSE Aeon; run 'transactional-update dup' if you must."
+        ;;
+    default)
+        echo "Unknown Linux distribution, terminating."
+        exit 1
+        ;;
+esac
