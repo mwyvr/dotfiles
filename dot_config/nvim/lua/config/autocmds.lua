@@ -2,22 +2,32 @@ local function augroup(name)
 	return vim.api.nvim_create_augroup("nvcfg" .. name, { clear = true })
 end
 
--- default for other types is 4
-vim.api.nvim_create_autocmd("FileType", {
-	group = augroup("luatab"),
-	pattern = { "lua" },
-	callback = function()
-		vim.opt_local.shiftwidth = 2
-		vim.opt_local.tabstop = 2
-	end,
-})
-
 -- chezmoi dotfile manager - run `chezmoi apply` on save
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = augroup("chezmoi"),
 	pattern = { "*/.local/share/chezmoi/*" },
 	callback = function()
 		os.execute("chezmoi apply")
+	end,
+})
+
+-- default for other types is 4
+vim.api.nvim_create_autocmd("FileType", {
+	group = augroup("luatab"),
+	pattern = { "*lua" },
+	callback = function()
+		vim.opt_local.shiftwidth = 2
+		vim.opt_local.tabstop = 2
+	end,
+})
+
+-- tmpl files are gotmpl
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	group = augroup("ftype"),
+	pattern = { "*.tmpl", "*.gotmpl" },
+	callback = function()
+		local buf = vim.api.nvim_get_current_buf()
+		vim.api.nvim_buf_set_option(buf, "filetype", "gotmpl")
 	end,
 })
 
