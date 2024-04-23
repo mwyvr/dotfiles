@@ -373,7 +373,7 @@ _ctb_subtle="\e[1;30m"
 _ctb_success="\e[1;32m"
 _ctb_warning="\e[1;33m"
 
-NORD_GNOME_TERMINAL_SCRIPT_OPTS=$(getopt -o hl:p: --long help,loglevel:,profile: -n 'nord.sh' -- "$@")
+NORD_GNOME_TERMINAL_SCRIPT_OPTS=$(getopt -o hl:p:  -- "$@")
 NORD_GNOME_TERMINAL_VERSION=0.1.0
 NORD_GNOME_TERMINAL_VERSION_DCONF_KEY=nord-gnome-terminal-version
 NORD_PROFILE_VISIBLE_NAME="Nordfox"
