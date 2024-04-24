@@ -83,6 +83,9 @@ iptables -A INPUT -j DROP -s 163.172.0.0/16   # fr - Scaleway hosts malware, dns
 iptables -A INPUT -j DROP -s 192.119.160.0/20 # us - "madgenius.com" scam sender
 iptables -A INPUT -j DROP -s 155.94.191.0/24  # us - "madgenius.com" scam sender
 iptables -A INPUT -j DROP -s 165.140.240.0/22 # us - alphavps scam sender
+iptables -A INPUT -j DROP -s 109.71.254.0/24 # de - emeraldhost.de apple ID phishing scammer
+iptables -A INPUT -j DROP -s 41.61.0.0/17 # hu/sa - grindhost - canadapost/intelcom phishing scammer; viagra
+
 
 # spf and dmarc violators
 iptables -A INPUT -j DROP -s 191.180.0.0/14  # br
