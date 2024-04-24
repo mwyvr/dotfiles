@@ -4,9 +4,11 @@
 # ~/.profile is read by login shells after /etc/profile, and should contain
 # commands to be executed only at login time.
 
-export EDITOR=nvim
+test -z "$PROFILEREAD" && . /etc/profile || true
 
-# add path(s)
+export EDITOR=/usr/bin/nvim
+
+# add path(s) for non-root
 if [ "$(id -u)" -ne 0 ]; then
 	mkdir -p $HOME/go/bin 
 	PATH="$PATH:$HOME/go/bin"
