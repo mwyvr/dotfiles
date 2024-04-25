@@ -4,16 +4,16 @@
 case $ID in
     chimera)
         doas apk update
-        doas apk add neovim go nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake
+        doas apk add neovim tmux go nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake
         # not in chimera cports (yet), mapped to space-l
         go install github.com/jesseduffield/lazygit@latest
         ;;
     void)
-	    sudo xbps-install -Su neovim go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard base-devel
+	    sudo xbps-install -Su neovim tmux go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard base-devel
         ;;
     "opensuse-tumbleweed")
         sudo zypper refresh
-	    sudo zypper in neovim go1.22 lazygit nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make awk
+	    sudo zypper in neovim tmux go1.22 lazygit nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make awk
         ;;
     "opensuse-aeon")
         echo "This system runs immutable openSUSE Aeon; run this script in a Tumbleweed container."
