@@ -86,6 +86,10 @@ iptables -A INPUT -j DROP -s 165.140.240.0/22 # us - alphavps scam sender
 iptables -A INPUT -j DROP -s 109.71.254.0/24 # de - emeraldhost.de apple ID phishing scammer
 iptables -A INPUT -j DROP -s 41.61.0.0/17 # hu/sa - grindhost - canadapost/intelcom phishing scammer; viagra
 
+# notable smtp connections without purpose
+iptables -A INPUT -j DROP -s 193.222.96.0/24 # fr contantmoulin, 4000 connections over several days
+# auth violators
+iptables -A INPUT -j DROP -s 111.0.0.0/10  # cn - china mobile
 
 # spf and dmarc violators
 iptables -A INPUT -j DROP -s 191.180.0.0/14  # br
