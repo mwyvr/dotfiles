@@ -1,14 +1,15 @@
 -- core options from LazyVim, with edits; override in options.lua
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 
+vim.cmd.colorscheme("nordfox")
 local opt = vim.opt
 
 opt.autowrite = true -- Enable auto write
 
 if not vim.env.SSH_TTY then
-  -- only set clipboard if not in ssh, to make sure the OSC 52
-  -- integration works automatically. Requires Neovim >= 0.10.0
-  opt.clipboard = "unnamedplus" -- Sync with system clipboard
+	-- only set clipboard if not in ssh, to make sure the OSC 52
+	-- integration works automatically. Requires Neovim >= 0.10.0
+	opt.clipboard = "unnamedplus" -- Sync with system clipboard
 end
 
 opt.completeopt = "menu,menuone,noselect"
@@ -45,7 +46,7 @@ opt.splitright = true -- Put new windows right of current
 opt.tabstop = 2 -- Number of spaces tabs count for
 opt.termguicolors = true -- True color support
 if not vim.g.vscode then
-  opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
+	opt.timeoutlen = 300 -- Lower than default (1000) to quickly trigger which-key
 end
 opt.undofile = true
 opt.undolevels = 10000
@@ -55,16 +56,16 @@ opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
 opt.fillchars = {
-  foldopen = "",
-  foldclose = "",
-  fold = " ",
-  foldsep = " ",
-  diff = "╱",
-  eob = " ",
+	foldopen = "",
+	foldclose = "",
+	fold = " ",
+	foldsep = " ",
+	diff = "╱",
+	eob = " ",
 }
 
 if vim.fn.has("nvim-0.10") == 1 then
-  opt.smoothscroll = true
+	opt.smoothscroll = true
 end
 
 -- Folding
