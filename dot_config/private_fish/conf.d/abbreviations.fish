@@ -21,11 +21,3 @@ abbr -a forkup git pull --rebase upstream master
 
 # processes
 abbr -a pst ps -o pid,ppid,stat,user,comm -AH
-
-# system updates
-{{- if eq .chezmoi.osRelease.id "chimera" }}
-abbr -a update "doas apk update && doas apk upgrade"
-{{ end }}
-{{- if eq .chezmoi.osRelease.id "void" }}
-abbr -a update sudo xbps-install -Su
-{{ end }}
