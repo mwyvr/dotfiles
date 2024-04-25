@@ -21,3 +21,8 @@ abbr -a forkup git pull --rebase upstream master
 
 # processes
 abbr -a pst ps -o pid,ppid,stat,user,comm -AH
+
+
+{{- if eq .chezmoi.osRelease.id "chimera" }}
+alias make cmake
+{{- end }}
