@@ -14,6 +14,7 @@ return {
         html = {},
         htmx = {},
         templ = {},
+        gopls = {},
       },
     },
   },
