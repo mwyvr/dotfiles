@@ -4,16 +4,19 @@
 case $ID in
 chimera)
 	doas apk update
-	doas apk add neovim tmux go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake awk
+	doas apk add neovim go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake awk
 	# not in chimera cports (yet)
 	go install github.com/jesseduffield/lazygit@latest
 	;;
 void)
-	sudo xbps-install -Su neovim tmux go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard base-devel awk
+	sudo xbps-install -Su neovim go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard base-devel awk
 	;;
 "opensuse-tumbleweed")
 	sudo zypper refresh
-	sudo zypper in neovim tmux go1.22 git lazygit nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make awk
+	sudo zypper in neovim go1.22 git lazygit nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make awk
+	if [ $CONTAINER_ID == "tumbleweed" ]; then
+		distrobox-export --bin /usr/bin/nvim
+	fi
 	;;
 "opensuse-aeon")
 	echo "This system runs immutable openSUSE Aeon; run this script in the default Tumbleweed container."
