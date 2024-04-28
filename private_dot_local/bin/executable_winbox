@@ -1,0 +1,7 @@
+#!/bin/sh
+FP="$HOME/.local/bin/winbox64.exe"
+if [ ! -f "$FP" ]; then
+	wget https://mt.lv/winbox64 -O $FP
+fi
+# may be running from a distrobox
+wine $FP
