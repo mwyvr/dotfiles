@@ -73,6 +73,7 @@ iptables -A INPUT -j DROP -s 179.152.0.0/14   # br porn bitcoin scam
 iptables -A INPUT -j DROP -s 196.176.0.0/14   # tn bitcoin porn scam
 iptables -A INPUT -j DROP -s 190.42.0.0/17    # pe bitcoin porn scam
 iptables -A INPUT -j DROP -s 102.210.41.0/24  # ke bitcoin porn scam
+iptables -A INPUT -j DROP -s 176.88.185.0/24  # tr bitcoin porn scam
 iptables -A INPUT -j DROP -s 185.49.69.0/24   # gb - leaseweb
 iptables -A INPUT -j DROP -s 5.79.64.0/18     # NL - Leaseweb
 iptables -A INPUT -j DROP -s 178.162.128.0/18 # NL - Leaseweb
@@ -83,13 +84,14 @@ iptables -A INPUT -j DROP -s 163.172.0.0/16   # fr - Scaleway hosts malware, dns
 iptables -A INPUT -j DROP -s 192.119.160.0/20 # us - "madgenius.com" scam sender
 iptables -A INPUT -j DROP -s 155.94.191.0/24  # us - "madgenius.com" scam sender
 iptables -A INPUT -j DROP -s 165.140.240.0/22 # us - alphavps scam sender
-iptables -A INPUT -j DROP -s 109.71.254.0/24 # de - emeraldhost.de apple ID phishing scammer
-iptables -A INPUT -j DROP -s 41.61.0.0/17 # hu/sa - grindhost - canadapost/intelcom phishing scammer; viagra
+iptables -A INPUT -j DROP -s 109.71.254.0/24  # de - emeraldhost.de apple ID phishing scammer
+iptables -A INPUT -j DROP -s 41.61.0.0/17     # hu/sa - grindhost - canadapost/intelcom phishing scammer; viagra
 
 # notable smtp connections without purpose
 iptables -A INPUT -j DROP -s 193.222.96.0/24 # fr contantmoulin, 4000 connections over several days
 # auth violators
 iptables -A INPUT -j DROP -s 111.0.0.0/10  # cn - china mobile
+iptables -A INPUT -j DROP -s 27.115.0.0/17 # cn - china unicom
 
 # spf and dmarc violators
 iptables -A INPUT -j DROP -s 191.180.0.0/14  # br
