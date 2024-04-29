@@ -13,10 +13,10 @@ opensuse-tumbleweed)
 	sudo zypper dup
 	;;
 opensuse-aeon)
-	echo "This system runs immutable openSUSE Aeon; run 'transactional-update dup' if you must."
+	sudo transactional-update dup
 	;;
 opensuse-microos)
-	echo "This system runs immutable openSUSE Aeon; run 'transactional-update dup' if you must."
+	sudo transactional-update dup
 	;;
 *)
 	echo "Unknown Linux distribution, terminating."
