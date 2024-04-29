@@ -1,19 +1,20 @@
 #!/usr/bin/sh
 # install supports for neovim on various Linux distributions (Chimera Linux, Void Linux, openSUSE Tumbleweed/Aeon in a tw container)
+# helix as backup
 . /etc/os-release
 case $ID in
 chimera)
 	doas apk update
-	doas apk add neovim go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake awk
+	doas apk add neovim helix go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake awk
 	# not in chimera cports (yet)
 	go install github.com/jesseduffield/lazygit@latest
 	;;
 void)
-	sudo xbps-install -Su neovim go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard base-devel awk
+	sudo xbps-install -Su neovim helix go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard base-devel
 	;;
 "opensuse-tumbleweed")
 	sudo zypper refresh
-	sudo zypper in neovim go1.22 git lazygit nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make awk
+	sudo zypper in neovim helix go1.22 git lazygit nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make
 	if [ $CONTAINER_ID == "tumbleweed" ]; then
 		distrobox-export --bin /usr/bin/nvim
 	fi
