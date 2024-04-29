@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Winbox
+GenericName=Winbox
+Comment=Manage Mikrotik routers
+Icon=org.gnome.DiskUtility
+Exec=winbox
+Terminal=false
+Categories=System;Network;
+Keywords=winbox;router;
+StartupNotify=true
