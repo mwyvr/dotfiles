@@ -24,7 +24,7 @@ change() {
 		echo "Error: Must be run as root/sudo"
 		exit
 	fi
-	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo $1 | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
 
 case $1 in
@@ -39,7 +39,7 @@ watch)
 powersave)
 	change
 	;;
-balanced)
+schedutil)
 	change
 	;;
 performance)
