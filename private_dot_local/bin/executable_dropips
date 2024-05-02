@@ -1,22 +1,29 @@
-#!/bin/bash
-echo "dropips.sh"
-# NOTE: Use countryblock.sh to block the worst offenders
-# Parses maillog, blocking auth violators and specific scam/spammers
-#
-# This script scans logfiles for the following:
+#!/usr/bin/bash
+# dropips is meant to be run via snooze (or cron) and scans logfiles for the
+# following:
 #
 #     - failed mail server authentication attempts
 #     - hosts attempting connection with or only offering insecure protocols
-#     - hosts attempting a http request to /wp-login...
 #
 # ... and adds a DROP rule to iptables.
 #
 # In addition the script adds some hard coded IP addresses or address blocks
-# for prolific spammers.
+# for prolific spammers and crackers.
 #
 # The script attempts to insert an ACCEPT rule for your IP address to avoid
-# locking out an admin.
-# EOF
+# locking out an admin, if run from the command line.
+#
+# By default dropips parses only /var/log/socklog/messages/current; to
+# catch up with prior activity, supply any argument to the script.
+
+set -e
+
+# ensure the latest is installed in hourly
+SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
+BASE=$(basename "$SCRIPT")
+cp $SCRIPT /etc/cron.hourly/$BASE
+chmod +x /etc/cron.hourly/$BASE
+logger "$BASE installed itself to /etc/cron.hourly/"
 
 # new blocks
 COUNT=0
@@ -25,7 +32,7 @@ COUNT=0
 DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
 
 SCOPE="/var/log/socklog/messages/current"
-logger "dropips.sh starting"
+logger "$SCRIPT starting"
 
 # if any command line argument, process all the log files current and past
 if [ ! $# -eq 0 ]; then
@@ -120,4 +127,4 @@ for ip in "${BADACTORS[@]}"; do
 		;;
 	esac
 done
-logger "dropips.sh finished, $COUNT DROP rules added"
+logger "$SCRIPT finished, $COUNT DROP rules added"
