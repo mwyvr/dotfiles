@@ -6,7 +6,21 @@ Usage:
     cpugov [powersave|performance|schedutil] - sets governor
     cpugov list     - display current CPU scheduling governor
     cpugov watch    - monitors current CPU frequencies
+
 EOF
+}
+
+DOAS=""
+
+checkroot() {
+	if command -v sudo &>/dev/null; then
+		DOAS=$(which sudo)
+	elif command -v doas &>/dev/null; then
+		DOAS=$(which doas)
+	fi
+	if [ -z "$DOAS" ]; then
+		echo "cpugov: No sudo or doas available"
+	fi
 }
 
 if [ -z "$1" ]; then
@@ -20,11 +34,8 @@ if ! compgen -G "/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor" >/dev/nu
 fi
 
 change() {
-	if [ "$(id -u)" -ne "0" ]; then
-		echo "Error: Must be run as root/sudo"
-		exit
-	fi
-	echo $1 | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	checkroot
+	echo $1 | $DOAS tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
 
 case $1 in
