@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "dropips.sh"
 # NOTE: Use countryblock.sh to block the worst offenders
 # Parses maillog, blocking auth violators and specific scam/spammers
 #
@@ -17,28 +18,34 @@
 # locking out an admin.
 # EOF
 
+# new blocks
+COUNT=0
+
 # don't block us/assumes only the sysadmin(s) or other authorized users have ssh access
 DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
 
 SCOPE="/var/log/socklog/messages/current"
+logger "dropips.sh starting"
 
+# if any command line argument, process all the log files current and past
 if [ ! $# -eq 0 ]; then
 	SCOPE="/var/log/socklog/messages/*"
 fi
-
-# DO THEM ALL
-# SCOPE="/var/log/socklog/messages/*"
 
 # mail system
 for ip in $(cat $SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
 	case "$ip" in
 	$DONTBLOCK)
-		iptables -C INPUT -j ACCEPT -s "$ip" || iptables -I INPUT -s "$ip" -j ACCEPT
+		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
 		continue
 		;;
 	*)
 		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
-		iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1 || iptables -A INPUT -j DROP -s "$ip"
+		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+			iptables -A INPUT -j DROP -s "$ip"
+			logger "mox failed auth DROP $ip"
+			let COUNT++
+		fi
 		;;
 	esac
 done
@@ -47,12 +54,16 @@ done
 for ip in $(cat $SCOPE | grep "TLS handshake error.*unsupported" | awk '{ sub(/.* handshake error from /,""); sub(/:.*/,""); print }' | sort | uniq); do
 	case $ip in
 	$DONTBLOCK)
-		iptables -C INPUT -j ACCEPT -s "$ip" || iptables -I INPUT -s "$ip" -j ACCEPT
+		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
 		continue
 		;;
 	*)
 		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
-		iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1 || iptables -A INPUT -j DROP -s "$ip"
+		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+			iptables -A INPUT -j DROP -s "$ip"
+			logger "mox unsupported HTTP TLS DROP $ip"
+			let COUNT++
+		fi
 		;;
 	esac
 done
@@ -95,12 +106,17 @@ BADACTORS=(
 for ip in "${BADACTORS[@]}"; do
 	case $ip in
 	$DONTBLOCK)
-		iptables -C INPUT -j ACCEPT -s "$ip" || iptables -I INPUT -s "$ip" -j ACCEPT
+		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
 		continue
 		;;
 	*)
 		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
-		iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1 || iptables -A INPUT -j DROP -s "$ip"
+		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+			iptables -A INPUT -j DROP -s "$ip"
+			logger "mox known bad actors DROP $ip"
+			let COUNT++
+		fi
 		;;
 	esac
 done
+logger "dropips.sh finished, $COUNT DROP rules added"
