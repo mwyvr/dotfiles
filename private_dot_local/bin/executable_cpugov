@@ -9,17 +9,15 @@ Usage:
 EOF
 }
 
-check() {
-	# if a VM / vps may not exist
-	if ! compgen -G "/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor" >/dev/null; then
-		echo "scaling_governor not present in devices/system/cpu/... is this a VM?"
-		exit
-	fi
-	if [ "$#" -eq 0 ]; then
-		usage
-		exit
-	fi
-}
+if [ -z "$1" ]; then
+	usage
+	exit
+fi
+
+if ! compgen -G "/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor" >/dev/null; then
+	echo "cpugov: scaling_governor not present in devices/system/cpu/... is this a VM?"
+	exit
+fi
 
 change() {
 	if [ "$(id -u)" -ne "0" ]; then
@@ -28,8 +26,6 @@ change() {
 	fi
 	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
-
-check
 
 case $1 in
 list)
