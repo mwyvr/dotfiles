@@ -1,18 +1,39 @@
-#!/bin/sh
+#!/usr/bin/bash
 # cpugov - see https://github.com/mwyvr/dotfiles
 usage() {
-	echo "Usage:"
-	echo "  cpugov [powersave|performance|schedutil] - sets governor"
-	echo "      list - display current CPU scheduling governor"
-	echo "      watch - monitors current CPU frequencies"
+	cat <<EOF
+Usage:
+    cpugov [powersave|performance|schedutil] - sets governor
+    cpugov list     - display current CPU scheduling governor
+    cpugov watch    - monitors current CPU frequencies
+EOF
 }
 
-if [ "$#" -eq 0 ]; then
-	usage
-	exit
-fi
+echo "command; $1"
 
-case $1 in
+check() {
+	if ! compgen -G "/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor" >/dev/null; then
+		echo "scaling_governor not present in devices/system/cpu/... is this a VM?"
+		exit
+	fi
+	if [ "$#" -eq 0 ]; then
+		usage
+		exit
+		# if a VM / vps may not exist
+	fi
+}
+
+change() {
+	if [ "$(id -u)" -ne "0" ]; then
+		echo "Error: Must be run as root/sudo"
+		exit
+	fi
+	echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+}
+
+check
+
+case "$1" in
 "list")
 	cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	exit
@@ -21,17 +42,18 @@ case $1 in
 	watch -n 1 cat /sys/devices/system/cpu/cpu[0-9]*/cpufreq/scaling_cur_freq
 	exit
 	;;
-"powersave") ;;
-"performance") ;;
+"powersave")
+	change
+	;;
+"balanced")
+	change
+	;;
+"performance")
+	change
+	;;
 *)
 	echo "Error: Invalid mode: [$1]"
 	usage
 	exit
 	;;
 esac
-
-if [ "$(id -u)" -ne "0" ]; then
-	echo "Error: Must be run as root/sudo"
-	exit
-fi
-echo $1 | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
