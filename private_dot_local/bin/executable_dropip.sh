@@ -15,7 +15,10 @@ $DONTBLOCK)
 	# Adds an ip or /netblock to iptables drop list, if it isn't already in there
 	if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
 		iptables -A INPUT -j DROP -s "$ip"
+		echo "dropip.sh DROP $ip"
 		logger "dropip.sh DROP $ip"
+	else
+		echo "$ip already in iptables INPUT DROP rule"
 	fi
 	;;
 esac
