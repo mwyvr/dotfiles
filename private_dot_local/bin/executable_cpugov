@@ -18,6 +18,7 @@ checkroot() {
 	elif command -v doas &>/dev/null; then
 		DOAS=$(which doas)
 	fi
+	echo "DOAS $DOAS"
 	if [ -z "$DOAS" ]; then
 		echo "cpugov: No sudo or doas available"
 	fi
@@ -26,6 +27,8 @@ checkroot() {
 if [ -z "$1" ]; then
 	usage
 	exit
+else
+	COMMAND=$1
 fi
 
 if ! compgen -G "/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor" >/dev/null; then
@@ -35,10 +38,11 @@ fi
 
 change() {
 	checkroot
-	echo $1 | $DOAS tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+	echo "Setting scaling to: $COMMAND"
+	echo $COMMAND | $DOAS tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 }
 
-case $1 in
+case $COMMAND in
 list)
 	cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	exit
