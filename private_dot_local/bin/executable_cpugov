@@ -9,8 +9,6 @@ Usage:
 EOF
 }
 
-echo "command; $1"
-
 check() {
 	# if a VM / vps may not exist
 	if ! compgen -G "/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor" >/dev/null; then
@@ -33,7 +31,7 @@ change() {
 
 check
 
-case "$1" in
+case $1 in
 list)
 	cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 	exit
