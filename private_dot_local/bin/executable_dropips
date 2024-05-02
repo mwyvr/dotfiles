@@ -15,15 +15,31 @@
 #
 # By default dropips parses only /var/log/socklog/messages/current; to
 # catch up with prior activity, supply any argument to the script.
+#
+# To install to cron.hourly run:
+#   dropips install
 
-set -e
+install_to_cron() {
+	# ensure the latest is installed in hourly
+	# Note: Void/runit run-parts command won't launch a script ending in .sh
+	SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
+	BASE=$(basename "$SCRIPT")
+	cp $SCRIPT /etc/cron.hourly/$BASE
+	chmod +x /etc/cron.hourly/$BASE
+	logger "$BASE installed itself to /etc/cron.hourly/"
+}
 
-# ensure the latest is installed in hourly
-SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
-BASE=$(basename "$SCRIPT")
-cp $SCRIPT /etc/cron.hourly/$BASE
-chmod +x /etc/cron.hourly/$BASE
-logger "$BASE installed itself to /etc/cron.hourly/"
+# if any command line argument:
+# - if "install", install script to cron.hourly for run-parts/snooze to process
+# - any other arg, process all the log files current and past
+if [ ! $# -eq 0 ]; then
+	SCOPE="/var/log/socklog/messages/*"
+	if [ "$1" == "install" ]; then
+		install_to_cron
+		echo "Installed, exiting"
+		exit
+	fi
+fi
 
 # new blocks
 COUNT=0
@@ -33,11 +49,6 @@ DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | so
 
 SCOPE="/var/log/socklog/messages/current"
 logger "$SCRIPT starting"
-
-# if any command line argument, process all the log files current and past
-if [ ! $# -eq 0 ]; then
-	SCOPE="/var/log/socklog/messages/*"
-fi
 
 # mail system
 for ip in $(cat $SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
