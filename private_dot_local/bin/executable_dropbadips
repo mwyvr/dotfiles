@@ -23,6 +23,11 @@ SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
 BASE=$(basename "$SCRIPT")
 SCOPE="/var/log/socklog/messages/current"
 
+if [ "$(id -u)" -ne 0 ]; then
+	echo "$SCRIPT must be run as root."
+	exit
+fi
+
 install_to_cron() {
 	# ensure the latest is installed in hourly
 	# Note: Void/runit run-parts command won't launch a script ending in .sh
