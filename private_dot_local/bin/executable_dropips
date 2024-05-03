@@ -21,6 +21,7 @@
 
 SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
 BASE=$(basename "$SCRIPT")
+SCOPE="/var/log/socklog/messages/current"
 
 install_to_cron() {
 	# ensure the latest is installed in hourly
@@ -30,15 +31,16 @@ install_to_cron() {
 	logger "$BASE installed itself to /etc/cron.hourly/"
 }
 
-# if any command line argument:
+# command line argument are optional:
 # - if "install", install script to cron.hourly for run-parts/snooze to process
 # - any other arg, process all the log files current and past
 if [ ! $# -eq 0 ]; then
-	SCOPE="/var/log/socklog/messages/*"
 	if [ "$1" == "install" ]; then
 		install_to_cron
 		echo "Installed, exiting"
 		exit
+	else
+		SCOPE="/var/log/socklog/messages/*"
 	fi
 fi
 
@@ -48,7 +50,6 @@ COUNT=0
 # don't block us/assumes only the sysadmin(s) or other authorized users have ssh access
 DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
 
-SCOPE="/var/log/socklog/messages/current"
 logger "$SCRIPT starting"
 
 # mail system
@@ -60,6 +61,7 @@ for ip in $(cat $SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print
 		;;
 	*)
 		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
+		# Unless iptables has been flushed recently, this will always be false
 		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
 			iptables -A INPUT -j DROP -s "$ip"
 			logger "mox failed auth DROP $ip"
