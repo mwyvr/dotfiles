@@ -38,14 +38,32 @@ install_to_cron() {
 
 # command line argument are optional:
 # - if "install", install script to cron.hourly for run-parts/snooze to process
-# - any other arg, process all the log files current and past
+# - if "all", reset, drop any countries defined, and process all the log files current and past
 if [ ! $# -eq 0 ]; then
 	if [ "$1" == "install" ]; then
 		install_to_cron
 		echo "Installed, exiting"
 		exit
-	else
+	elif [ "$1" == "all" ]; then
+		echo "Resetting iptables"
+		iptables -F
+		COUNTRIES="cn ru"
+		echo "Dropping countries: $COUNTRIES. Please wait."
+		BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
+		URL_SUFFIX="-aggregated.zone"
+		for code in $COUNTRIES; do
+			URL="$BASE_URL$code$URL_SUFFIX"
+			echo $URL
+			for ip in $(curl $URL); do
+				iptables -A INPUT -j DROP -s $ip
+			done
+		done
+		echo "Setting scope to all logs and processing."
 		SCOPE="/var/log/socklog/messages/*"
+	else
+		echo "$SCRIPT: Bad command: $1. Use install or all"
+		logger "$SCRIPT: Bad command: $1. Use install or all"
+		exit
 	fi
 fi
 
@@ -76,23 +94,23 @@ for ip in $(cat $SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print
 	esac
 done
 
-# http server; some are legit internet intel scans but who cares
-for ip in $(cat $SCOPE | grep "TLS handshake error.*unsupported" | awk '{ sub(/.* handshake error from /,""); sub(/:.*/,""); print }' | sort | uniq); do
-	case $ip in
-	$DONTBLOCK)
-		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
-		continue
-		;;
-	*)
-		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
-		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-			iptables -A INPUT -j DROP -s "$ip"
-			logger "mox unsupported HTTP TLS DROP $ip"
-			let COUNT++
-		fi
-		;;
-	esac
-done
+# http server; some are legit internet intel scans
+# for ip in $(cat $SCOPE | grep "TLS handshake error.*unsupported" | awk '{ sub(/.* handshake error from /,""); sub(/:.*/,""); print }' | sort | uniq); do
+# 	case $ip in
+# 	$DONTBLOCK)
+# 		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
+# 		continue
+# 		;;
+# 	*)
+# 		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
+# 		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+# 			iptables -A INPUT -j DROP -s "$ip"
+# 			logger "mox unsupported HTTP TLS DROP $ip"
+# 			let COUNT++
+# 		fi
+# 		;;
+# 	esac
+# done
 
 BADACTORS=(
 	# prolific spammers
