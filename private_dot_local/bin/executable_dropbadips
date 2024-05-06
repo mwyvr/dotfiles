@@ -128,7 +128,10 @@ BADACTORS=(
 	"5.79.64.0/18"     # NL - Leaseweb
 	"81.171.0.0/19"    # NL - Leaseweb
 	"62.210.0.0/16"    # fr - Scaleway hosts malware, dns blocklisted
+	"62.4.0.0/19"      # fr scaleway
 	"163.172.0.0/16"   # fr - Scaleway hosts malware, dns blocklisted
+	"200.75.0.0/19"    # cl - spam hosts
+
 	"192.119.160.0/20" # us - "madgenius.com" scam sender
 	"155.94.191.0/24"  # us - "madgenius.com" scam sender
 	"165.140.240.0/22" # us - alphavps scam sender
