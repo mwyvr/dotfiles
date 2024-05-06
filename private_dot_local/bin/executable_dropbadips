@@ -117,17 +117,18 @@ BADACTORS=(
 	"194.169.175.0/24" # gb
 	"194.169.175.4"    # gb
 	"194.169.175.0/24" # gb
-	"41.211.128.0/19"  # ga porn bitcoin scam
-	"179.152.0.0/14"   # br porn bitcoin scam
-	"196.176.0.0/14"   # tn bitcoin porn scam
-	"190.42.0.0/17"    # pe bitcoin porn scam
 	"102.210.41.0/24"  # ke bitcoin porn scam
 	"176.88.185.0/24"  # tr bitcoin porn scam
-	"185.49.69.0/24"   # gb - leaseweb
-	"5.79.64.0/18"     # NL - Leaseweb
+	"179.152.0.0/14"   # br porn bitcoin scam
+	"186.33.88.128/25" # do bitcoin porn scam
+	"190.42.0.0/17"    # pe bitcoin porn scam
+	"196.176.0.0/14"   # tn bitcoin porn scam
+	"41.211.128.0/19"  # ga porn bitcoin scam
 	"178.162.128.0/18" # NL - Leaseweb
-	"81.171.0.0/19"    # NL - Leaseweb
+	"185.49.69.0/24"   # gb - leaseweb
 	"37.48.78.87"      # NL - Leaseweb
+	"5.79.64.0/18"     # NL - Leaseweb
+	"81.171.0.0/19"    # NL - Leaseweb
 	"62.210.0.0/16"    # fr - Scaleway hosts malware, dns blocklisted
 	"163.172.0.0/16"   # fr - Scaleway hosts malware, dns blocklisted
 	"192.119.160.0/20" # us - "madgenius.com" scam sender
