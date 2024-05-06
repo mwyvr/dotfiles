@@ -114,9 +114,7 @@ done
 
 BADACTORS=(
 	# prolific spammers
-	"194.169.175.0/24" # gb
-	"194.169.175.4"    # gb
-	"194.169.175.0/24" # gb
+	"194.169.175.0/24" # gb emanuelhosting
 	"102.210.41.0/24"  # ke bitcoin porn scam
 	"176.88.185.0/24"  # tr bitcoin porn scam
 	"179.152.0.0/14"   # br porn bitcoin scam
@@ -149,6 +147,7 @@ BADACTORS=(
 	"103.31.179.0/24" # bd
 	# # msedge.exe / exploit
 	"212.102.40.0/23" # uk /dallas us
+	# many connections for no purpose
 )
 
 for ip in "${BADACTORS[@]}"; do
