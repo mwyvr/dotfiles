@@ -78,8 +78,11 @@ COUNT=0
 
 # don't block us/assumes only the sysadmin(s) or other authorized users have ssh access
 DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
+OFFICEIP=$(/home/mw/dontblockme)
+DONTBLOCK="$DONTBLOCK $OFFICEIP"
 
 logger "$SCRIPT starting"
+logger "Ensures ACCEPT rule exists for $DONTBLOCK"
 
 # mail system, failed auth
 for ip in $(cat $SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
