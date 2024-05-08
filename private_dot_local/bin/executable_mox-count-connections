@@ -3,4 +3,18 @@
 
 old="/var/log/socklog/messages/*.[us]"
 cur="/var/log/socklog/messages/current"
-cat $old $cur | grep -e 'mox.*"new connection" pkg=smtpserver' | awk -F 'remote=| local' '{ print $2 }' | cut -d ':' -f 1 | sort | uniq -c | sort -r
+SCOPE=$cur
+
+if [ ! $# -eq 0 ]; then
+	case $1 in
+	all)
+		SCOPE="$old $cur"
+		;;
+	*)
+		echo "usage: "
+		echo "mox-count-connections [all]"
+		;;
+	esac
+fi
+
+cat $SCOPE | grep -e 'mox.*"new connection" pkg=smtpserver' | awk -F 'remote=| local' '{ print $2 }' | cut -d ':' -f 1 | sort | uniq -c | sort -r
