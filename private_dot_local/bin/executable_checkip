@@ -1,0 +1,29 @@
+#!/usr/bin/bash
+# checkip ipaddress
+# - grep messages log for examples
+# - perform whois
+# - check if blocked in iptables
+
+# if [ "$(id -u)" -ne 0 ]; then
+# 	echo "$SCRIPT must be run as root."
+# 	exit
+# fi
+
+SCOPE="/var/log/socklog/messages/*"
+
+if [ ! $# -eq 0 ]; then
+	ip=$1
+else
+	echo "checkip requires an ipaddress or netblock as an argument"
+	exit
+fi
+
+grep $ip $SCOPE
+whois $ip
+echo "Checking $ip in iptables:"
+
+if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+	echo "$ip not in iptables DROP rule"
+else
+	echo "$ip already in iptables with DROP rule"
+fi
