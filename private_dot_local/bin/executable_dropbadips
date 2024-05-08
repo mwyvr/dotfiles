@@ -75,20 +75,28 @@ fi
 
 # new blocks derived from logs
 COUNT=0
-
-# don't block us/assumes only the sysadmin(s) or other authorized users have ssh access
-DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
-OFFICEIP=$(/home/mw/dontblockme)
-DONTBLOCK="$DONTBLOCK $OFFICEIP"
-
 logger "$SCRIPT starting"
-logger "Ensures ACCEPT rule exists for $DONTBLOCK"
 
+# assumes only sysadmin(s) or other authorized users have ssh access
+DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
+# script to return my office ip, not in git
+OFFICEIP=$(/etc/dontblockme)
+DONTBLOCK="$DONTBLOCK $OFFICEIP"
+for ip in $DONTBLOCK; do
+	# if not in table, INSERT a rule to protect us
+	if ! iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1; then
+		iptables -I INPUT -s "$ip" -j ACCEPT
+		logger "ACCEPT rule added for $ip"
+	else
+		logger "ACCEPT rule exists for $ip"
+	fi
+done
+
+# all other rules are APPENDED
 # mail system, failed auth
 for ip in $(cat $SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
 	case "$ip" in
 	$DONTBLOCK)
-		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
 		continue
 		;;
 	*)
@@ -107,7 +115,6 @@ done
 for ip in $(cat $SCOPE | grep "mox.*spf fail.*your ip" | awk -F 'your ip | is not' '{print $2}' | sort | uniq); do
 	case "$ip" in
 	$DONTBLOCK)
-		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
 		continue
 		;;
 	*)
@@ -126,7 +133,6 @@ done
 for ip in $(cat $SCOPE | grep "mox.*rejecting due to listing in dnsbl.*Listed by CSS" | awk -F'/ip/|\" mailfrom' '{print $2}' | sort | uniq); do
 	case "$ip" in
 	$DONTBLOCK)
-		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
 		continue
 		;;
 	*)
