@@ -4,6 +4,7 @@
 #
 #     - failed mail server authentication attempts
 #     - hosts attempting connection with or only offering insecure protocols
+#     - spf policy rejects; on this server these are 100% spam or scams
 #
 # ... and adds a DROP rule to iptables.
 #
@@ -15,7 +16,8 @@
 #
 # By default dropips parses only /var/log/socklog/messages/current; to
 # catch up with prior activity, supply any argument to the script.
-#
+
+# IMPORTANT: When making changes, don't forget to install it to cron.hourly once tested.
 # To install to cron.hourly run:
 #   dropips install
 
@@ -45,6 +47,9 @@ if [ ! $# -eq 0 ]; then
 		echo "Installed, exiting"
 		exit
 	elif [ "$1" == "all" ]; then
+		echo "Scanning all logs"
+		SCOPE="/var/log/socklog/messages/*"
+	elif [ "$1" == "reset" ]; then
 		echo "Resetting iptables"
 		iptables -F
 		COUNTRIES="cn ru"
@@ -52,6 +57,7 @@ if [ ! $# -eq 0 ]; then
 		BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
 		URL_SUFFIX="-aggregated.zone"
 		for code in $COUNTRIES; do
+			echo "Dropping $code"
 			URL="$BASE_URL$code$URL_SUFFIX"
 			echo $URL
 			for ip in $(curl $URL); do
@@ -61,13 +67,13 @@ if [ ! $# -eq 0 ]; then
 		echo "Setting scope to all logs and processing."
 		SCOPE="/var/log/socklog/messages/*"
 	else
-		echo "$SCRIPT: Bad command: $1. Use install or all"
-		logger "$SCRIPT: Bad command: $1. Use install or all"
+		echo "$SCRIPT: Bad command: $1. Use install, all, or reset"
+		logger "$SCRIPT: Bad command: $1. Use install, all, or reset"
 		exit
 	fi
 fi
 
-# new blocks
+# new blocks derived from logs
 COUNT=0
 
 # don't block us/assumes only the sysadmin(s) or other authorized users have ssh access
@@ -75,7 +81,7 @@ DONTBLOCK=$(ss | grep ssh | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | so
 
 logger "$SCRIPT starting"
 
-# mail system
+# mail system, failed auth
 for ip in $(cat $SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
 	case "$ip" in
 	$DONTBLOCK)
@@ -94,24 +100,49 @@ for ip in $(cat $SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print
 	esac
 done
 
-# http server; some are legit internet intel scans
-# for ip in $(cat $SCOPE | grep "TLS handshake error.*unsupported" | awk '{ sub(/.* handshake error from /,""); sub(/:.*/,""); print }' | sort | uniq); do
-# 	case $ip in
-# 	$DONTBLOCK)
-# 		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
-# 		continue
-# 		;;
-# 	*)
-# 		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
-# 		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-# 			iptables -A INPUT -j DROP -s "$ip"
-# 			logger "mox unsupported HTTP TLS DROP $ip"
-# 			let COUNT++
-# 		fi
-# 		;;
-# 	esac
-# done
+# mail system, spf violators - all are attacks on our domains or spoofs of legit biz
+for ip in $(cat $SCOPE | grep "mox.*spf fail.*your ip" | awk -F 'your ip | is not' '{print $2}' | sort | uniq); do
+	case "$ip" in
+	$DONTBLOCK)
+		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
+		continue
+		;;
+	*)
+		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
+		# Unless iptables has been flushed recently, this will always be false
+		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+			iptables -A INPUT -j DROP -s "$ip"
+			logger "mox spf fail DROP $ip"
+			let COUNT++
+		fi
+		;;
+	esac
+done
 
+# mail system, dnsbl rejects, often for malware
+for ip in $(cat $SCOPE | grep "mox.*rejecting due to listing in dnsbl.*Listed by CSS" | awk -F'/ip/|\" mailfrom' '{print $2}' | sort | uniq); do
+	case "$ip" in
+	$DONTBLOCK)
+		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
+		continue
+		;;
+	*)
+		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
+		# Unless iptables has been flushed recently, this will always be false
+		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+			iptables -A INPUT -j DROP -s "$ip"
+			logger "mox dnsbl reject DROP $ip"
+			let COUNT++
+		fi
+		;;
+	esac
+done
+
+# IMPORTANT: When making changes, don't forget to install it to cron.hourly once tested.
+# To install to cron.hourly run:
+#   dropips install
+
+# static list of noted bad actors
 BADACTORS=(
 	# prolific spammers
 	"194.169.175.0/24" # gb emanuelhosting
@@ -122,25 +153,26 @@ BADACTORS=(
 	"190.42.0.0/17"    # pe bitcoin porn scam
 	"196.176.0.0/14"   # tn bitcoin porn scam
 	"41.211.128.0/19"  # ga porn bitcoin scam
-	"178.162.128.0/18" # nl - leaseweb
-	"185.49.69.0/24"   # gb - leaseweb
-	"37.48.64.0/18"    # nl - leaseweb
-	"5.79.64.0/18"     # nl - leaseweb
-	"81.171.0.0/19"    # nl - leaseweb
-	"62.210.0.0/16"    # fr - Scaleway hosts malware, dns blocklisted
+	"178.162.128.0/18" # nl leaseweb
+	"185.49.69.0/24"   # gb leaseweb
+	"37.48.64.0/18"    # nl leaseweb
+	"5.79.64.0/18"     # nl leaseweb
+	"81.171.0.0/19"    # nl leaseweb
+	"62.210.0.0/16"    # fr Scaleway hosts malware, dns blocklisted
 	"62.4.0.0/19"      # fr scaleway
-	"163.172.0.0/16"   # fr - Scaleway hosts malware, dns blocklisted
-	"200.75.0.0/19"    # cl - spam hosts
-
-	"192.119.160.0/20" # us - "madgenius.com" scam sender
-	"155.94.191.0/24"  # us - "madgenius.com" scam sender
-	"165.140.240.0/22" # us - alphavps scam sender
-	"109.71.254.0/24"  # de - emeraldhost.de apple ID phishing scammer
-	"41.61.0.0/17"     # hu/sa - grindhost - canadapost/intelcom phishing scammer; viagra
-	"77.87.208.0/21"   # ru - bad spam
+	"163.172.0.0/16"   # fr Scaleway hosts malware, dns blocklisted
+	"200.75.0.0/19"    # cl spam hosts
+	"192.119.160.0/20" # us "madgenius.com" scam sender
+	"155.94.191.0/24"  # us "madgenius.com" scam sender
+	"165.140.240.0/22" # us alphavps scam sender
+	"109.71.254.0/24"  # de emeraldhost.de apple ID phishing scammer
+	"41.61.0.0/17"     # hu grindhost - canadapost/intelcom phishing scammer; viagra
+	"77.87.208.0/21"   # ru bad spam, now covered by country block
 	"5.104.104.0/21"   # de male gummies
-	# notable smtp connections without purpose
+	# notable smtp connections without purpose or no tls (always bad actors)
 	"193.222.96.0/24" # fr contantmoulin, 4000 connections over several days
+	"80.76.49.0/24"   # fr
+	"43.158.217.0/24" # sg
 	# auth violators
 	"111.0.0.0/10"   # cn - china mobile
 	"27.115.0.0/17"  # cn - china unicom
@@ -148,6 +180,7 @@ BADACTORS=(
 	# spf and dmarc violators
 	"191.180.0.0/14"  # br
 	"103.31.179.0/24" # bd
+	"149.54.32.0/24"  # zz afghanistan
 	# # msedge.exe / exploit
 	"212.102.40.0/23" # uk /dallas us
 	# many connections for no purpose
@@ -169,4 +202,5 @@ for ip in "${BADACTORS[@]}"; do
 		;;
 	esac
 done
+
 logger "$SCRIPT finished, $COUNT DROP rules added"
