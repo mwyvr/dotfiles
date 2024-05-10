@@ -178,6 +178,7 @@ BADACTORS=(
 	"41.61.0.0/17"     # hu grindhost - canadapost/intelcom phishing scammer; viagra
 	"77.87.208.0/21"   # ru bad spam, now covered by country block
 	"5.104.104.0/21"   # de male gummies
+	"213.202.192.0/18" # de male gummies
 	# notable smtp connections without purpose or no tls (always bad actors)
 	"193.222.96.0/24" # fr contantmoulin, 4000 connections over several days
 	"80.76.49.0/24"   # fr
