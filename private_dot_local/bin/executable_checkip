@@ -41,6 +41,10 @@ case $ID in
         sudo journalctl -g $ip
         whois $ip
         ;;
+    opensuse-tumbleweed)
+        sudo journalctl -g $ip
+        whois $ip
+        ;;
     *)
         echo "Unknown distribution: $ID"
         exit 1
