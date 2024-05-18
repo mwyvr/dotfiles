@@ -5,18 +5,23 @@ case $ID in
 chimera)
 	doas apk update
 	doas apk upgrade
+	fwupdmgr get-updates && fwupdmgr update
 	;;
 void)
 	sudo xbps-install -Su
+	fwupdmgr get-updates && fwupdmgr update
 	;;
 opensuse-tumbleweed)
 	sudo zypper dup
+	fwupdmgr get-updates && fwupdmgr update
 	;;
 opensuse-aeon)
 	sudo transactional-update dup
+	fwupdmgr get-updates && fwupdmgr update
 	;;
 opensuse-microos)
 	sudo transactional-update dup
+	fwupdmgr get-updates && fwupdmgr update
 	;;
 *)
 	echo "Unknown Linux distribution, terminating."
