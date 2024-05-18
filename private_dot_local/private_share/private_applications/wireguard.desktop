@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Wireguard
+GenericName=Wireguard
+Comment=Toggle Wireguard
+Exec=wgtoggle
+Terminal=true
+Categories=System;Network;
+Keywords=wireguard;vpn;
