@@ -1,6 +1,7 @@
 #!/bin/sh
 # wgtoggle.sh activates or deactivates the wg0 connection
 # nmcli must be installed in the host OS (not a Distrobox container)
+# this can be run from cli or as an Exec in a .desktop shortcut
 UPCMD="nmcli connection up wg0"
 DOWNCMD="nmcli connection down wg0"
 
@@ -31,6 +32,9 @@ if [ -z "${CONTAINER_ID}" ]; then
 		echo "nmcli not installed on host (not container) OS"
 		exit 1
 	fi
+else
+	echo "wgtoggle must be run from host (not container) OS"
+	exit 1
 fi
 
 nmcli connection show --active | grep wg0 >/dev/null
