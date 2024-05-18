@@ -162,6 +162,7 @@ BADACTORS=(
 	"190.42.0.0/17"    # pe bitcoin porn scam
 	"196.176.0.0/14"   # tn bitcoin porn scam
 	"41.211.128.0/19"  # ga porn bitcoin scam
+	"103.164.146.0/24" # ph bitcoin porn scam
 	"178.162.128.0/18" # nl leaseweb
 	"185.49.69.0/24"   # gb leaseweb
 	"37.48.64.0/18"    # nl leaseweb
