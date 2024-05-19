@@ -169,7 +169,6 @@ BADACTORS=(
 	"5.79.64.0/18"     # nl leaseweb
 	"81.171.0.0/19"    # nl leaseweb
 	"62.210.0.0/16"    # fr Scaleway hosts malware, dns blocklisted
-	"62.4.0.0/19"      # fr scaleway
 	"163.172.0.0/16"   # fr Scaleway hosts malware, dns blocklisted
 	"200.75.0.0/19"    # cl spam hosts
 	"192.119.160.0/20" # us "madgenius.com" scam sender
@@ -193,6 +192,12 @@ BADACTORS=(
 	"149.54.32.0/24"  # zz afghanistan
 	# # msedge.exe / exploit
 	"212.102.40.0/23" # uk /dallas us
+	# dnsbl / obvious spammers
+	"143.110.166.49"  # digitalocean yerembe.com
+	"159.89.8.234"    # digitalocean homeofficehaven.net reg'd in iceland
+	"209.97.180.160"  # digitalocean cakechange.com reg'd in iceland
+	"165.227.221.227" # digitalocean malware sender, reported, no action by them
+	"62.4.0.0/19"     # fr scaleway
 	# many connections for no purpose
 )
 
