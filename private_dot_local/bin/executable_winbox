@@ -1,7 +1,11 @@
 #!/bin/sh
-FP="$HOME/.local/bin/winbox64.exe"
-if [ ! -f "$FP" ]; then
-	wget https://mt.lv/winbox64 -O $FP
+if [ -z "${CONTAINER_ID}" ]; then
+	EXE="$HOME/.local/bin/winbox64.exe"
+	if [ ! -f "$EXE" ]; then
+		wget https://mt.lv/winbox64 -O $EXE
+	fi
+	distrobox enter -n wine -- wine $EXE
+	distrobox-stop wine
+else
+	echo "Must be run from host OS, not container."
 fi
-# wine may be exported/running from a distrobox
-wine $FP
