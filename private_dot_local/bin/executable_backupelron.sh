@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$HOSTNAME" = "elron" ]; then
+if [ "$HOSTNAME" == "elron" ]; then
 	echo "Do not backup on to yourself"
 	exit 1
 else
