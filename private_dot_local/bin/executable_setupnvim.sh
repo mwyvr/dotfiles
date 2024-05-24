@@ -2,6 +2,7 @@
 # install supports for neovim on various Linux distributions (Chimera Linux, Void Linux, openSUSE Tumbleweed/Aeon in a tw container)
 # helix as backup
 . /etc/os-release
+
 case $ID in
 chimera)
 	doas apk update
@@ -10,7 +11,12 @@ chimera)
 	go install github.com/jesseduffield/lazygit@latest
 	;;
 void)
-	sudo xbps-install -Su neovim helix go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard base-devel
+	if [ -z "$DISPLAY" ]; then
+		# probably a server
+		sudo xbps-install -Su neovim helix go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl base-devel
+	else
+		sudo xbps-install -Su neovim helix go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl base-devel wl-clipboard
+	fi
 	;;
 "opensuse-tumbleweed")
 	sudo zypper refresh
