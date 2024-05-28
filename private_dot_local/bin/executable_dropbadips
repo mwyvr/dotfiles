@@ -182,6 +182,7 @@ BADACTORS=(
 	"193.222.96.0/24" # fr contantmoulin, 4000 connections over several days
 	"80.76.49.0/24"   # fr
 	"43.158.217.0/24" # sg
+	"45.125.66.0/25"  # hk
 	# auth violators
 	"111.0.0.0/10"   # cn - china mobile
 	"27.115.0.0/17"  # cn - china unicom
