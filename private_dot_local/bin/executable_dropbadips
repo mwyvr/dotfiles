@@ -41,7 +41,7 @@ void)
 	LOGALL="journalctl -u mox.service -t moxproduction --no-pager"
 	;;
 *)
-	echo "Unsupported. If running in a distrobox, go to the root OS."
+	echo "Unsupported Linux distribution. If running in a distrobox, run from the root OS."
 	exit 1
 	;;
 esac
@@ -69,6 +69,19 @@ install() {
 	esac
 }
 
+block_countries() {
+	# COUNTRIES="cn ru"
+	BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
+	URL_SUFFIX="-aggregated.zone"
+	for code in $COUNTRIES; do
+		logger "$BASE dropping country $code"
+		URL="$BASE_URL$code$URL_SUFFIX"
+		for ip in $(curl $URL); do
+			iptables -A INPUT -j DROP -s $ip
+		done
+	done
+}
+
 # command line argument are optional:
 # - install: copy script to root executable location for snooze (Void) or systemd-timer (opensuse-microos)
 # - all: rescan all logs today and prior
@@ -83,19 +96,23 @@ if [ ! $# -eq 0 ]; then
 		SCOPE=$LOGALL
 		logger "$BASE scanning all logs"
 	elif [ "$1" == "reset" ]; then
+		# no params after reset
+		if [ "$2" == "" ]; then
+			echo "$BASE reset: requires at least one country code as parameter"
+			echo "eg: $BASE reset ru cn"
+			exit
+		fi
 		logger "$BASE resetting iptables"
 		iptables -F
-		COUNTRIES="cn ru"
-		logger "$BASE dropping countries: $COUNTRIES"
-		BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
-		URL_SUFFIX="-aggregated.zone"
-		for code in $COUNTRIES; do
-			logger "$BASE dropping country $code"
-			URL="$BASE_URL$code$URL_SUFFIX"
-			for ip in $(curl $URL); do
-				iptables -A INPUT -j DROP -s $ip
-			done
+		# after arg 1, balanace are countries
+		shift
+		COUNTRIES=""
+		for var in "$@"; do
+			COUNTRIES+=" "
+			COUNTRIES+="$var"
 		done
+		logger "$BASE dropping countries: $COUNTRIES"
+		block_countries
 		SCOPE=$LOGALL
 		logger "$BASE scanning all logs"
 	else
@@ -108,11 +125,16 @@ fi
 # new blocks derived from logs
 COUNT=0
 
-# assumes only sysadmin(s) or other authorized users have ssh access
+# AVOID BLOCKING US / PROTECTED IPs
+# Add home or office static IP if any
+if test -f /etc/dontblockme; then
+	DONTBLOCKSTATIC=$(cat /etc/dontblockme)
+fi
+# Dynamic protection: assumes only sysadmin(s) or other authorized users have
+# ssh access to this machine, INSERTS ACCEPT at start of ruleset to avoid blocking
 DONTBLOCK=$(ss | grep ":ssh" | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
-# script to return my office ip, not in git
-OFFICEIP=$(cat /etc/dontblockme)
-DONTBLOCK="$DONTBLOCK $OFFICEIP"
+# combine and ACCEPT
+DONTBLOCK="$DONTBLOCK $DONTBLOCKSTATIC"
 for ip in $DONTBLOCK; do
 	# if not in table, INSERT a rule to protect us
 	if ! iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1; then
@@ -123,6 +145,7 @@ for ip in $DONTBLOCK; do
 	fi
 done
 
+# TIME TO DROP IPs
 # all other rules are APPENDED
 # mail system, failed auth
 for ip in $($SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
