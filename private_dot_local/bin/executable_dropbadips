@@ -37,7 +37,7 @@ void)
 	LOGALL="cat /var/log/socklog/messages/@* /var/log/socklog/messages/current"
 	;;
 "opensuse-microos")
-	LOGCURRENT="journalctl -u mox.service -t moxproduction --no-pager --since yesterday"
+	LOGCURRENT="journalctl -u mox.service -t moxproduction --no-pager --since today"
 	LOGALL="journalctl -u mox.service -t moxproduction --no-pager"
 	;;
 *)
