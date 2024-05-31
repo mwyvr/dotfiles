@@ -1,33 +1,34 @@
 #!/usr/bin/bash
-# dropips is meant to be run via snooze (or cron) and scans logfiles for the
-# following:
-#
-#     - failed mail server authentication attempts
-#     - hosts attempting connection with or only offering insecure protocols
-#     - spf policy rejects; on this server these are 100% spam or scams
-#
-# ... and adds a DROP rule to iptables.
-#
-# In addition the script adds some hard coded IP addresses or address blocks
-# for prolific spammers and crackers.
+# dropbadips processes mox mail server log files to identify obvious bad actors
+# and add a DROP rule for their IP.
 #
 # The script attempts to insert an ACCEPT rule for your IP address to avoid
-# locking out an admin, if run from the command line.
+# locking out an admin, if run from the command line, and any IPs listed in
+# /etc/dontblockme.
 #
-# By default dropips parses only /var/log/socklog/messages/current; to
-# catch up with prior activity, supply any argument to the script.
-
-# IMPORTANT: When making changes, don't forget to install it to cron.hourly once tested.
-# To install to cron.hourly run:
+# Note: This isn't a replacement for fail2ban; it's specific to mox and *may*
+# be extended to parse log files for failed ssh access in the future.
+#
+# Currently the script adds a DROP rule for:
+# - failed authentication to the mail server (imap or otherwise)
+# - SPF rejects, sure sign of spammers and scammers
+# - DNSBL rejects, could cause problems for some
+#
+# There are also static IP blocks added manually from time to time when
+# egregious spammers slipping through are identified.
+#
+# IMPORTANT: When making changes, don't forget to re-install the script with:
 #   dropips install
-
-SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
-BASE=$(basename "$SCRIPT")
 
 if [ "$(id -u)" -ne 0 ]; then
 	echo "$SCRIPT must be run as root."
+	logger "$SCRIPT must be run as root."
 	exit
 fi
+
+SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
+BASE=$(basename "$SCRIPT")
+logger "$SCRIPT starting, command line parameter [$1]"
 
 . /etc/os-release
 case $ID in
@@ -79,25 +80,24 @@ if [ ! $# -eq 0 ]; then
 		echo "Installed, exiting"
 		exit
 	elif [ "$1" == "all" ]; then
-		echo "Scanning all logs"
 		SCOPE=$LOGALL
+		logger "$BASE scanning all logs"
 	elif [ "$1" == "reset" ]; then
-		echo "Resetting iptables"
+		logger "$BASE resetting iptables"
 		iptables -F
 		COUNTRIES="cn ru"
-		echo "Dropping countries: $COUNTRIES. Please wait."
+		logger "$BASE dropping countries: $COUNTRIES"
 		BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
 		URL_SUFFIX="-aggregated.zone"
 		for code in $COUNTRIES; do
-			echo "Dropping $code"
+			logger "$BASE dropping country $code"
 			URL="$BASE_URL$code$URL_SUFFIX"
-			echo $URL
 			for ip in $(curl $URL); do
 				iptables -A INPUT -j DROP -s $ip
 			done
 		done
-		echo "Setting scope to all logs and processing."
 		SCOPE=$LOGALL
+		logger "$BASE scanning all logs"
 	else
 		echo "$SCRIPT: Bad command: $1. Use install, all, or reset"
 		logger "$SCRIPT: Bad command: $1. Use install, all, or reset"
@@ -107,7 +107,6 @@ fi
 
 # new blocks derived from logs
 COUNT=0
-logger "$SCRIPT starting"
 
 # assumes only sysadmin(s) or other authorized users have ssh access
 DONTBLOCK=$(ss | grep ":ssh" | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
