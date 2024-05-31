@@ -1,0 +1,5 @@
+[Unit]
+Description="Run dropbadips script"
+
+[Service]
+ExecStart=/usr/local/bin/dropbadips

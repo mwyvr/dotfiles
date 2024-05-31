@@ -1,0 +1,11 @@
+[Unit]
+Description="Run dropbadips.service 2min after boot and 15 minutes relative to activation time"
+
+[Timer]
+OnBootSec=4min
+OnUnitActiveSec=24h
+OnCalendar=*:0/5
+Unit=dropbadips.service
+
+[Install]
+WantedBy=multi-user.target

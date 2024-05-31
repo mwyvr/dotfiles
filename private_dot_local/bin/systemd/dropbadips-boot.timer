@@ -1,0 +1,9 @@
+[Unit]
+Description="Run dropbadips-boot.service 30 seconds after boot"
+
+[Timer]
+OnBootSec=30sec
+Unit=dropbadips-boot.service
+
+[Install]
+WantedBy=multi-user.target

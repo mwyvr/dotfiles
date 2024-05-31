@@ -1,0 +1,6 @@
+[Unit]
+Description="Run dropbadips reset for boot, via associated timer"
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/dropbadips reset ru cn ir
