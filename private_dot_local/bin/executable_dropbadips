@@ -184,7 +184,7 @@ for ip in $($SCOPE | grep "mox.*spf fail.*your ip" | awk -F 'your ip | is not' '
 done
 
 # mail system, dnsbl rejects, often for malware
-for ip in $($SCOPE | grep "mox.*rejecting due to listing in dnsbl.*Listed by CSS" | awk -F'/ip/|\" mailfrom' '{print $2}' | sort | uniq); do
+for ip in $($SCOPE | grep "mox.*rejecting due to listing in dnsbl.*" | grep -Eo '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)' | sort | uniq); do
 	case "$ip" in
 	$DONTBLOCK)
 		continue
