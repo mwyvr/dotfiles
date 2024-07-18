@@ -184,7 +184,7 @@ for ip in $($SCOPE | grep "mox.*spf fail.*your ip" | awk -F 'your ip | is not' '
 done
 
 # mail system, dnsbl rejects, often for malware
-for ip in $($SCOPE | grep "mox.*rejecting due to listing in dnsbl.*" | grep -Eo '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)' | sort | uniq); do
+for ip in $($SCOPE | grep "mox.*rejecting due to listing in dnsbl.*Listed by CSS" | awk -F'/ip/|\" mailfrom' '{print $2}' | sort | uniq); do
 	case "$ip" in
 	$DONTBLOCK)
 		continue
@@ -217,6 +217,9 @@ BADACTORS=(
 	"196.176.0.0/14"   # tn bitcoin porn scam
 	"41.211.128.0/19"  # ga porn bitcoin scam
 	"103.164.146.0/24" # ph bitcoin porn scam
+	"213.202.192.0/18" # de myloc.de gummies
+	"89.163.128.0/17"  # de myloc.de gummies
+	"46.165.192.0/18"  # de leaseweb gummies
 	"178.162.128.0/18" # nl leaseweb
 	"185.49.69.0/24"   # gb leaseweb
 	"37.48.64.0/18"    # nl leaseweb
@@ -231,12 +234,21 @@ BADACTORS=(
 	"109.71.254.0/24"  # de emeraldhost.de apple ID phishing scammer
 	"41.61.0.0/17"     # hu grindhost - canadapost/intelcom phishing scammer; viagra
 	"77.87.208.0/21"   # ru bad spam, now covered by country block
+	"31.28.27.0/24"    # ru bad spam, now covered by country block
 	"5.104.104.0/21"   # de male gummies
+	"187.20.0.0/14"    # br spoofs outlook.com
+	"102.130.120.0/24" # za purolator, intelexprescom scam
+
 	# notable smtp connections without purpose or no tls (always bad actors)
 	"193.222.96.0/24" # fr contantmoulin, 4000 connections over several days
 	"80.76.49.0/24"   # fr
 	"43.158.217.0/24" # sg
 	"45.125.66.0/25"  # hk
+	# ru not in country block at discovery
+	"62.173.128.0/19" # ru junk sales spam, spacenet
+	# cn not in country block at discovery
+	"43.143.0.0/16" # cn - donation fraud - tencent cloud computing
+
 	# auth violators
 	"111.0.0.0/10"   # cn - china mobile
 	"27.115.0.0/17"  # cn - china unicom
@@ -248,8 +260,10 @@ BADACTORS=(
 	# # msedge.exe / exploit
 	"212.102.40.0/23" # uk /dallas us
 	# dnsbl / obvious spammers
+	"92.53.111.0/24"  # ru, apparently outside of current country block
 	"143.110.166.49"  # digitalocean yerembe.com
 	"159.89.8.234"    # digitalocean homeofficehaven.net reg'd in iceland
+	"167.99.200.210"  # digitalocean adamdugan.com spf pass malware
 	"209.97.180.160"  # digitalocean cakechange.com reg'd in iceland
 	"165.227.221.227" # digitalocean malware sender, reported, no action by them
 	"62.4.0.0/19"     # fr scaleway
