@@ -13,15 +13,13 @@ void)
 	;;
 opensuse-tumbleweed)
 	sudo zypper dup
-	fwupdmgr get-updates && fwupdmgr update
 	;;
-opensuse-aeon)
+aeon)
 	sudo transactional-update dup
 	fwupdmgr get-updates && fwupdmgr update
 	;;
 opensuse-microos)
 	sudo transactional-update dup
-	fwupdmgr get-updates && fwupdmgr update
 	;;
 *)
 	echo "Unknown Linux distribution, terminating."
