@@ -2,6 +2,7 @@ if status is-interactive
     set -g fish_key_bindings fish_vi_key_bindings
     set -U EDITOR nvim
     set fish_greeting # disable welcome
+    set -U LIBVIRT_DEFAULT_URI 'qemu:///system'
 end
 
 # make ctrl-f accept auto suggestion in vi mode as it does in emacs mode
