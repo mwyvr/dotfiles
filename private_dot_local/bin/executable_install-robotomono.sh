@@ -1,10 +1,10 @@
 #!/bin/sh
-INSTALLPATH="/home/mw/.local/share/fonts/robotomono"
-HOSTNAME=$(hostname)
 
+# I prefer Roboto Mono; current nvim config demands a patched Nerd Font
+# which is not carried by most distributions, so for thosse, install it ~/.local
 install_fonts() {
-	# I prefer Roboto Mono; current nvim config demands a patched Nerd Font
-	# which is unlikely to be carried by most distributions, so install it in .local
+INSTALLPATH="/home/$USER/.local/share/fonts/robotomono"
+HOSTNAME=$(hostname)
 	if ! [ -f $INSTALLPATH/RobotoMonoNerdFont-Regular.ttf ]; then
 		ZIPFILE=$(mktemp)
 		wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/RobotoMono.zip" -O $ZIPFILE
@@ -42,4 +42,13 @@ EOF
 	fc-cache -f -r
 }
 
-install_fonts
+. /etc/os-release
+case $ID in
+chimera)
+	doas apk update
+	doas apk add fonts-nerd-roboto-mono
+	;;
+*)
+  install_fonts
+	;;
+esac
