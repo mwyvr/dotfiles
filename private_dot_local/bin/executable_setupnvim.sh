@@ -20,7 +20,7 @@ void)
     ;;
 "opensuse-tumbleweed")
     sudo zypper refresh
-    sudo zypper in neovim helix go1.22 git lazygit nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make
+    sudo zypper in neovim go1.22 git lazygit nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make
     if [ $CONTAINER_ID == "tumbleweed" ]; then
         distrobox-export --bin /usr/bin/nvim
     fi
