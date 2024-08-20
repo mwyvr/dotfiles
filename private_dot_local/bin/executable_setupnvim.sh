@@ -5,24 +5,27 @@
 
 case $ID in
 chimera)
-    doas apk update
-    doas apk add neovim helix fonts-nerd-roboto-mono go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake
-    # not in chimera cports (yet)
-    go install github.com/jesseduffield/lazygit@latest
+    # doas apk update
+    # doas apk add neovim helix fonts-nerd-roboto-mono go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake
+    # # not in chimera cports (yet)
+    # go install github.com/jesseduffield/lazygit@latest
+    echo "Install in a distrobox"
+    exit 1
     ;;
 void)
     if [ -z "$DISPLAY" ]; then
         # probably a server
-        sudo xbps-install -Su neovim helix go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl base-devel
+        sudo xbps-install -Su chezmoi neovim helix go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl base-devel
     else
-        sudo xbps-install -Su neovim helix go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl base-devel wl-clipboard
+        sudo xbps-install -Su chezmoi neovim helix go lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl base-devel wl-clipboard
     fi
     ;;
 "opensuse-tumbleweed")
     sudo zypper refresh
-    sudo zypper in neovim go1.22 git lazygit nodejs python312-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make
-    if [ $CONTAINER_ID == "tumbleweed" ]; then
-        distrobox-export --bin /usr/bin/nvim
+    sudo zypper in neovim helix chezmoi go git lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make
+    if [ $CONTAINER_ID == "twbox" ]; then
+         distrobox-export --bin /usr/bin/nvim
+         distrobox-export --bin /usr/bin/chezmoi
     fi
     ;;
 "aeon")
