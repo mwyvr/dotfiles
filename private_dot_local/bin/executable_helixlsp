@@ -9,7 +9,7 @@ void)
     sudo xbps-install -Su go nodejs python3-pip
     ;;
 "opensuse-tumbleweed")
-    # Likelyi in distrobox container
+    # Likely in distrobox container
     sudo zypper install go nodejs python3-pip
     if [ $CONTAINER_ID == "twbox" ]; then
         sudo ln -svf /usr/bin/helix /usr/bin/hx
