@@ -5,12 +5,12 @@
 
 case $ID in
 chimera)
-    # doas apk update
-    # doas apk add neovim helix fonts-nerd-roboto-mono go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake
-    # # not in chimera cports (yet)
-    # go install github.com/jesseduffield/lazygit@latest
-    echo "Install in a distrobox"
-    exit 1
+    doas apk update
+    doas apk add neovim fonts-nerd-roboto-mono go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake
+    # not in chimera cports (yet)
+    go install github.com/jesseduffield/lazygit@latest
+    # echo "install in a distrobox"
+    # exit 1
     ;;
 void)
     if [ -z "$DISPLAY" ]; then
