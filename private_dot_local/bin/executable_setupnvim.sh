@@ -7,6 +7,7 @@ case $ID in
 chimera)
     doas apk update
     doas apk add neovim fonts-nerd-roboto-mono go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake gmake
+    ln -svf /usr/bin/gmake ~/.local/bin/make
     # not in chimera cports (yet)
     go install github.com/jesseduffield/lazygit@latest
     # echo "install in a distrobox"
