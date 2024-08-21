@@ -25,5 +25,8 @@ abbr -a pst ps -o pid,ppid,stat,user,comm -AH
 
 
 {{- if eq .chezmoi.osRelease.id "chimera" }}
-alias make cmake
+abbr -a update doas apk update && doas apk upgrade
+{{- end }}
+{{- if eq .chezmoi.osRelease.id "aeon" }}
+abbr -a update sudo transactional-update dup
 {{- end }}
