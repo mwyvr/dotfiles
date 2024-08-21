@@ -7,7 +7,7 @@
 test -s ~/.alias && . ~/.alias || true
 set -o vi
 
-{{- if eq .chezmoi.osRelease.id "void" "chimera" }}
+{{- if eq .chezmoi.osRelease.id "void" "chimera" "arch" }}
 {{/*
 # set coloured prompts and window titles for
 # void/freebsd/chimera; openSUSE does this in /etc/...

@@ -13,6 +13,11 @@ chimera)
     # echo "install in a distrobox"
     # exit 1
     ;;
+arch)
+    sudo pacman -Syu --needed neovim luarocks helix ttf-roboto-mono-nerd git lazygit base-devel go python-pip nodejs npm cargo fd ripgrep wl-clipboard
+    ln -svf /usr/bin/helix ~/.local/bin/hx
+
+    ;;
 void)
     if [ -z "$DISPLAY" ]; then
         # probably a server
@@ -25,8 +30,8 @@ void)
     sudo zypper refresh
     sudo zypper in neovim helix chezmoi go git lazygit nodejs python3-pip cargo fd ripgrep unzip wget curl wl-clipboard gcc gcc-c++ make
     if [ $CONTAINER_ID == "twbox" ]; then
-         distrobox-export --bin /usr/bin/nvim
-         distrobox-export --bin /usr/bin/chezmoi
+        distrobox-export --bin /usr/bin/nvim
+        distrobox-export --bin /usr/bin/chezmoi
     fi
     ;;
 "aeon")
