@@ -4,7 +4,7 @@ return {
     config = function()
       require("nightfox").setup({
         options = {
-          transparent = true,
+          transparent = false,
           styles = {
             comments = "italic",
             -- keywords = "bold",
@@ -13,12 +13,12 @@ return {
         },
         palettes = {
           nordfox = {
-            bg1 = "#16191f", -- darker; #2e3440 is the original
+            bg1 = "#20242c", -- darker; #2e3440 is the original
           },
         },
         groups = {
           nordfox = {
-            CursorLine = { bg = "#101216" }, -- darker than bg, works with non-trans bg
+            CursorLine = { bg = "#1a1d23" }, -- 10% darker than bg, works with non-trans bg
           },
         },
       })
