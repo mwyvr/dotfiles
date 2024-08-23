@@ -21,4 +21,5 @@ left = ["mode", "spinner", "version-control", "file-name"]
 "S-tab" = ":buffer-previous"
 
 [keys.normal.space]
-"l" = ":run-shell-command $TERM -e -m lazygit"
+# "l" = ":run-shell-command $TERM -e -m lazygit"
+"g" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw" ]
