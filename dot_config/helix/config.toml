@@ -1,3 +1,6 @@
+# TODO - some ideas
+# https://github.com/LGUG2Z/helix-vim/blob/master/config.toml
+
 theme="nord-night"
 
 [editor]
@@ -16,13 +19,21 @@ render = true
 skip-levels = 1
 
 [editor.statusline]
-left = ["mode", "spinner", "version-control", "file-name", "file-modification-indicator"]
+left = ["mode", "spinner", "version-control", "file-name"]
 
 [keys.normal]
 "tab" = ":buffer-next"
 "S-tab" = ":buffer-previous"
 y = "yank_main_selection_to_clipboard"
 p = "paste_clipboard_before"
+
+# Alt-x shrink selection by one line
+A-x = "extend_to_line_bounds"
+X = ["extend_line_up", "extend_to_line_bounds"]
+
+[keys.select]
+A-x = "extend_to_line_bounds"
+X = ["extend_line_up", "extend_to_line_bounds"]
 
 [keys.normal.space]
 "g" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw" ]
