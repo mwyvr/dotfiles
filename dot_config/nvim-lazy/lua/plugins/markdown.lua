@@ -1,3 +1,6 @@
+-- if true then
+--   return {}
+-- end
 return {
   -- Minimum config required
   -- LazyExtras includes these plus linter; linter makes many docs too busy
@@ -25,23 +28,23 @@ return {
     lazy = true,
     config = true, -- or `opts = {}`
   },
-  {
-    "iamcco/markdown-preview.nvim",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = function()
-      vim.fn["mkdp#util#install"]()
-    end,
-    keys = {
-      {
-        "<leader>cp",
-        ft = "markdown",
-        "<cmd>MarkdownPreviewToggle<cr>",
-        desc = "Markdown Preview",
-      },
-    },
-    config = function()
-      vim.cmd([[do FileType]])
-    end,
-  },
+  -- {
+  --   "iamcco/markdown-preview.nvim",
+  --   cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+  --   build = function()
+  --     vim.fn["mkdp#util#install"]()
+  --   end,
+  --   keys = {
+  --     {
+  --       "<leader>cp",
+  --       ft = "markdown",
+  --       "<cmd>MarkdownPreviewToggle<cr>",
+  --       desc = "Markdown Preview",
+  --     },
+  --   },
+  --   config = function()
+  --     vim.cmd([[do FileType]])
+  --   end,
+  -- },
   -- TODO: add a toggle to include linter
 }
