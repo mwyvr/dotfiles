@@ -1,9 +1,30 @@
 [[languages]]
 
 [[language]]
+name = "bash"
+auto-format = true
+formatter = {command = "shfmt"}
+
+[[language]]
 name = "go"
 auto-format = true
-formatter = { command = "goimports" }
+formatter = {command = "goimports"}
+
+[[language]]
+name = "html"
+# language-servers = [ "vscode-html-language-server", "emmet-ls" ]
+formatter = { command = 'prettier', args = ["--parser", "html"] }
+auto-format = true
+
+[[language]]
+name = "css"
+formatter = { command = 'prettier', args = ["--parser", "css"] }
+auto-format = true
+
+[[language]]
+name = "json"
+formatter = { command = 'prettier', args = ["--parser", "json"] }
+auto-format = true
 
 [language-server.ruff-lsp]
 command = "ruff-lsp"
@@ -12,5 +33,5 @@ command = "ruff-lsp"
 name = "python"
 language-servers = [ "ruff-lsp" ]
 # In case you'd like to use ruff alongside black for code formatting:
-formatter = { command = "black", args = ["--quiet", "-"] }
 auto-format = true
+formatter = { command = "black", args = ["--quiet", "-"] }

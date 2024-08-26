@@ -2,11 +2,15 @@
 # https://github.com/LGUG2Z/helix-vim/blob/master/config.toml
 
 theme="nord-night"
+# theme = "tokyonight_storm"
 
 [editor]
-bufferline = "always"
+auto-format = true
+bufferline = "multiple"
+color-modes = true
 cursorline = true
-mouse = true
+line-number = "relative"
+mouse = false
 true-color = true
 
 [editor.cursor-shape]
@@ -19,7 +23,7 @@ render = true
 skip-levels = 1
 
 [editor.statusline]
-left = ["mode", "spinner", "version-control", "file-name"]
+left = ["mode", "spinner", "version-control", "file-name", "file-modification-indicator"]
 
 [keys.insert]
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
@@ -30,11 +34,13 @@ A-x = "extend_to_line_bounds"
 X = ["extend_line_up", "extend_to_line_bounds"]
 
 [keys.normal]
+C-p = ["move_line_up", "scroll_up"]
+C-n = ["move_line_down", "scroll_down"]
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
 "tab" = ":buffer-next"
 "S-tab" = ":buffer-previous"
-y = "yank_main_selection_to_clipboard"
-p = "paste_clipboard_before"
+# y = "yank_main_selection_to_clipboard"
+# p = "paste_clipboard_before"
 
 # Alt-x shrink selection by one line
 A-x = "extend_to_line_bounds"
