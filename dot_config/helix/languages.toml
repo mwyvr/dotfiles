@@ -12,17 +12,19 @@ formatter = {command = "goimports"}
 
 [[language]]
 name = "html"
-# language-servers = [ "vscode-html-language-server", "emmet-ls" ]
+language-servers = [ "vscode-html-language-server", "emmet-ls" ]
 formatter = { command = 'prettier', args = ["--parser", "html"] }
 auto-format = true
 
 [[language]]
 name = "css"
+language-servers = [ "vscode-css-language-server" ]
 formatter = { command = 'prettier', args = ["--parser", "css"] }
 auto-format = true
 
 [[language]]
 name = "json"
+language-servers = [ "vscode-json-language-server" ]
 formatter = { command = 'prettier', args = ["--parser", "json"] }
 auto-format = true
 
