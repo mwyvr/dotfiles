@@ -1,6 +1,6 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
-SETUVAR EDITOR:hx
+SETUVAR --export EDITOR:hx
 SETUVAR --export LIBVIRT_DEFAULT_URI:qemu\x3a///system
 SETUVAR __fish_initialized:3400
 SETUVAR fish_color_autosuggestion:4c566a
