@@ -10,11 +10,11 @@ export EDITOR=/usr/bin/hx
 
 # add path(s) for non-root
 if [ "$(id -u)" -ne 0 ]; then
-	mkdir -p $HOME/go/bin 
-	PATH="$PATH:$HOME/go/bin"
-	PATH="$PATH:$HOME/.local/bin"
+    mkdir -p "$HOME/go/bin"
+    PATH="$PATH:$HOME/go/bin"
+    PATH="$PATH:$HOME/.local/bin"
     export PATH
-	if [ -f "$HOME/.env" ]; then
-		. $HOME/.env
-	fi
+    if [ -f "$HOME/.env" ]; then
+        . "$HOME/.env"
+    fi
 fi
