@@ -1,39 +1,71 @@
 [[languages]]
+# https://github.com/helix-editor/helix/wiki/Language-Server-Configurations
+# https://github.com/helix-editor/helix/wiki/External-formatter-configuration
+
+# shells
+[[language]]
+name = "fish"
+formatter = { command = "fish_indent" }
+auto-format = true
 
 [[language]]
 name = "bash"
+indent = { tab-width = 4, unit = "    " }
+formatter = { command = 'shfmt', args = ["-i", "4"] }
 auto-format = true
-formatter = {command = "shfmt"}
 
+# text documents
+[[language]]
+name = "markdown"
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "markdown"] }
+language-servers = ["marksman"]
+
+# configuration or data markup languages
+[[language]]
+name = "toml"
+formatter = { command = "taplo", args = ["format", "-"] }
+auto-format = true
+
+[language-server.yaml-language-server.config.yaml]
+format = { enable = true }
+validation = true
+
+[language-server.yaml-language-server.config.yaml.schemas]
+"https://json.schemastore.org/github-workflow.json" = ".github/workflows/*.{yml,yaml}"
+"https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-tasks.json" = "roles/{tasks,handlers}/*.{yml,yaml}"
+
+# programming languages
 [[language]]
 name = "go"
 auto-format = true
-formatter = {command = "goimports"}
+formatter = { command = "goimports" }
 
 [[language]]
+name = "python"
+language-servers = ["ruff-lsp"]
+# In case you'd like to use ruff alongside black for code formatting:
+auto-format = true
+formatter = { command = "black", args = ["--quiet", "-"] }
+
+# hypertext and related
+[[language]]
 name = "html"
-language-servers = [ "vscode-html-language-server", "emmet-ls" ]
+language-servers = ["vscode-html-language-server", "emmet-ls"]
 formatter = { command = 'prettier', args = ["--parser", "html"] }
 auto-format = true
 
 [[language]]
 name = "css"
-language-servers = [ "vscode-css-language-server" ]
+language-servers = ["vscode-css-language-server"]
 formatter = { command = 'prettier', args = ["--parser", "css"] }
 auto-format = true
 
 [[language]]
 name = "json"
-language-servers = [ "vscode-json-language-server" ]
+language-servers = ["vscode-json-language-server"]
 formatter = { command = 'prettier', args = ["--parser", "json"] }
 auto-format = true
 
 [language-server.ruff-lsp]
 command = "ruff-lsp"
-
-[[language]]
-name = "python"
-language-servers = [ "ruff-lsp" ]
-# In case you'd like to use ruff alongside black for code formatting:
-auto-format = true
-formatter = { command = "black", args = ["--quiet", "-"] }
