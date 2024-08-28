@@ -21,9 +21,9 @@
 #   dropips install
 
 if [ "$(id -u)" -ne 0 ]; then
-	echo "$SCRIPT must be run as root."
-	logger "$SCRIPT must be run as root."
-	exit
+    echo "$SCRIPT must be run as root."
+    logger "$SCRIPT must be run as root."
+    exit
 fi
 
 SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
@@ -33,53 +33,53 @@ logger "$SCRIPT starting, command line parameter [$1]"
 . /etc/os-release
 case $ID in
 void)
-	LOGCURRENT="cat /var/log/socklog/messages/current"
-	LOGALL="cat /var/log/socklog/messages/@* /var/log/socklog/messages/current"
-	;;
+    LOGCURRENT="cat /var/log/socklog/messages/current"
+    LOGALL="cat /var/log/socklog/messages/@* /var/log/socklog/messages/current"
+    ;;
 "opensuse-microos")
-	LOGCURRENT="journalctl -u mox.service -t moxproduction --no-pager --since today"
-	LOGALL="journalctl -u mox.service -t moxproduction --no-pager"
-	;;
+    LOGCURRENT="journalctl -u mox.service -t moxproduction --no-pager --since today"
+    LOGALL="journalctl -u mox.service -t moxproduction --no-pager"
+    ;;
 *)
-	echo "Unsupported Linux distribution. If running in a distrobox, run from the root OS."
-	exit 1
-	;;
+    echo "Unsupported Linux distribution. If running in a distrobox, run from the root OS."
+    exit 1
+    ;;
 esac
 
 # default
 SCOPE=$LOGCURRENT
 
 install() {
-	case $ID in
-	void)
-		# ensure the latest is installed in hourly
-		# Note: Void/runit run-parts command won't launch a script ending in .sh
-		cp $SCRIPT /etc/cron.hourly/$BASE
-		chmod +x /etc/cron.hourly/$BASE
-		logger "$BASE installed itself to /etc/cron.hourly/"
-		;;
-	"opensuse-microos")
-		cp $SCRIPT /usr/local/bin/$BASE
-		logger "$BASE installed itself to /usr/local/bin; ensure systemd-timer setup"
-		;;
-	*)
-		echo "Unsupported Linux distribution. If running in a distrobox, run from the root OS."
-		exit 1
-		;;
-	esac
+    case $ID in
+    void)
+        # ensure the latest is installed in hourly
+        # Note: Void/runit run-parts command won't launch a script ending in .sh
+        cp $SCRIPT /etc/cron.hourly/$BASE
+        chmod +x /etc/cron.hourly/$BASE
+        logger "$BASE installed itself to /etc/cron.hourly/"
+        ;;
+    "opensuse-microos")
+        cp $SCRIPT /usr/local/bin/$BASE
+        logger "$BASE installed itself to /usr/local/bin; ensure systemd-timer setup"
+        ;;
+    *)
+        echo "Unsupported Linux distribution. If running in a distrobox, run from the root OS."
+        exit 1
+        ;;
+    esac
 }
 
 block_countries() {
-	# COUNTRIES="cn ru"
-	BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
-	URL_SUFFIX="-aggregated.zone"
-	for code in $COUNTRIES; do
-		logger "$BASE dropping country $code"
-		URL="$BASE_URL$code$URL_SUFFIX"
-		for ip in $(curl $URL); do
-			iptables -A INPUT -j DROP -s $ip
-		done
-	done
+    # COUNTRIES="cn ru"
+    BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
+    URL_SUFFIX="-aggregated.zone"
+    for code in $COUNTRIES; do
+        logger "$BASE dropping country $code"
+        URL="$BASE_URL$code$URL_SUFFIX"
+        for ip in $(curl $URL); do
+            iptables -A INPUT -j DROP -s $ip
+        done
+    done
 }
 
 # command line argument are optional:
@@ -88,38 +88,38 @@ block_countries() {
 # - reset: drop current iptables, import any countries defined, and process all the log files current and past
 #          reset may get run once on boot
 if [ ! $# -eq 0 ]; then
-	if [ "$1" == "install" ]; then
-		install
-		echo "Installed, exiting"
-		exit
-	elif [ "$1" == "all" ]; then
-		SCOPE=$LOGALL
-		logger "$BASE scanning all logs"
-	elif [ "$1" == "reset" ]; then
-		# no params after reset
-		if [ "$2" == "" ]; then
-			echo "$BASE reset: requires at least one country code as parameter"
-			echo "eg: $BASE reset ru cn"
-			exit
-		fi
-		logger "$BASE resetting iptables"
-		iptables -F
-		# after arg 1, balanace are countries
-		shift
-		COUNTRIES=""
-		for var in "$@"; do
-			COUNTRIES+=" "
-			COUNTRIES+="$var"
-		done
-		logger "$BASE dropping countries: $COUNTRIES"
-		block_countries
-		SCOPE=$LOGALL
-		logger "$BASE scanning all logs"
-	else
-		echo "$SCRIPT: Bad command: $1. Use install, all, or reset"
-		logger "$SCRIPT: Bad command: $1. Use install, all, or reset"
-		exit
-	fi
+    if [ "$1" == "install" ]; then
+        install
+        echo "Installed, exiting"
+        exit
+    elif [ "$1" == "all" ]; then
+        SCOPE=$LOGALL
+        logger "$BASE scanning all logs"
+    elif [ "$1" == "reset" ]; then
+        # no params after reset
+        if [ "$2" == "" ]; then
+            echo "$BASE reset: requires at least one country code as parameter"
+            echo "eg: $BASE reset ru cn"
+            exit
+        fi
+        logger "$BASE resetting iptables"
+        iptables -F
+        # after arg 1, balanace are countries
+        shift
+        COUNTRIES=""
+        for var in "$@"; do
+            COUNTRIES+=" "
+            COUNTRIES+="$var"
+        done
+        logger "$BASE dropping countries: $COUNTRIES"
+        block_countries
+        SCOPE=$LOGALL
+        logger "$BASE scanning all logs"
+    else
+        echo "$SCRIPT: Bad command: $1. Use install, all, or reset"
+        logger "$SCRIPT: Bad command: $1. Use install, all, or reset"
+        exit
+    fi
 fi
 
 # new blocks derived from logs
@@ -128,7 +128,7 @@ COUNT=0
 # AVOID BLOCKING US / PROTECTED IPs
 # Add home or office static IP if any
 if test -f /etc/dontblockme; then
-	DONTBLOCKSTATIC=$(cat /etc/dontblockme)
+    DONTBLOCKSTATIC=$(cat /etc/dontblockme)
 fi
 # Dynamic protection: assumes only sysadmin(s) or other authorized users have
 # ssh access to this machine, INSERTS ACCEPT at start of ruleset to avoid blocking
@@ -136,69 +136,69 @@ DONTBLOCK=$(ss | grep ":ssh" | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 |
 # combine and ACCEPT
 DONTBLOCK="$DONTBLOCK $DONTBLOCKSTATIC"
 for ip in $DONTBLOCK; do
-	# if not in table, INSERT a rule to protect us
-	if ! iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1; then
-		iptables -I INPUT -s "$ip" -j ACCEPT
-		logger "ACCEPT rule added for $ip"
-	else
-		logger "ACCEPT rule exists for $ip"
-	fi
+    # if not in table, INSERT a rule to protect us
+    if ! iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1; then
+        iptables -I INPUT -s "$ip" -j ACCEPT
+        logger "ACCEPT rule added for $ip"
+    else
+        logger "ACCEPT rule exists for $ip"
+    fi
 done
 
 # TIME TO DROP IPs
 # all other rules are APPENDED
 # mail system, failed auth
 for ip in $($SCOPE | grep "mox.*failed auth" | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
-	case "$ip" in
-	$DONTBLOCK)
-		continue
-		;;
-	*)
-		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
-		# Unless iptables has been flushed recently, this will always be false
-		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-			iptables -A INPUT -j DROP -s "$ip"
-			logger "mox failed auth DROP $ip"
-			let COUNT++
-		fi
-		;;
-	esac
+    case "$ip" in
+    $DONTBLOCK)
+        continue
+        ;;
+    *)
+        # Adds an ip or /netblock to iptables drop list, if it isn't already in there
+        # Unless iptables has been flushed recently, this will always be false
+        if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+            iptables -A INPUT -j DROP -s "$ip"
+            logger "mox failed auth DROP $ip"
+            let COUNT++
+        fi
+        ;;
+    esac
 done
 
 # mail system, spf violators - all are attacks on our domains or spoofs of legit biz
 for ip in $($SCOPE | grep "mox.*spf fail.*your ip" | awk -F 'your ip | is not' '{print $2}' | sort | uniq); do
-	case "$ip" in
-	$DONTBLOCK)
-		continue
-		;;
-	*)
-		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
-		# Unless iptables has been flushed recently, this will always be false
-		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-			iptables -A INPUT -j DROP -s "$ip"
-			logger "mox spf fail DROP $ip"
-			let COUNT++
-		fi
-		;;
-	esac
+    case "$ip" in
+    $DONTBLOCK)
+        continue
+        ;;
+    *)
+        # Adds an ip or /netblock to iptables drop list, if it isn't already in there
+        # Unless iptables has been flushed recently, this will always be false
+        if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+            iptables -A INPUT -j DROP -s "$ip"
+            logger "mox spf fail DROP $ip"
+            let COUNT++
+        fi
+        ;;
+    esac
 done
 
 # mail system, dnsbl rejects, often for malware
 for ip in $($SCOPE | grep "mox.*rejecting due to listing in dnsbl.*Listed by CSS" | awk -F'/ip/|\" mailfrom' '{print $2}' | sort | uniq); do
-	case "$ip" in
-	$DONTBLOCK)
-		continue
-		;;
-	*)
-		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
-		# Unless iptables has been flushed recently, this will always be false
-		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-			iptables -A INPUT -j DROP -s "$ip"
-			logger "mox dnsbl reject DROP $ip"
-			let COUNT++
-		fi
-		;;
-	esac
+    case "$ip" in
+    $DONTBLOCK)
+        continue
+        ;;
+    *)
+        # Adds an ip or /netblock to iptables drop list, if it isn't already in there
+        # Unless iptables has been flushed recently, this will always be false
+        if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+            iptables -A INPUT -j DROP -s "$ip"
+            logger "mox dnsbl reject DROP $ip"
+            let COUNT++
+        fi
+        ;;
+    esac
 done
 
 # IMPORTANT: When making changes, don't forget to install it to cron.hourly once tested.
@@ -207,84 +207,92 @@ done
 
 # static list of noted bad actors
 BADACTORS=(
-	# prolific spammers
-	"194.169.175.0/24" # gb emanuelhosting
-	"102.210.41.0/24"  # ke bitcoin porn scam
-	"176.88.185.0/24"  # tr bitcoin porn scam
-	"179.152.0.0/14"   # br porn bitcoin scam
-	"186.33.88.128/25" # do bitcoin porn scam
-	"190.42.0.0/17"    # pe bitcoin porn scam
-	"196.176.0.0/14"   # tn bitcoin porn scam
-	"41.211.128.0/19"  # ga porn bitcoin scam
-	"103.164.146.0/24" # ph bitcoin porn scam
-	"213.202.192.0/18" # de myloc.de gummies
-	"89.163.128.0/17"  # de myloc.de gummies
-	"46.165.192.0/18"  # de leaseweb gummies
-	"178.162.128.0/18" # nl leaseweb
-	"185.49.69.0/24"   # gb leaseweb
-	"37.48.64.0/18"    # nl leaseweb
-	"5.79.64.0/18"     # nl leaseweb
-	"81.171.0.0/19"    # nl leaseweb
-	"62.210.0.0/16"    # fr Scaleway hosts malware, dns blocklisted
-	"163.172.0.0/16"   # fr Scaleway hosts malware, dns blocklisted
-	"200.75.0.0/19"    # cl spam hosts
-	"192.119.160.0/20" # us "madgenius.com" scam sender
-	"155.94.191.0/24"  # us "madgenius.com" scam sender
-	"165.140.240.0/22" # us alphavps scam sender
-	"109.71.254.0/24"  # de emeraldhost.de apple ID phishing scammer
-	"41.61.0.0/17"     # hu grindhost - canadapost/intelcom phishing scammer; viagra
-	"77.87.208.0/21"   # ru bad spam, now covered by country block
-	"31.28.27.0/24"    # ru bad spam, now covered by country block
-	"5.104.104.0/21"   # de male gummies
-	"187.20.0.0/14"    # br spoofs outlook.com
-	"102.130.120.0/24" # za purolator, intelexprescom scam
+    # prolific spammers
+    "194.169.175.0/24"   # gb emanuelhosting
+    "102.210.41.0/24"    # ke bitcoin porn scam
+    "176.88.185.0/24"    # tr bitcoin porn scam
+    "179.152.0.0/14"     # br porn bitcoin scam
+    "186.33.88.128/25"   # do bitcoin porn scam
+    "190.42.0.0/17"      # pe bitcoin porn scam
+    "196.176.0.0/14"     # tn bitcoin porn scam
+    "41.211.128.0/19"    # ga porn bitcoin scam
+    "103.164.146.0/24"   # ph bitcoin porn scam
+    "103.131.104.225/23" # id porn hack scam
+    "105.240.0.0/8"      # za porn hack scam
+    "105.0.0.0/16"       # za porn hack scam
+    "213.202.192.0/18"   # de myloc.de gummies
+    "89.163.128.0/17"    # de myloc.de gummies
+    "46.165.192.0/18"    # de leaseweb gummies
+    "178.162.128.0/18"   # nl leaseweb
+    "185.49.69.0/24"     # gb leaseweb
+    "37.48.64.0/18"      # nl leaseweb
+    "5.79.64.0/18"       # nl leaseweb
+    "81.171.0.0/19"      # nl leaseweb
+    "62.210.0.0/16"      # fr Scaleway hosts malware, dns blocklisted
+    "163.172.0.0/16"     # fr Scaleway hosts malware, dns blocklisted
+    "200.75.0.0/19"      # cl spam hosts
+    "192.119.160.0/20"   # us "madgenius.com" scam sender
+    "155.94.191.0/24"    # us "madgenius.com" scam sender
+    "23.95.37.0/25"      # us dumb scammer
+    "165.140.240.0/22"   # us alphavps scam sender
+    "109.71.254.0/24"    # de emeraldhost.de apple ID phishing scammer
+    "41.61.0.0/17"       # hu grindhost - canadapost/intelcom phishing scammer; viagra
+    "77.87.208.0/21"     # ru bad spam, now covered by country block
+    "31.28.27.0/24"      # ru bad spam, now covered by country block
+    "5.104.104.0/21"     # de male gummies
+    "187.20.0.0/14"      # br spoofs outlook.com
+    "102.130.120.0/24"   # za purolator, intelexprescom scam
+    # fraud spam sent to honeypot addresses
+    "77.87.208.0/21" # ru not currently covered by country block
+    "31.28.27.0/24"  # ru not currently covered by country block
+    "23.95.37.0/25"  # chicagovps.net
 
-	# notable smtp connections without purpose or no tls (always bad actors)
-	"193.222.96.0/24" # fr contantmoulin, 4000 connections over several days
-	"80.76.49.0/24"   # fr
-	"43.158.217.0/24" # sg
-	"45.125.66.0/25"  # hk
-	# ru not in country block at discovery
-	"62.173.128.0/19" # ru junk sales spam, spacenet
-	# cn not in country block at discovery
-	"43.143.0.0/16" # cn - donation fraud - tencent cloud computing
+    # notable smtp connections without purpose or no tls (always bad actors)
+    "193.222.96.0/24" # fr contantmoulin, 4000 connections over several days
+    "80.76.49.0/24"   # fr
+    "43.158.217.0/24" # sg
+    "45.125.66.0/25"  # hk
+    # ru not in country block at discovery
+    "62.173.128.0/19" # ru junk sales spam, spacenet
+    # cn not in country block at discovery
+    "43.143.0.0/16" # cn - donation fraud - tencent cloud computing
 
-	# auth violators
-	"111.0.0.0/10"   # cn - china mobile
-	"27.115.0.0/17"  # cn - china unicom
-	"80.244.11.0/24" # ir - iran posing as nl
-	# spf and dmarc violators
-	"191.180.0.0/14"  # br
-	"103.31.179.0/24" # bd
-	"149.54.32.0/24"  # zz afghanistan
-	# # msedge.exe / exploit
-	"212.102.40.0/23" # uk /dallas us
-	# dnsbl / obvious spammers
-	"92.53.111.0/24"  # ru, apparently outside of current country block
-	"143.110.166.49"  # digitalocean yerembe.com
-	"159.89.8.234"    # digitalocean homeofficehaven.net reg'd in iceland
-	"167.99.200.210"  # digitalocean adamdugan.com spf pass malware
-	"209.97.180.160"  # digitalocean cakechange.com reg'd in iceland
-	"165.227.221.227" # digitalocean malware sender, reported, no action by them
-	"62.4.0.0/19"     # fr scaleway
-	# many connections for no purpose
+    # auth violators
+    "111.0.0.0/10"   # cn - china mobile
+    "27.115.0.0/17"  # cn - china unicom
+    "80.244.11.0/24" # ir - iran posing as nl
+    # spf and dmarc violators
+    "191.180.0.0/14"  # br
+    "103.31.179.0/24" # bd
+    "149.54.32.0/24"  # zz afghanistan
+    # # msedge.exe / exploit
+    "212.102.40.0/23" # uk /dallas us
+    # dnsbl / obvious spammers
+    "92.53.111.0/24"  # ru, apparently outside of current country block
+    "143.110.166.49"  # digitalocean yerembe.com
+    "159.89.8.234"    # digitalocean homeofficehaven.net reg'd in iceland
+    "167.99.200.210"  # digitalocean adamdugan.com spf pass malware
+    "209.97.180.160"  # digitalocean cakechange.com reg'd in iceland
+    "165.227.221.227" # digitalocean malware sender, reported, no action by them
+    "62.4.0.0/19"     # fr scaleway
+    # many connections for no purpose
 )
 
 for ip in "${BADACTORS[@]}"; do
-	case $ip in
-	$DONTBLOCK)
-		iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
-		continue
-		;;
-	*)
-		# Adds an ip or /netblock to iptables drop list, if it isn't already in there
-		if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-			iptables -A INPUT -j DROP -s "$ip"
-			logger "mox known bad actors DROP $ip"
-			let COUNT++
-		fi
-		;;
-	esac
+    case $ip in
+    $DONTBLOCK)
+        iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1 || iptables -I INPUT -s "$ip" -j ACCEPT
+        continue
+        ;;
+    *)
+        # Adds an ip or /netblock to iptables drop list, if it isn't already in there
+        if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+            iptables -A INPUT -j DROP -s "$ip"
+            logger "mox known bad actors DROP $ip"
+            let COUNT++
+        fi
+        ;;
+    esac
 done
 
 logger "$SCRIPT finished, $COUNT DROP rules added"
