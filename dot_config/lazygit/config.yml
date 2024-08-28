@@ -1,0 +1,2 @@
+os:
+  edit: "hx {{filename}} +N {{line}}"
