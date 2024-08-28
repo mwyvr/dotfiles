@@ -2,7 +2,9 @@
 export USER=mw
 doas apk update
 doas apk upgrade
-doas apk add gnome-tweaks git helix neovim wl-copy go chezmoi foot fish-shell fonts-nerd-roboto-mono htop
+doas apk add gnome-tweaks git helix neovim wl-copy go chezmoi foot fish-shell fonts-nerd-roboto-mono bash htop
+# user service:
+dinitctl enable foot
 # lazygit not yet in cports
 go install github.com/jesseduffield/lazygit@latest
 doas apk add chrony
