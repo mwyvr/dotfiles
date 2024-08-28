@@ -1,7 +1,7 @@
 # TODO - some ideas
 # https://github.com/LGUG2Z/helix-vim/blob/master/config.toml
 
-theme="nord-night"
+theme = "nord-night"
 # theme = "tokyonight_storm"
 
 [editor]
@@ -24,7 +24,13 @@ render = true
 skip-levels = 1
 
 [editor.statusline]
-left = ["mode", "spinner", "version-control", "file-name", "file-modification-indicator"]
+left = [
+  "mode",
+  "spinner",
+  "version-control",
+  "file-name",
+  "file-modification-indicator",
+]
 
 [keys.insert]
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
@@ -46,4 +52,4 @@ A-x = "extend_to_line_bounds"
 X = ["extend_line_up", "extend_to_line_bounds"]
 
 [keys.normal.space]
-"g" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw" ]
+"g" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
