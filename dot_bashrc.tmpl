@@ -6,6 +6,7 @@
 
 test -s ~/.alias && . ~/.alias || true
 set -o vi
+export EDITOR=hx
 
 {{- if eq .chezmoi.osRelease.id "void" "chimera" "arch" }}
 {{/*
@@ -19,15 +20,15 @@ else
 	PS1='[\[\e[31m\]\u@\h \w\[\e[0m\]]# ' #root
 fi
 export PS1
- 
- # set window titles
+
+# set window titles
 case ${TERM} in
 st* | alacritty | foot | xterm* | rxvt* | kitty | kterm | gnome*)
-    PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033]0;%s\007"   "${PWD/#$HOME/\~}"'
-    export COLORTERM=truecolor
-    ;;
+	PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033]0;%s\007"   "${PWD/#$HOME/\~}"'
+	export COLORTERM=truecolor
+	;;
 tmux* | screen*)
-    PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033]0;%s\007"   "tmux: ${PWD/#$HOME/\~}"'
-    ;;
+	PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033]0;%s\007"   "tmux: ${PWD/#$HOME/\~}"'
+	;;
 esac
 {{- end }}
