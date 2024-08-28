@@ -1,37 +1,41 @@
 #!/usr/bin/sh
+echo "Install lsp, formatters and other components supporting Helix"
 . /etc/os-release
 
 LOCAL=~/.local/bin
+FETCHER=wget
 
 case $ID in
 chimera)
-	doas apk add go nodejs python-pip
-	;;
+    FETCHER=fetch
+    doas apk add go nodejs python-pip
+    ;;
 void)
-	sudo xbps-install -Su go nodejs python3-pip
-	;;
+    sudo xbps-install -Su go nodejs python3-pip
+    ;;
 "opensuse-tumbleweed")
-	# Likely in distrobox container
-	sudo zypper install go nodejs python3-pip
-	if [ $CONTAINER_ID == "twbox" ]; then
-		sudo ln -svf /usr/bin/helix /usr/bin/hx
-		distrobox-export --bin /usr/bin/hx
-	fi
-	;;
+    # Likely in distrobox container
+    sudo zypper install go nodejs python3-pip
+    if [ "$CONTAINER_ID" = "twbox" ]; then
+        sudo ln -svf /usr/bin/helix /usr/bin/hx
+        distrobox-export --bin /usr/bin/hx
+    fi
+    ;;
 *)
-	echo "Unknown Linux distribution, terminating."
-	exit 1
-	;;
+    echo "Unknown Linux distribution, terminating."
+    exit 1
+    ;;
 esac
-
-echo "Installing language servers for use in Helix editor"
 
 npm update -g
 npm i -g @ansible/ansible-language-server # ansible
 
 # bash / sh
+# https://github.com/bash-lsp/bash-language-server?tab=readme-ov-file
 npm i -g bash-language-server
 go install mvdan.cc/sh/v3/cmd/shfmt@latest
+# https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing
+$FETCHER -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar zxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
 
 # go
 go install golang.org/x/tools/gopls@latest                             # LSP
@@ -41,7 +45,9 @@ go install github.com/nametake/golangci-lint-langserver@latest         # Linter
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.60.3 # Linter
 
 # html, css, json, scss, typescript
-npm i -g vscode-langservers-extracted emmet-ls prettier typescript-language-server typescript
+npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
+# also Markdown formatting...
+npm i -g @fsouza/prettierd
 
 # python
 pip install -U 'python-lsp-server[all]' --break-system-packages # python
@@ -51,8 +57,15 @@ pip install -U ruff-lsp --break-system-packages                 # lsp for ruff
 pip install -U black --break-system-packages                    # python formatter
 
 # markdown
-fetch -o ${LOCAL}/marksman -R https://github.com/artempyanykh/marksman/releases/download/2023-12-09/marksman-linux-x64
+$FETCHER -o ${LOCAL}/marksman -R https://github.com/artempyanykh/marksman/releases/download/2023-12-09/marksman-linux-x64
 chmod +x ${LOCAL}/marksman
+
+# toml
+$FETCHER -o - https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz | gunzip >${LOCAL}/taplo
+chmod +x ${LOCAL}/taplo
+
+# yaml
+npm i -g yaml-language-server@next
 
 # not lsp components; not in chimera cports (yet), mapped to space-l
 go install -a github.com/jesseduffield/lazygit@latest
