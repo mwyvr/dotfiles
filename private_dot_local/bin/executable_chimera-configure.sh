@@ -12,7 +12,8 @@ doas dinitctl enable sshd
 doas apk add ucode-intel
 doas update-initramfs -c -k all
 # ensure machine does not suspend at gdm login prompt
-doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type nothing
+doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 0
+doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
 
 # containers
 doas add flatpak
