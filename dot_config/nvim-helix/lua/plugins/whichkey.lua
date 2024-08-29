@@ -40,13 +40,24 @@ return {
   event = "VeryLazy",
   opts_extend = { "spec" },
   opts = {
-    defaults = {},
+    defaults = {}, -- don't use, deprecated
+    preset = "helix",
+    sort = {"manual",},
     spec = {
       {
         mode = { "n", "v" },
+        -- arranged in same order as Helix
+        { "<leader>f", group = "Open file picker" },
+        {
+          "<leader>b",
+          group = "Open buffer picker",
+          expand = function()
+            return require("which-key.extras").expand.buf()
+          end,
+        },
+
         { "<leader><tab>", group = "tabs" },
         { "<leader>c", group = "code" },
-        { "<leader>f", group = "file/find" },
         { "<leader>g", group = "git" },
         { "<leader>gh", group = "hunks" },
         { "<leader>q", group = "quit/session" },
@@ -58,13 +69,6 @@ return {
         { "g", group = "goto" },
         { "gs", group = "surround" },
         { "z", group = "fold" },
-        {
-          "<leader>b",
-          group = "buffer",
-          expand = function()
-            return require("which-key.extras").expand.buf()
-          end,
-        },
         {
           "<leader>w",
           group = "windows",

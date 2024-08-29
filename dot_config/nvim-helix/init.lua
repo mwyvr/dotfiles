@@ -1,4 +1,4 @@
--- Managed by chezmoi dotfile manager, see - https://github.com/mwyvr/dotfiles
+--  Managed by chezmoi dotfile manager, see - https://github.com/mwyvr/dotfiles
 
 -- bootstrap lazy.nvim plugin manager
 vim.g.mapleader = " " -- should be defined before Lazy.nvim loaded
@@ -10,11 +10,11 @@ if not vim.loop.fs_stat(lazypath) then
 		"clone",
 		"--filter=blob:none",
 		"https://github.com/folke/lazy.nvim.git",
-		"--branch=stable", -- latest stable release
+		"--branch=stable", 
 		lazypath,
 	})
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("plugins") -- plugins and their configs
-require("config") -- options, keybindings, autocmds
+require("lazy").setup("plugins")
+require("config") -- options, keybindings, autocmds, filetypes
