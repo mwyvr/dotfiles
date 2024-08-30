@@ -7,9 +7,7 @@ files across multiple machines and distributions a ~~little~~ **lot** easier.
 
 ## Inclusions of note
 
-I mostly run dwm or dwl window managers rather than the Gnome desktop
-environment; I've configured dwm and dwl to act as similarly as possible. Those
-configurations will be available here as patch files _soon_.
+I used to run `dwm` for many years on X, and then the work-a-like `dwl` on Wayland, but since mid-2023 I've been running vanilla GNOME. With just a few keyboard customizations, GNOME feels comfortable enough for this long-term tiling window manager user.
 
 There's nothing distribution-specific in here; fwiw I run [Void
 Linux](https://voidlinux.org/) on desktop and laptops and and openSUSE MicroOS for
