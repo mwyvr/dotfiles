@@ -228,6 +228,7 @@ BADACTORS=(
     "37.48.64.0/18"      # nl leaseweb
     "5.79.64.0/18"       # nl leaseweb
     "81.171.0.0/19"      # nl leaseweb
+    "83.149.64.0/18"     # nl leaseweb
     "62.210.0.0/16"      # fr Scaleway hosts malware, dns blocklisted
     "163.172.0.0/16"     # fr Scaleway hosts malware, dns blocklisted
     "200.75.0.0/19"      # cl spam hosts
@@ -242,6 +243,8 @@ BADACTORS=(
     "5.104.104.0/21"     # de male gummies
     "187.20.0.0/14"      # br spoofs outlook.com
     "102.130.120.0/24"   # za purolator, intelexprescom scam
+    "185.75.240.0/24"    # uk, garden variety ru oriented scam
+    "103.4.188.0/24"     # bn fraud scam email@paulgam.com
     # fraud spam sent to honeypot addresses
     "77.87.208.0/21" # ru not currently covered by country block
     "31.28.27.0/24"  # ru not currently covered by country block
