@@ -3,7 +3,6 @@ echo "Install lsp, formatters and other components supporting Helix"
 . /etc/os-release
 
 LOCAL=~/.local/bin
-FETCHER=wget
 
 case $ID in
 chimera)
@@ -11,10 +10,12 @@ chimera)
     doas apk add go nodejs python-pip
     ;;
 void)
-    sudo xbps-install -Su go nodejs python3-pip
+    FETCHER=wget
+    sudo xbps-install -Su go nodejs python3-pip wget
     ;;
 "opensuse-tumbleweed")
     # Likely in distrobox container
+    FETCHER=wget
     sudo zypper install go nodejs python3-pip
     if [ "$CONTAINER_ID" = "twbox" ]; then
         sudo ln -svf /usr/bin/helix /usr/bin/hx
