@@ -1,0 +1,4 @@
+inherits = "nord-night"
+"ui.background" = {}
+"ui.bufferline" = { fg = "gray" }
+"ui.bufferline.active" = { fg = "light-gray" }

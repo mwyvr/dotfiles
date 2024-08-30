@@ -1,12 +1,10 @@
-# https://github.com/LGUG2Z/helix-vim/blob/master/config.toml
+# dotfiles managed by [chezmoi](https://www.chezmoi.io/) - source at https://github.com/mwyvr/dotfiles
 
-theme = "nord-night"
-# theme = "tokyonight_storm"
+# ~/.config/helix/themes/nord-transparent.toml
+theme = "nord-transparent"
 
 [editor]
-auto-format = true
 bufferline = "multiple"
-
 color-modes = true
 cursorline = true
 line-number = "relative"
@@ -15,7 +13,6 @@ true-color = true
 
 [editor.cursor-shape]
 insert = "bar"
-normal = "block"
 
 [editor.indent-guides]
 render = true
@@ -27,7 +24,7 @@ left = [
   "spinner",
   "version-control",
   "file-name",
-  "file-modification-indicator",
+  "file-modification-indicator", # because bufferline is set to "multiple"
 ]
 
 [keys.insert]
@@ -44,12 +41,10 @@ C-n = ["move_line_down", "scroll_down"]
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
 "tab" = ":buffer-next"
 "S-tab" = ":buffer-previous"
-A-l = ":buffer-next"
-A-h = ":buffer-previous"
 
 # Alt-x shrink selection by one line
 A-x = "extend_to_line_bounds"
 X = ["extend_line_up", "extend_to_line_bounds"]
 
 [keys.normal.space]
-"g" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
+"l" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
