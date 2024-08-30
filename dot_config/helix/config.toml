@@ -1,4 +1,3 @@
-# TODO - some ideas
 # https://github.com/LGUG2Z/helix-vim/blob/master/config.toml
 
 theme = "nord-night"
@@ -17,7 +16,6 @@ true-color = true
 [editor.cursor-shape]
 insert = "bar"
 normal = "block"
-select = "underline"
 
 [editor.indent-guides]
 render = true
@@ -46,6 +44,8 @@ C-n = ["move_line_down", "scroll_down"]
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
 "tab" = ":buffer-next"
 "S-tab" = ":buffer-previous"
+A-l = ":buffer-next"
+A-h = ":buffer-previous"
 
 # Alt-x shrink selection by one line
 A-x = "extend_to_line_bounds"
