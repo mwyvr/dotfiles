@@ -13,6 +13,15 @@ void)
     FETCHER=wget
     sudo xbps-install -Su go nodejs python3-pip wget
     ;;
+"opensuse-microos")
+    # Likely in distrobox container
+    FETCHER=wget
+    sudo zypper install go nodejs python3-pip
+    if [ "$CONTAINER_ID" = "twbox" ]; then
+        sudo ln -svf /usr/bin/helix /usr/bin/hx
+        distrobox-export --bin /usr/bin/hx
+    fi
+    ;;
 "opensuse-tumbleweed")
     # Likely in distrobox container
     FETCHER=wget
