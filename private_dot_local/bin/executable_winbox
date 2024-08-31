@@ -30,10 +30,10 @@ if ! command -v $WINE; then
 fi
 
 if [ -z "${CONTAINER_ID}" ]; then
-    echo "HERE"
-    exec "/usr/bin/distrobox-enter" -n archbox -- '/usr/bin/wine64' "$EXE"
+    "/usr/bin/distrobox-enter" -n archbox -- '/usr/bin/wine64' "$EXE"
 elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "archbox" ]; then
     exec distrobox-host-exec '/home/mw/.local/bin/wine64' "$EXE"
 else
     exec '/usr/bin/wine64' "$EXE"
 fi
+distrobox-stop -Y archbox
