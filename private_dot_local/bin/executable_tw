@@ -2,17 +2,17 @@
 # On openSUSE Aeon actions happen within a default Tumbleweed container
 . /etc/os-release
 case $ID in
-opensuse-aeon)
-    distrobox enter twbox
-    ;;
-opensuse-microos)
-    distrobox enter twbox
-    ;;
-opensuse-tumbleweed)
-    echo "Already in default container"
-    ;;
-*)
-    echo "Unknown Linux distribution, terminating."
-    exit 1
-    ;;
+    opensuse-aeon)
+        distrobox enter twbox
+        ;;
+    opensuse-microos)
+        distrobox enter twbox
+        ;;
+    opensuse-tumbleweed)
+        echo "Already in default container"
+        ;;
+    *)
+	    echo "Unknown Linux distribution, terminating."
+	    exit 1
+        ;;
 esac
