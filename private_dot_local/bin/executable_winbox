@@ -1,33 +1,39 @@
 #!/bin/sh
+# Winbox is a Mikrotik router management tool; v4 will provide Linux compatibility
+# but for the time being, running v3.x which is windoes only; runs under Wine via
+# a distrobox.
+
+# NOTE: This appears to fail unless run within a distrobox, yet the desktop entry works.
+# For now, that will do.
+
 . /etc/os-release
 export EXE="$HOME/.local/bin/winbox64.exe"
+export WINE="$HOME/.local/bin/wine64" # exported distrobox binary
 
-if ! command -v /usr/bin/wine64; then
-    case $ID in
-    chimera)
-        FETCHER=fetch
-        ;;
-    void)
-        FETCHER=wget
-        ;;
-    "opensuse-tumbleweed")
-        # Likely in distrobox container
-        FETCHER=wget
-        ;;
-    *)
-        echo "Unknown Linux distribution, terminating."
-        exit 1
-        ;;
-    esac
-fi
+case $ID in
+chimera)
+    FETCHER=fetch
+    ;;
+*)
+    FETCHER=wget
+    ;;
+esac
 
 # download if not already done
 if [ ! -f "$EXE" ]; then
     $FETCHER -o $EXE https://mt.lv/winbox64
 fi
 
+if ! command -v $WINE; then
+    echo "Install and export wine64 from a distrobox"
+    exit 1
+fi
+
 if [ -z "${CONTAINER_ID}" ]; then
-    echo "Enter tw container, then run winbox"
+    echo "HERE"
+    exec "/usr/bin/distrobox-enter" -n archbox -- '/usr/bin/wine64' "$EXE"
+elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "archbox" ]; then
+    exec distrobox-host-exec '/home/mw/.local/bin/wine64' "$EXE"
 else
-    exec /usr/bin/wine64 $EXE
+    exec '/usr/bin/wine64' "$EXE"
 fi
