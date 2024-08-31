@@ -229,6 +229,7 @@ BADACTORS=(
     "5.79.64.0/18"       # nl leaseweb
     "81.171.0.0/19"      # nl leaseweb
     "83.149.64.0/18"     # nl leaseweb
+    "37.48.64.0/18" # nl leaseweb
     "62.210.0.0/16"      # fr Scaleway hosts malware, dns blocklisted
     "163.172.0.0/16"     # fr Scaleway hosts malware, dns blocklisted
     "200.75.0.0/19"      # cl spam hosts
