@@ -19,7 +19,6 @@ auto-format = true
 name = "markdown"
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "markdown"] }
-language-servers = ["marksman"]
 
 # configuration or data markup languages
 [[language]]
