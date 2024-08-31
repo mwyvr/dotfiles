@@ -39,7 +39,7 @@ validation = true
 name = "go"
 auto-format = true
 formatter = { command = "goimports" }
-language-servers = ["gopls", "golangci-lint-lsp"]
+language-servers = ["gopls", "golangci-lint-langserver"]
 
 [[language]]
 name = "python"
@@ -51,8 +51,41 @@ formatter = { command = "black", args = ["--quiet", "-"] }
 # hypertext and related
 [[language]]
 name = "html"
+indent.tab-width = 2
+indent.unit = " "
 language-servers = ["vscode-html-language-server", "emmet-ls"]
-formatter = { command = 'prettier', args = ["--parser", "html"] }
+formatter = { command = 'prettier', args = [
+  "--parser",
+  "html",
+  "--tab-width",
+  "2",
+] }
+auto-format = true
+
+[[language]]
+name = "javascript"
+indent.tab-width = 4
+indent.unit = " "
+language-servers = ["typescript-language-server"]
+formatter = { command = 'prettier', args = [
+  "--parser",
+  "javascript",
+  "--tab-width",
+  "4",
+] }
+auto-format = true
+
+[[language]]
+name = "typescript"
+indent.tab-width = 4
+indent.unit = " "
+language-servers = ["typescript-language-server"]
+formatter = { command = 'prettier', args = [
+  "--parser",
+  "typescript",
+  "--tab-width",
+  "4",
+] }
 auto-format = true
 
 [[language]]
