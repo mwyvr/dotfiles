@@ -1,23 +1,18 @@
 #!/bin/sh
-EXE="$HOME/.local/bin/winbox64.exe"
+. /etc/os-release
+export EXE="$HOME/.local/bin/winbox64.exe"
 
 if ! command -v /usr/bin/wine64; then
     case $ID in
     chimera)
         FETCHER=fetch
-        doas apk add wine
         ;;
     void)
         FETCHER=wget
-        sudo xbps-install -Su wine
         ;;
     "opensuse-tumbleweed")
         # Likely in distrobox container
         FETCHER=wget
-        sudo zypper install wine
-        if [ "$CONTAINER_ID" = "twbox" ]; then
-            distrobox-export --bin /usr/bin/wine
-        fi
         ;;
     *)
         echo "Unknown Linux distribution, terminating."
@@ -31,10 +26,8 @@ if [ ! -f "$EXE" ]; then
     $FETCHER -o $EXE https://mt.lv/winbox64
 fi
 
-wine64 $EXE
-# if [ -z "${CONTAINER_ID}" ]; then
-#     distrobox enter -n wine -- wine $EXE
-#     distrobox-stop wine
-# else
-#     echo "Must be run from host OS, not container."
-# fi
+if [ -z "${CONTAINER_ID}" ]; then
+    echo "Enter tw container, then run winbox"
+else
+    exec /usr/bin/wine64 $EXE
+fi
