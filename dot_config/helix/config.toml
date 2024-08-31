@@ -5,7 +5,6 @@ theme = "nord-transparent"
 
 [editor]
 bufferline = "multiple"
-color-modes = true
 cursorline = true
 line-number = "relative"
 mouse = false
@@ -24,7 +23,7 @@ left = [
   "spinner",
   "version-control",
   "file-name",
-  "file-modification-indicator", # because bufferline is set to "multiple"
+  "file-modification-indicator",
 ]
 
 [keys.insert]
@@ -39,6 +38,8 @@ X = ["extend_line_up", "extend_to_line_bounds"]
 C-p = ["move_line_up", "scroll_up"]
 C-n = ["move_line_down", "scroll_down"]
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
+G = "goto_file_end"
+g.q = ":reflow"
 "tab" = ":buffer-next"
 "S-tab" = ":buffer-previous"
 
@@ -47,4 +48,8 @@ A-x = "extend_to_line_bounds"
 X = ["extend_line_up", "extend_to_line_bounds"]
 
 [keys.normal.space]
-"l" = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
+l.f = ":format"
+l.g = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
+l.r = ":lsp-restart"
+q = ":quit"
+w = ":write"
