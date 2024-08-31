@@ -1,6 +1,7 @@
 if status is-interactive
     set -g fish_key_bindings fish_vi_key_bindings
     set -x EDITOR hx
+    set -x HOSTNAME (hostname)
     set fish_greeting # disable welcome
     set -x LIBVIRT_DEFAULT_URI 'qemu:///system'
 end
