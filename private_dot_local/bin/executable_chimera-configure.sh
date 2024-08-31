@@ -48,10 +48,10 @@ for app in com.google.Chrome org.signal.Signal us.zoom.Zoom; do
 done
 
 # core utils
-doas apk add gnome-tweaks git chezmoi foot fish-shell fonts-nerd-roboto-mono htop
+doas apk add gnome-tweaks git chezmoi foot fish-shell fonts-nerd-roboto-mono btop distrobox
 
 # for Helix & dev
-doas apk add helix go nodejs
+doas apk add helix go nodejs cargo
 
 # lazygit not yet in cports
 go install github.com/jesseduffield/lazygit@latest
