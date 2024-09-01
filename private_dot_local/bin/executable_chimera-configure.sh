@@ -53,8 +53,8 @@ doas apk add gnome-tweaks git chezmoi foot fish-shell fonts-nerd-roboto-mono bto
 # for Helix & dev
 doas apk add helix go nodejs cargo
 
-# lazygit not yet in cports
-go install github.com/jesseduffield/lazygit@latest
-
 # applications
 doas apk add evolution
+
+# lazygit not yet in cports
+go install github.com/jesseduffield/lazygit@latest
