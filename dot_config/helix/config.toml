@@ -1,5 +1,8 @@
 # dotfiles managed by [chezmoi](https://www.chezmoi.io/) - source at https://github.com/mwyvr/dotfiles
 
+# Obscure notes:
+# shift-tab when inserting tabs in the middle of a line (due to "smart tab" feature)
+
 # ~/.config/helix/themes/nord-transparent.toml
 theme = "nord-transparent"
 
