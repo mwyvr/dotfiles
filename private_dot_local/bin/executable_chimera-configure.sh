@@ -78,6 +78,10 @@ fi
 # Desktop and laptop get these
 if [ -n "$IS_GUI" ]; then
     $ADDCMD foot gnome-tweaks fonts-nerd-roboto-mono
+    # note, run as user not doas:
+    dinitctl enable foot
+    # make foot the default terminal
+    gsettings set org.gnome.desktop.default-applications.terminal exec 'footclient'
     # applications
     $ADDCMD evolution
     # flatpak apps
