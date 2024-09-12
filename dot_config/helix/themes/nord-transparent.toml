@@ -1,4 +1,6 @@
 inherits = "nord-night"
 "ui.background" = {}
-"ui.bufferline" = { fg = "gray" }
-"ui.bufferline.active" = { fg = "light-gray" }
+"ui.cursorline.primary" = { bg = "nord0" }
+"ui.bufferline" = { fg = "nord3" }
+"ui.bufferline.active" = { fg = "nord4" }
+"ui.cursor.match" = { bg = "nord14", fg = "nord3" }
