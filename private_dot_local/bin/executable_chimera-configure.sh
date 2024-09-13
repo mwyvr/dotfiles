@@ -44,7 +44,7 @@ else
 fi
 
 # core utils
-$ADDCMD git chezmoi fish-shell btop distrobox
+$ADDCMD git chezmoi fish-shell htop
 # for Helix editor and dev
 $ADDCMD helix go nodejs cargo
 # lazygit not yet in cports
@@ -79,17 +79,18 @@ fi
 if [ -n "$IS_GUI" ]; then
     $ADDCMD foot gnome-tweaks fonts-nerd-roboto-mono
     # note, run as user not doas:
-    dinitctl enable foot
+    # dinitctl enable foot
     # make foot the default terminal
-    gsettings set org.gnome.desktop.default-applications.terminal exec 'footclient'
+    gsettings set org.gnome.desktop.default-applications.terminal exec 'foot'
     # applications
     $ADDCMD evolution
     # flatpak apps
     $ADDCMD flatpak
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
     for app in com.google.Chrome org.signal.Signal us.zoom.Zoom; do
         echo "Installing $app"
-        flatpak install -y $app
+        flatpak install --user -y $app
     done
 fi
 
