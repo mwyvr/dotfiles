@@ -1,0 +1,63 @@
+# Author: Mike Watkins <github@mikewatkins.ca>
+# (c) Mike Watkins, MIT licensed: https://github.com/mwyvr/cli-themes/blob/main/LICENSE
+#
+# mui_light is a light Material Design-inspired theme for the Helix editor;
+
+# Matching and other themes can be found at https://github.com/mwyvr/cli-themes.
+
+inherits = "mui_dark"
+
+# UI
+"ui.selection" = { bg = "surface-dim" }   # only Helix theme attribute that *must* be defined
+"ui.text" = { fg = "on-surface-variant" } # Default text style, overridden with specific rules
+
+[palette]
+# surfaces 
+"surface-dim" = "#d9d9e0"               # N-87; ui.selection
+"surface" = "#f9f9ff"                   # N-98; the primary editor surface layer; surface neutrals have a weak primary colour tint 
+"surface-bright" = "#f9f9ff"            # N-24; in this scheme, same as Surface; unused 
+"surface-container-lowest" = "#ffffff"  # N-100; unused
+"surface-container-low" = "#f3f3fa"     # N-96; unused 
+"surface-container" = "#ededf4"         # N-94; cursorline, bufferline, statusline 
+"surface-container-high" = "#e7e8ee"    # N-92; background for all popups, menus, help
+"surface-container-highest" = "#e2e2e9" # N-90; window splitline
+"inverse-surface" = "#2e3036"           # N-20; 
+"inverse-on-surface" = "#f0f0f7"        # N-95; unused 
+"primary" = "#415f91"                   # P-40; (blue primary, affects NV and surface)
+"on-primary" = "#ffffff"                # P-100;
+"primary-container" = "#d6e3ff"         # P-90; 
+"on-primary-container" = "#001b3e"      # P-10; 
+"secondary" = "#565f71"                 # S-40; 
+"on-secondary" = "#ffffff"              # S-100;
+"secondary-container" = "#dae2f9"       # S-90; 
+"on-secondary-container" = "#131c2b"    # S-10; 
+"tertiary" = "#705575"                  # T-40; 
+"on-tertiary" = "#ffffff"               # T-10
+"tertiary-container" = "#fad8fd"        # T-90; 
+"on-tertiary-container" = "#28132e"     # T-10; 
+"error" = "#ba1a1a"                     # E-40; 
+"on-error" = "#ffffff"                  # E-100;
+"error-container" = "#ffdad6"           # E-90; 
+"on-error-container" = "#410002"        # E-10;
+"on-surface" = "#191c20"                # N-10; 
+"on-surface-variant" = "#44474e"        # NV-30; primary text colour 
+"outline-brighter" = "#5D5E64"          # NV-40; (a shade darker in light theme)
+"outline" = "#74777f"                   # NV-50; 
+"outline-dimmer" = "#8E9099"            # NV-60; (a shade brighter in light theme)
+"outline-variant" = "#c4c6d0"           # NV-80; # redefine standard 16 colour names
+"black" = "#24262B"                     # 0; NV-15
+"red" = "#690005"                       # 1; Error-20
+"green" = "#1F3701"                     # 2; Green-20 green primary)
+"yellow" = "#3A3000"                    # 3; Yellow-20 (yellow primary)
+"blue" = "#0A305F"                      # 4; Primary-20(blue primary)
+"magenta" = "#4B3350"                   # 5; Tertiary-25 (blue primary)
+"cyan" = "#6B9995"                      # 6; Cyan-60 
+"white" = "#8F9097"                     # 7; NV-60
+"light-black" = "#44474E"               # 8; NV-30
+"light-red" = "#93000A"                 # 9; Error-30
+"light-green" = "#354E16"               # 10; Green-30 (green primary)
+"light-yellow" = "#534600"              # 11; Yellow-30 (yellow primary)
+"light-blue" = "#284777"                # 12; Primary-30
+"light-magenta" = "#634A68"             # 13; Tertiary-35 (blue primary)
+"light-cyan" = "#A0D0CB"                # 14; Cyan-80 
+"light-white" = "#C4C6D0"               # 15; NV-80

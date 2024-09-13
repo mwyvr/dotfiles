@@ -1,0 +1,137 @@
+# Author: Mike Watkins <github@mikewatkins.ca>
+# (c) Mike Watkins, MIT licensed: https://github.com/mwyvr/cli-themes/blob/main/LICENSE
+#
+# mui_dark is a dark Material Design-inspired theme for the Helix editor;
+
+# Matching and other themes can be found at https://github.com/mwyvr/cli-themes.
+
+# UI
+"ui.selection" = { bg = "surface-bright" }                                     # only Helix theme attribute that *must* be defined
+"ui.background" = { bg = "surface" }                                           # set bg = "" for transparency 
+"ui.text" = { fg = "on-surface" }                                              # Default text style, overridden with specific rules
+"ui.text.focus" = { fg = "on-primary-container", bg = "primary-container" }    # Selected line in the file/buffer/jumplist/symbol/etc picker 
+"ui.text.inactive" = { fg = "outline" }                                        # Same as ui.text but when the text is inactive (e.g. suggestions) 
+"ui.text.info" = { fg = "on-surface-variant" }                                 # The key: command text in ui.popup.info boxes 
+"ui.help" = { fg = "primary", bg = "surface-container-high" }                  # Description box for commands 
+"ui.window" = { fg = "surface-container-highest" }                             # Borderlines separating splits # cursor
+"ui.cursor" = { modifiers = ["reversed"] }                                     # inherits selection otherwise 
+"ui.cursor.match" = { fg = "light-yellow" }                                    # highlight the matching bracket/brace or quote 
+"ui.cursorline" = { bg = "surface-container" }                                 # Current cursor line # bufferline 
+"ui.bufferline" = { fg = "outline-dimmer", bg = "surface-container" }          # if enabled in config 
+"ui.bufferline.active" = { fg = "outline-brighter" }                           # statusline 
+"ui.statusline" = { fg = "outline-brighter", bg = "surface-container" }        # Statusline 
+"ui.statusline.inactive" = { fg = "outline-dimmer", bg = "surface-container" } # Statusline (unfocused document)
+"ui.statusline.normal" = { fg = "primary", bg = "on-primary" }                 # Statusline mode during normal mode (only if editor.color-modes is enabled)
+"ui.statusline.insert" = { fg = "secondary", bg = "on-secondary" }             # Statusline mode during insert mode (only if editor.color-modes is enabled)
+"ui.statusline.select" = { fg = "tertiary", bg = "on-tertiary" }               # Statusline mode during select mode (only if editor.color-modes is enabled) # gutter
+"ui.gutter" = { fg = "outline-variant" }                                       # bg is not set to reduce clutter
+"ui.linenr.selected" = { fg = "primary" }                                      # line number for the line the cursor is o # menus and pop ups 
+"ui.menu" = { fg = "on-surface-variant", bg = "surface-container-high" }       # command and other menus 
+"ui.menu.selected" = { fg = "on-primary-container", bg = "primary-container" } # selected autocomplete item 
+"ui.menu.scroll" = { fg = "outline", bg = "outline-variant" }                  # scrollbar
+"ui.popup" = { fg = "outline-variant", bg = "surface-container-high" }         # GoTo/space+ menus, documentation popups 
+"ui.popup.info" = { fg = "primary", bg = "surface-container-high" }            # editor 
+"ui.virtual.indent-guide" = { fg = "surface-container-highest" }               # Vertical indent width guides
+"ui.virtual.whitespace" = { fg = "surface-container-highest" }                 # when cursor in tab 
+
+# git indicators 
+"diff" = { fg = "blue" }
+"diff.plus" = { fg = "green" }
+"diff.minus" = { fg = "red" }
+"diff.delta" = { fg = "primary" }
+
+# diagnostics
+"hint" = { fg = "outline-brighter" }
+"info" = { fg = "blue" }
+"warning" = { fg = "yellow" }
+"error" = { fg = "red" }                                                        # flag in gutter 
+"diagnostic.hint" = { fg = "outline-brighter", underline = { style = "line" } }
+"diagnostic.info" = { fg = "blue", underline = { style = "line" } }
+"diagnostic.warning" = { fg = "yellow", underline = { style = "line" } }
+"diagnostic.error" = { fg = "red", underline = { style = "line" } }
+"diagnostic.unnecessary" = { modifiers = ["dim"] }
+"diagnostic.deprecated" = { modifiers = ["crossed_out"] }
+
+# syntax # 
+"attribute" = { fg = "yellow" }                               # Class, html attributes
+"comment" = { fg = "outline-dimmer", modifiers = ["italic"] }
+"comment.block" = { fg = "outline" }
+"comment.block.documentation" = { fg = "outline" }
+"constant" = { fg = "yellow" }
+"constant.builtin" = { fg = "magenta" }
+"function" = { fg = "light-blue" }
+"keyword" = { fg = "magenta" }
+"namespace" = { fg = "on-surface" }
+"operator" = { fg = "magenta" }
+"punctuation" = { fg = "outline" }
+"string" = { fg = "green" }
+"tag" = { fg = "blue" }                                       # html tags
+"type" = { fg = "light-red" }
+"type.builtin" = { fg = "light-red" }
+"variable" = { fg = "outline-brighter" }
+# "variable.parameter" = { fg = "outline-" } # in a function 
+# "variable.parameter" = { fg = "light-cyan" } # in a function 
+"variable.parameter" = { fg = "cyan" } # in a function 
+
+# markup
+"markup.bold" = { modifiers = ["bold"] }
+"markup.italic" = { modifiers = ["italic"] }
+"markup.strikethrough" = { modifiers = ["crossed_out"] }
+"markup.heading" = { fg = "briblue" }
+"markup.heading.1" = { modifiers = ["bold"] }
+"markup.heading.2" = { fg = "on-surface-variant", modifiers = ["bold"] }
+"markup.heading.3" = { fg = "on-surface-variant" }
+"markup.link" = "blue"
+"markup.link.url" = { fg = "blue", underline = { style = "line" } }
+"markup.link.text" = { fg = "blue", underline = { style = "line" } }
+
+[palette]
+# surfaces 
+"surface-dim" = "#111318"               # N-6; in this scheme, same as Surface; unused 
+"surface" = "#111318"                   # N-6; the primary editor surface layer; surface neutrals have a weak primary colour tint 
+"surface-bright" = "#37393e"            # N-24; ui.selection 
+"surface-container-lowest" = "#0c0e13"  # N-4; unused
+"surface-container-low" = "#191c20"     # N-10; unused 
+"surface-container" = "#1d2024"         # N-12; cursorline, bufferline, statusline 
+"surface-container-high" = "#282a2f"    # N-17; background for all popups, menus, help
+"surface-container-highest" = "#33353a" # N-24; window splitline
+"inverse-surface" = "#e2e2e9"           # N-90; unused 
+"inverse-on-surface" = "#2e3036"        # N-20; unused 
+"primary" = "#aac7ff"                   # P-80; (blue primary, affects NV and surface)
+"on-primary" = "#0a305f"                # P-20;
+"primary-container" = "#284777"         # P-30; 
+"on-primary-container" = "#d6e3ff"      # P-90; 
+"secondary" = "#bec6dc"                 # S-80; 
+"on-secondary" = "#283141"              # S-20;
+"secondary-container" = "#3e4759"       # S-30; 
+"on-secondary-container" = "#dae2f9"    # S-90; 
+"tertiary" = "#ddbce0"                  # T-80; 
+"on-tertiary" = "#3f2844"               # T-20
+"tertiary-container" = "#573e5c"        # T-30; 
+"on-tertiary-container" = "#fad8fd"     # T-90; 
+"error" = "#ffb4ab"                     # E-80; 
+"on-error" = "#690005"                  # E-20;
+"error-container" = "#93000a"           # E-30; 
+"on-error-container" = "#ffdad6"        # E-90;
+"on-surface" = "#e2e2e9"                # N-90; 
+"on-surface-variant" = "#c4c6d0"        # NV-90; primary text colour 
+"outline-brighter" = "#A9ABB4"          # NV-70; 
+"outline" = "#8e9099"                   # NV-60; 
+"outline-dimmer" = "#5B5E66"            # NV-40; comments
+"outline-variant" = "#44474e"           # NV-30; # redefine standard 16 colour names
+"black" = "#24262B"                     # 0; NV-15
+"red" = "#FF5449"                       # 1; Error-60 
+"green" = "#7D9A59"                     # 2; Green-60(green primary)
+"yellow" = "#A3903F"                    # 3; Yellow-60 (yellow primary)
+"blue" = "#7491C7"                      # 4; Primary-60 (blue primary)
+"magenta" = "#A487A9"                   # 5; Tertiary-60 (blue primary)
+"cyan" = "#6B9995"                      # 6; Cyan-60 
+"white" = "#8F9097"                     # 7; NV-60
+"light-black" = "#44474E"               # 8; NV-30
+"light-red" = "#ffb4ab"                 # 9; Error-80 
+"light-green" = "#B1D18A"               # 10; Green-80 (green primary)
+"light-yellow" = "#DBC66E"              # 11; Yellow-80(yellow primary)
+"light-blue" = "#AAC7FF"                # 12; Primary-80 
+"light-magenta" = "#DDBCE0"             # 13; Tertiary-80 (blue primary)
+"light-cyan" = "#A0D0CB"                # 14; Cyan-80 
+"light-white" = "#C4C6D0"               # 15; NV-80

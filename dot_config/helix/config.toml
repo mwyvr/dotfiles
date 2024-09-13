@@ -3,8 +3,8 @@
 # Obscure notes:
 # shift-tab when inserting tabs in the middle of a line (due to "smart tab" feature)
 
-# ~/.config/helix/themes/nord-transparent.toml
-theme = "nord-transparent"
+# https://github.com/mwyvr/cli-themes/blob/main/helix/mui_dark.toml
+theme = "mui_dark"
 
 [editor]
 bufferline = "multiple"
@@ -12,6 +12,9 @@ cursorline = true
 line-number = "relative"
 mouse = false
 true-color = true
+color-modes = true
+
+# persist-old-files = true # when persist branch is merged
 
 [editor.cursor-shape]
 insert = "bar"
@@ -19,6 +22,9 @@ insert = "bar"
 [editor.indent-guides]
 render = true
 skip-levels = 1
+
+[editor.lsp]
+display-messages = true
 
 [editor.statusline]
 left = [
@@ -54,5 +60,6 @@ X = ["extend_line_up", "extend_to_line_bounds"]
 l.f = ":format"
 l.g = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
 l.r = ":lsp-restart"
+l.c = ":config-reload"
 q = ":quit"
 w = ":write"
