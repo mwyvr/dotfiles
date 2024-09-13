@@ -1,4 +1,5 @@
 # some things make more sense as an alias
+alias ls "ls --color=always"
 alias l. "ls -d .*"
 
 # dotfiles management
