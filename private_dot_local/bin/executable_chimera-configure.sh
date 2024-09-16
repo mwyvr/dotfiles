@@ -31,6 +31,7 @@ fi
 
 # Adds necessary packages and services for all types of systems
 doas apk update
+$ADDCMD chimera-repo-user
 doas apk upgrade --no-interactive
 $ADDCMD chrony
 doas dinitctl enable chrony
@@ -44,11 +45,9 @@ else
 fi
 
 # core utils
-$ADDCMD git chezmoi fish-shell btop distrobox
+$ADDCMD git lazygit chezmoi fish-shell btop distrobox
 # for Helix editor and dev
 $ADDCMD helix go nodejs cargo
-# lazygit not yet in cports
-go install github.com/jesseduffield/lazygit@latest
 
 # Desktop for me means development workstation and virtual machine host
 if [ -n "$IS_DESKTOP" ]; then
