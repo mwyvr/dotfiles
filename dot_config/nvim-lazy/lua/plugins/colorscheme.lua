@@ -24,6 +24,10 @@ return {
       })
     end,
   },
+
+  {
+    "marko-cerovac/material.nvim",
+  },
   -- load colorscheme
   {
     "LazyVim/LazyVim",

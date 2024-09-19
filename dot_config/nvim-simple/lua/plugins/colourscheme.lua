@@ -69,4 +69,7 @@ return {
 		-- 	vim.cmd.colorscheme("catppuccin-mocha")
 		-- end,
 	},
+  {
+    'marko-cerovac/material.nvim'
+},
 }
