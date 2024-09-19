@@ -1,7 +1,9 @@
 -- core options from LazyVim, with edits; override in options.lua
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 
-vim.cmd.colorscheme("nordfox")
+-- vim.cmd.colorscheme("nordfox")
+vim.g.material_style = "darker"
+vim.cmd.colorscheme("material")
 local opt = vim.opt
 
 opt.autowrite = true -- Enable auto write
