@@ -44,11 +44,9 @@ else
 fi
 
 # core utils
-$ADDCMD git chezmoi fish-shell btop distrobox
+$ADDCMD git lazygit delta chezmoi fish-shell btop distrobox
 # for Helix editor and dev
 $ADDCMD helix go nodejs cargo
-# lazygit not yet in cports
-go install github.com/jesseduffield/lazygit@latest
 
 # Desktop for me means development workstation and virtual machine host
 if [ -n "$IS_DESKTOP" ]; then
@@ -78,10 +76,6 @@ fi
 # Desktop and laptop get these
 if [ -n "$IS_GUI" ]; then
     $ADDCMD foot gnome-tweaks fonts-nerd-roboto-mono
-    # note, run as user not doas:
-    dinitctl enable foot
-    # make foot the default terminal
-    gsettings set org.gnome.desktop.default-applications.terminal exec 'footclient'
     # applications
     $ADDCMD evolution
     # flatpak apps
