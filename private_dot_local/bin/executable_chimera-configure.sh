@@ -31,6 +31,7 @@ fi
 
 # Adds necessary packages and services for all types of systems
 doas apk update
+$ADDCMD chimera-repo-user
 doas apk upgrade --no-interactive
 $ADDCMD chrony
 doas dinitctl enable chrony
@@ -80,10 +81,11 @@ if [ -n "$IS_GUI" ]; then
     $ADDCMD evolution
     # flatpak apps
     $ADDCMD flatpak
-    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
     for app in com.google.Chrome org.signal.Signal us.zoom.Zoom; do
         echo "Installing $app"
-        flatpak install -y $app
+        flatpak install --user -y $app
     done
 fi
 

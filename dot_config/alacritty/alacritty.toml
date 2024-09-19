@@ -9,10 +9,12 @@ style = "Block"
 [font]
 size = 12
 
+[mouse]
+hide_when_typing = false # annoying in alacritty
+
 [font.normal]
 family = "monospace"
 
 [font.offset]
 # # vertical spacing, normalizing with foot setup
 y = -2
-
