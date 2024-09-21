@@ -2,6 +2,9 @@
 # https://github.com/helix-editor/helix/wiki/Language-Server-Configurations
 # https://github.com/helix-editor/helix/wiki/External-formatter-configuration
 
+# TODO Word completion and snippets:
+# https://github.com/estin/simple-completion-language-server
+
 # shells
 [[language]]
 name = "fish"
@@ -19,6 +22,11 @@ auto-format = true
 name = "markdown"
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "markdown"] }
+
+# spelling and grammar
+[language-server.harper-ls]
+command = "harper-ls"
+args = ["--stdio"]
 
 # configuration or data markup languages
 [[language]]
