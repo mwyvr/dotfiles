@@ -81,11 +81,10 @@ if [ -n "$IS_GUI" ]; then
     $ADDCMD evolution
     # flatpak apps
     $ADDCMD flatpak
-    flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
+    flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
     for app in com.google.Chrome org.signal.Signal us.zoom.Zoom; do
         echo "Installing $app"
-        flatpak install --user -y $app
+        flatpak install -y $app
     done
 fi
 
