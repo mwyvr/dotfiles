@@ -58,6 +58,8 @@ npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typesc
 npm i -g @fsouza/prettierd
 # spell and grammar
 cargo install harper-ls --locked
+# word completion and snippets
+cargo install --git https://github.com/estin/simple-completion-language-server.git
 
 # python
 pip install -U 'python-lsp-server[all]' --break-system-packages # python
