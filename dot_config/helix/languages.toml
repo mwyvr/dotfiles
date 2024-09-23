@@ -36,7 +36,7 @@ auto-format = true
 name = "markdown"
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "markdown"] }
-language-servers = ["scls"]
+language-servers = ["scls", "harper-ls"]
 
 # spelling and grammar
 [language-server.harper-ls]
