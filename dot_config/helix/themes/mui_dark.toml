@@ -77,7 +77,7 @@
 "markup.bold" = { modifiers = ["bold"] }
 "markup.italic" = { modifiers = ["italic"] }
 "markup.strikethrough" = { modifiers = ["crossed_out"] }
-"markup.heading" = { fg = "briblue" }
+"markup.heading" = { fg = "light-blue" }
 "markup.heading.1" = { modifiers = ["bold"] }
 "markup.heading.2" = { fg = "on-surface-variant", modifiers = ["bold"] }
 "markup.heading.3" = { fg = "on-surface-variant" }
