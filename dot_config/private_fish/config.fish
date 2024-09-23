@@ -13,6 +13,6 @@ function fish_user_key_bindings
     end
 end
 
-fish_add_path ~/.local/bin
-fish_add_path ~/go/bin
 fish_add_path ~/.cargo/bin
+fish_add_path ~/go/bin
+fish_add_path ~/.local/bin

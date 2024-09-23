@@ -207,6 +207,8 @@ done
 
 # static list of noted bad actors
 BADACTORS=(
+    # hacks or worse
+    "77.221.157.109" # de bitcoin intrusion/miner hack noted elsewhere
     # prolific spammers
     "194.169.175.0/24"   # gb emanuelhosting
     "102.210.41.0/24"    # ke bitcoin porn scam
@@ -221,15 +223,18 @@ BADACTORS=(
     "105.240.0.0/8"      # za porn hack scam
     "105.0.0.0/16"       # za porn hack scam
     "213.202.192.0/18"   # de myloc.de gummies
+    "217.79.176.0/20"    # de myloc.de gummies
     "89.163.128.0/17"    # de myloc.de gummies
     "46.165.192.0/18"    # de leaseweb gummies
     "178.162.128.0/18"   # nl leaseweb
+    "62.212.64.0/19"     # nl leaseweb
+    "212.32.224.0/19"    # nl leaseweb
     "185.49.69.0/24"     # gb leaseweb
     "37.48.64.0/18"      # nl leaseweb
     "5.79.64.0/18"       # nl leaseweb
     "81.171.0.0/19"      # nl leaseweb
     "83.149.64.0/18"     # nl leaseweb
-    "37.48.64.0/18" # nl leaseweb
+    "37.48.64.0/18"      # nl leaseweb
     "62.210.0.0/16"      # fr Scaleway hosts malware, dns blocklisted
     "163.172.0.0/16"     # fr Scaleway hosts malware, dns blocklisted
     "200.75.0.0/19"      # cl spam hosts
@@ -246,6 +251,7 @@ BADACTORS=(
     "102.130.120.0/24"   # za purolator, intelexprescom scam
     "185.75.240.0/24"    # uk, garden variety ru oriented scam
     "103.4.188.0/24"     # bn fraud scam email@paulgam.com
+    "89.185.84.0/24"     # ru not currently covered by country block
     # fraud spam sent to honeypot addresses
     "77.87.208.0/21" # ru not currently covered by country block
     "31.28.27.0/24"  # ru not currently covered by country block
