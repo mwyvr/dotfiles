@@ -6,3 +6,4 @@ if [ ! -d helix ]; then
 fi
 cd helix
 RUSTFLAGS="-C target-feature=-crt-static" cargo install --path helix-term --locked
+ln -Tsv ~/src/helix/runtime ~/.config/helix/runtime
