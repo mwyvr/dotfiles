@@ -33,14 +33,14 @@ fi
 doas apk update
 $ADDCMD chimera-repo-user
 doas apk upgrade --no-interactive
-$ADDCMD chrony
 doas dinitctl enable chrony
 doas dinitctl enable syslog-ng
 
 # cpu microcode
 if lscpu | grep "GenuineIntel"; then
     $ADDCMD ucode-intel
-else
+fi
+if lscpu | grep "AuthenticAMD"; then
     $ADDCMD ucode-amd
 fi
 
