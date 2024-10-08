@@ -45,7 +45,7 @@ if lscpu | grep "AuthenticAMD"; then
 fi
 
 # core utils
-$ADDCMD git lazygit delta chezmoi fish-shell btop distrobox
+$ADDCMD git lazygit delta chezmoi fish-shell btop htop
 # for Helix editor and dev
 $ADDCMD helix go nodejs cargo
 
