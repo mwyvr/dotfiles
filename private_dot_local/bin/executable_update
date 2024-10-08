@@ -1,27 +1,36 @@
 #!/usr/bin/sh
-# install supports for neovim on various Linux distributions (Chimera Linux, Void Linux, openSUSE)
+# package update/upgrade & fw updates for various Linux distributions (Chimera
+# Linux, Void Linux, openSUSE Tumbleweed and Aeon Desktop)
 . /etc/os-release
+
+do_fw() {
+	# don't install it on servers
+	if test -x fwupdmgr; then
+		fwupdmgr get-updates && fwupdmgr update
+	fi
+}
+
 case $ID in
 chimera)
 	doas apk update
 	doas apk upgrade
-	if test -x fwupdmgr; then
-		fwupdmgr get-updates && fwupdmgr update
-	fi
+	do_fw
 	;;
 void)
 	sudo xbps-install -Su
-	fwupdmgr get-updates && fwupdmgr update
+	do_fw
 	;;
 opensuse-tumbleweed)
 	sudo zypper dup
+	do_fw
 	;;
 aeon)
 	sudo transactional-update dup
-	fwupdmgr get-updates && fwupdmgr update
+	# fw updates built in
 	;;
 opensuse-microos)
 	sudo transactional-update dup
+	# no do_fw - only have used this as a server os
 	;;
 *)
 	echo "Unknown Linux distribution, terminating."
