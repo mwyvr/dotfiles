@@ -1,6 +1,0 @@
-#!/bin/sh
-FP="$HOME/.local/bin/winbox64.exe"
-if [ ! -f "$FP" ]; then
-	wget https://mt.lv/winbox64 -O $FP
-fi
-echo "Start using Bottles (install via Flatpak)"
