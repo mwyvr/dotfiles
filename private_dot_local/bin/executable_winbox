@@ -1,21 +1,21 @@
 #!/bin/sh
 # Winbox is a Mikrotik router management tool; v4 will provide Linux compatibility
-# but for the time being, running v3.x which is a Windows executable.
+# but for the time being, running v3.x which is a Windows executable. Update to 4.0x,
+# which offers native Linux support, when out of beta.
 #
 # See also ~/.local/share/applications/winbox.desktop which calls this.
 
 . /etc/os-release
 export EXE="$HOME/.local/bin/winbox64.exe"
-export WINE="$HOME/.local/bin/wine64"
 
 setup() {
     # download if not already done
     if [ ! -f "$EXE" ]; then
-        $FETCHER -o "$EXE" https://mt.lv/winbox64
+        $FETCHER -o "$EXE" https://download.mikrotik.com/routeros/winbox/3.41/winbox64.exe
     fi
-    if ! command -v "$WINE"; then
-        # Some Linux distributions install an absurd volume of packages for Wine (looking
-        # at you, openSUSE - on those run Wine via a distrobox.
+    if ! command -v "$(which wine64)"; then
+        # Some Linux distributions install an absurd volume of packages for Wine,
+        # - looking at you, openSUSE - on those run Wine via a distrobox.
         echo "Install wine; on openSUSE install within and export wine64 from a distrobox"
         exit 1
     fi
