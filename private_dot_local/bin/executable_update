@@ -4,36 +4,36 @@
 . /etc/os-release
 
 do_fw() {
-	# don't install it on servers
-	if test -x fwupdmgr; then
-		fwupdmgr get-updates && fwupdmgr update
-	fi
+    # Not installed on servers
+    if test -x fwupdmgr; then
+        fwupdmgr get-updates && fwupdmgr update
+    fi
 }
 
 case $ID in
 chimera)
-	doas apk update
-	doas apk upgrade
-	do_fw
-	;;
+    doas apk update
+    doas apk upgrade
+    do_fw
+    ;;
 void)
-	sudo xbps-install -Su
-	do_fw
-	;;
+    sudo xbps-install -Su
+    do_fw
+    ;;
 opensuse-tumbleweed)
-	sudo zypper dup
-	do_fw
-	;;
+    sudo zypper dup
+    do_fw
+    ;;
 aeon)
-	sudo transactional-update dup
-	# fw updates built in
-	;;
+    sudo transactional-update dup
+    # fw updates built in
+    ;;
 opensuse-microos)
-	sudo transactional-update dup
-	# no do_fw - only have used this as a server os
-	;;
+    # only use this as a server os
+    sudo transactional-update dup
+    ;;
 *)
-	echo "Unknown Linux distribution, terminating."
-	exit 1
-	;;
+    echo "Unknown Linux distribution, terminating."
+    exit 1
+    ;;
 esac
