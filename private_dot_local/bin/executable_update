@@ -5,7 +5,9 @@ case $ID in
 chimera)
 	doas apk update
 	doas apk upgrade
-	fwupdmgr get-updates && fwupdmgr update
+	if test -x fwupdmgr; then
+		fwupdmgr get-updates && fwupdmgr update
+	fi
 	;;
 void)
 	sudo xbps-install -Su
