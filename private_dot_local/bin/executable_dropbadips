@@ -210,7 +210,9 @@ iptables -I INPUT -m set --match-set spffail src -j DROP
 
 # mail system, dnsbl rejects, often for malware
 ipset create -exist -q dnsbl hash:ip maxelem 120000
-for ip in $($SCOPE | grep "mox.*rejecting due to listing in dnsbl" | awk -F'/ip/|\" mailfrom' '{print $2}' | sort | uniq); do
+# example:
+# 2024-10-10 01:44:33 info mox[3064]: l=info m="rejecting due to listing in dnsbl" pkg=smtpserver zone=sbl.spamhaus.org explanation="Error: open resolver; https://check.spamhaus.org/returnc/pub/104.207.157.76/" mailfrom=yrquvrr@offroderz.de rcptto=hello@solutionroute.ca cid=19272dcede1 delta=175.298792m
+for ip in $($SCOPE | grep "rejecting due to listing in dnsbl" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sort | uniq); do
     case "$ip" in
     "$DONTBLOCK")
         continue
