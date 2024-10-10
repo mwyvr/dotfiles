@@ -20,22 +20,24 @@
 # IMPORTANT: When making changes, don't forget to re-install the script with:
 #   dropips install
 
-if [ "$(id -u)" -ne 0 ]; then
-    echo "$SCRIPT must be run as root."
-    logger "$SCRIPT must be run as root."
-    exit
-fi
-
 SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
 BASE=$(basename "$SCRIPT")
-logger "$SCRIPT starting, command line parameter [$1]"
+LOGCMD="/usr/bin/logger -p mail.info -t $BASE: "
+$LOGCMD "$SCRIPT starting, command line parameter [$1]"
+COUNTRIES=""
+
+if [ "$(id -u)" -ne 0 ]; then
+    echo "$SCRIPT must be run as root."
+    $$LOGCMD "$SCRIPT must be run as root."
+    exit
+fi
 
 . /etc/os-release
 case $ID in
 chimera)
-    LOGCURRENT="cat /var/log/mox.log"
+    LOGCURRENT="cat /var/log/mail.log"
     # TODO until logrotate happens
-    LOGALL="cat /var/log/mox.log"
+    LOGALL="cat /var/log/mail.log"
     # LOGALL="cat /var/log/socklog/messages/@* /var/log/socklog/messages/current"
     ;;
 void)
@@ -61,17 +63,18 @@ install() {
     chimera)
         cp $SCRIPT /usr/bin/$BASE
         chmod +x /usr/bin/$BASE
+        $LOGCMD "$BASE installed itself to /usr/bin/$BASE; run by cron"
         ;;
     void)
         # ensure the latest is installed in hourly
         # Note: Void/runit run-parts command won't launch a script ending in .sh
         cp $SCRIPT /etc/cron.hourly/$BASE
         chmod +x /etc/cron.hourly/$BASE
-        logger "$BASE installed itself to /etc/cron.hourly/"
+        $LOGCMD "$BASE installed itself to /etc/cron.hourly/"
         ;;
     "opensuse-microos")
         cp $SCRIPT /usr/local/bin/$BASE
-        logger "$BASE installed itself to /usr/local/bin; ensure systemd-timer setup"
+        $LOGCMD "$BASE installed itself to /usr/local/bin; ensure systemd-timer setup"
         ;;
     *)
         echo "Unsupported Linux distribution. If running in a distrobox, run from the root OS."
@@ -81,15 +84,21 @@ install() {
 }
 
 block_countries() {
-    # COUNTRIES="cn ru"
     BASE_URL="https://www.ipdeny.com/ipblocks/data/aggregated/"
     URL_SUFFIX="-aggregated.zone"
-    for code in $COUNTRIES; do
-        logger "$BASE dropping country $code"
-        URL="$BASE_URL$code$URL_SUFFIX"
-        for ip in $(curl "$URL"); do
-            iptables -A INPUT -j DROP -s "$ip"
+
+    for cc in $COUNTRIES; do
+        URL="$BASE_URL$cc$URL_SUFFIX"
+        $LOGCMD "dropping country $cc and reloading"
+
+        ipset destroy -q "drop-$cc"
+        ipset create "drop-$cc" -exist hash:net maxelem 90000
+
+        for ip in $(fetch -o - "$URL"); do
+            ipset add -exist -q "drop-$cc" "$ip"
         done
+        # add the drop rule for the set
+        iptables -I INPUT -m set --match-set "drop-$cc" src -j DROP
     done
 }
 
@@ -105,7 +114,7 @@ if [ ! $# -eq 0 ]; then
         exit
     elif [ "$1" = "all" ]; then
         SCOPE=$LOGALL
-        logger "$BASE scanning all logs"
+        $LOGCMD "scanning all logs"
     elif [ "$1" = "reset" ]; then
         # no params after reset
         if [ "$2" = "" ]; then
@@ -113,21 +122,22 @@ if [ ! $# -eq 0 ]; then
             echo "eg: $BASE reset ru cn"
             exit
         fi
-        logger "$BASE resetting iptables"
+        $LOGCMD "resetting iptables and dropping sets"
         iptables -F
+        ipset destroy
         # after arg 1, any remaining args are countries
         shift
         COUNTRIES=""
         for var in "$@"; do
             COUNTRIES="${COUNTRIES:+${COUNTRIES} }${var}"
         done
-        logger "$BASE dropping countries: $COUNTRIES"
+        $LOGCMD "dropping countries: $COUNTRIES"
         block_countries
         SCOPE=$LOGALL
-        logger "$BASE scanning all logs"
+        $LOGCMD "scanning all logs"
     else
         echo "$SCRIPT: Bad command: $1. Use install, all, or reset"
-        logger "$SCRIPT: Bad command: $1. Use install, all, or reset"
+        $LOGCMD "$SCRIPT: Bad command: $1. Use install, all, or reset"
         exit
     fi
 fi
@@ -145,37 +155,35 @@ fi
 DONTBLOCK=$(ss | grep ":ssh" | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
 # combine and ACCEPT
 DONTBLOCK="$DONTBLOCK $DONTBLOCKSTATIC"
+ipset create -exist -q "noblock" hash:ip
 for ip in $DONTBLOCK; do
-    # if not in table, INSERT a rule to protect us
-    if ! iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1; then
-        iptables -I INPUT -s "$ip" -j ACCEPT
-        logger "ACCEPT rule added for $ip"
-    else
-        logger "ACCEPT rule exists for $ip"
-    fi
+    ipset add -exist -q noblock "$ip"
+    $LOGCMD "ACCEPT rule added for $ip"
 done
+iptables -I INPUT -m set --match-set noblock src -j ACCEPT
 
 # TIME TO DROP IPs
 # all other rules are APPENDED
 # mail system, failed auth
+ipset create -exist -q failedauth hash:ip maxelem 120000
 for ip in $($SCOPE | grep 'm="failed authentication attempt"' | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
     case "$ip" in
     "$DONTBLOCK")
         continue
         ;;
     *)
-        # Adds an ip or /netblock to iptables drop list, if it isn't already in there
-        # Unless iptables has been flushed recently, this will always be false
-        if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-            iptables -A INPUT -j DROP -s "$ip"
-            logger "mox: failed auth attempt DROP $ip"
+        if ! ipset test -q failedauth "$ip"; then
+            ipset add -exist -q failedauth "$ip"
             COUNT=$((COUNT + 1))
+            $LOGCMD "failedauth DROP $ip"
         fi
         ;;
     esac
 done
+iptables -I INPUT -m set --match-set failedauth src -j DROP
 
 # mail system, spf violators - all are attacks on our domains or spoofs of legit biz
+ipset create -exist -q spffail hash:ip maxelem 2000
 for ip in $($SCOPE | grep "mox.*spf fail.*your ip" | awk -F 'your ip | is not' '{print $2}' | sort | uniq); do
     case "$ip" in
     "$DONTBLOCK")
@@ -184,17 +192,19 @@ for ip in $($SCOPE | grep "mox.*spf fail.*your ip" | awk -F 'your ip | is not' '
     *)
         # Adds an ip or /netblock to iptables drop list, if it isn't already in there
         # Unless iptables has been flushed recently, this will always be false
-        if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-            iptables -A INPUT -j DROP -s "$ip"
-            logger "mox spf fail DROP $ip"
+        if ! ipset test -q spffail "$ip"; then
+            ipset add -exist -q spffail "$ip"
             COUNT=$((COUNT + 1))
+            $LOGCMD "spffail DROP $ip"
         fi
         ;;
     esac
 done
+iptables -I INPUT -m set --match-set spffail src -j DROP
 
 # mail system, dnsbl rejects, often for malware
-for ip in $($SCOPE | grep "mox.*rejecting due to listing in dnsbl.*Listed by CSS" | awk -F'/ip/|\" mailfrom' '{print $2}' | sort | uniq); do
+ipset create -exist -q dnsbl hash:ip maxelem 120000
+for ip in $($SCOPE | grep "mox.*rejecting due to listing in dnsbl" | awk -F'/ip/|\" mailfrom' '{print $2}' | sort | uniq); do
     case "$ip" in
     "$DONTBLOCK")
         continue
@@ -202,14 +212,15 @@ for ip in $($SCOPE | grep "mox.*rejecting due to listing in dnsbl.*Listed by CSS
     *)
         # Adds an ip or /netblock to iptables drop list, if it isn't already in there
         # Unless iptables has been flushed recently, this will always be false
-        if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-            iptables -A INPUT -j DROP -s "$ip"
-            logger "mox dnsbl reject DROP $ip"
+        if ! ipset test -q dnsbl "$ip"; then
+            ipset add -exist -q dnsbl "$ip"
             COUNT=$((COUNT + 1))
+            $LOGCMD "dnsbl DROP $ip"
         fi
         ;;
     esac
 done
+iptables -I INPUT -m set --match-set dnsbl src -j DROP
 
 # IMPORTANT: When making changes, don't forget to install it to cron.hourly once tested.
 # To install to cron.hourly run:
@@ -218,6 +229,7 @@ done
 # static list of noted bad actors ranging from frauds/scams to prolific spammers like leaseweb
 # or hosts that repeatedly are reported for malware
 BADACTORS="77.221.157.109
+95.211.0.0/16
 102.210.41.0/24
 176.88.185.0/24
 179.152.0.0/14
@@ -287,29 +299,20 @@ BADACTORS="77.221.157.109
 set -f
 IFS='
 '
+ipset create -exist -q badactors hash:net
 for ip in $BADACTORS; do
     # in case of expansion needs in the loop
     set +f
     unset IFS
-    case $ip in
-    "$DONTBLOCK")
-        if ! iptables -C INPUT -j ACCEPT -s "$ip" >/dev/null 2>&1; then
-            iptables -I INPUT -s "$ip" -j ACCEPT
-        fi
-        continue
-        ;;
-    *)
-        # Adds an ip or /netblock to iptables drop list, if it isn't already in there
-        if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
-            iptables -A INPUT -j DROP -s "$ip"
-            logger "mox known bad actors DROP $ip"
-            COUNT=$((COUNT + 1))
-        fi
-        ;;
-    esac
+    if ! ipset test -q badactors "$ip"; then
+        ipset add -q -exist badactors "$ip"
+        COUNT=$((COUNT + 1))
+        $LOGCMD "badactors DROP $ip"
+    fi
 done
+iptables -I INPUT -m set --match-set badactors src -j DROP
 # again in case there were none
 set +f
 unset IFS
 
-logger "$SCRIPT finished, $COUNT DROP rules added"
+$LOGCMD "$SCRIPT finished, $COUNT DROP rules added"
