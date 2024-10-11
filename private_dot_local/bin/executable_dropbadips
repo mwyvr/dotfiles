@@ -160,7 +160,7 @@ fi
 DONTBLOCK="$DONTBLOCK $DONTBLOCKSTATIC"
 ipset create -exist -q "noblock" hash:ip
 for ip in $DONTBLOCK; do
-    if ! ipset test -q noblock"$ip"; then
+    if ! ipset test -q noblock "$ip"; then
         ipset add -exist -q noblock "$ip"
         log "ACCEPT rule added for $ip"
     fi
