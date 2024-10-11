@@ -7,7 +7,7 @@
 # /etc/dontblockme.
 #
 # Note: This isn't a replacement for fail2ban; it's specific to mox and *may*
-# be extended to parse log files for failed ssh access in the future.
+# be extended to parse other log files.
 #
 # Currently the script adds a DROP rule for:
 # - failed authentication to the mail server (imap or otherwise)
@@ -27,13 +27,12 @@ log() {
 SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
 BASE=$(basename "$SCRIPT")
 LOGCMD="/usr/bin/logger -p mail.info -t $BASE l=info"
-# $LOGCMD m=\"$SCRIPT starting, command line parameter [$1]\"
-log "$SCRIPT starting, command line parameter [$1]"
 COUNTRIES=""
+
+log "$SCRIPT starting, command line parameter [$1]"
 
 if [ "$(id -u)" -ne 0 ]; then
     echo "$SCRIPT must be run as root."
-    # $LOGCMD m="$SCRIPT must be run as root."
     log "$SCRIPT must be run as root."
     exit
 fi
@@ -44,7 +43,6 @@ chimera)
     LOGCURRENT="cat /var/log/mail.log"
     # TODO until logrotate happens
     LOGALL="cat /var/log/mail.log"
-    # LOGALL="cat /var/log/socklog/messages/@* /var/log/socklog/messages/current"
     ;;
 void)
     LOGCURRENT="cat /var/log/socklog/messages/current"
@@ -152,72 +150,63 @@ fi
 COUNT=0
 
 # AVOID BLOCKING US / PROTECTED IPs
+# Dynamic protection: assumes only sysadmin(s) or other authorized users that may be physically logged on
+# when this script runs. INSERTS ACCEPT at start of ruleset to avoid blocking
+DONTBLOCK=$(ss | grep ":ssh" | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
 # Add home or office static IP if any
 if test -f /etc/dontblockme; then
     DONTBLOCKSTATIC=$(cat /etc/dontblockme)
 fi
-# Dynamic protection: assumes only sysadmin(s) or other authorized users have
-# ssh access to this machine, INSERTS ACCEPT at start of ruleset to avoid blocking
-DONTBLOCK=$(ss | grep ":ssh" | grep ESTAB | awk '{print $6}' | cut -d ":" -f 1 | sort | uniq)
-# combine and ACCEPT
 DONTBLOCK="$DONTBLOCK $DONTBLOCKSTATIC"
 ipset create -exist -q "noblock" hash:ip
 for ip in $DONTBLOCK; do
-    ipset add -exist -q noblock "$ip"
-    log "ACCEPT rule added for $ip"
+    if ! ipset test -q noblock"$ip"; then
+        ipset add -exist -q noblock "$ip"
+        log "ACCEPT rule added for $ip"
+    fi
 done
+# this table only is INSERTED at the start, all others are APPENDED
 iptables -I INPUT -m set --match-set noblock src -j ACCEPT
 
 # TIME TO DROP IPs
 # all other rules are APPENDED
 # mail system, failed auth
 ipset create -exist -q failedauth hash:ip maxelem 120000
-for ip in $($SCOPE | grep 'm="failed authentication attempt"' | awk -F 'remote=| cid' '{print $2}' | sort | uniq); do
-    case "$ip" in
-    "$DONTBLOCK")
-        continue
-        ;;
-    *)
+for ip in $($SCOPE | grep 'm="failed authentication attempt"' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sort | uniq); do
+    if ! echo "$DONTBLOCK" | grep -q "$ip"; then
         if ! ipset test -q failedauth "$ip"; then
             ipset add -exist -q failedauth "$ip"
             COUNT=$((COUNT + 1))
             log "failedauth DROP $ip"
         fi
-        ;;
-    esac
+    else
+        log "failedauth NOT DROPPED due to dontblock $ip"
+    fi
 done
-iptables -I INPUT -m set --match-set failedauth src -j DROP
+iptables -A INPUT -m set --match-set failedauth src -j DROP
 
 # mail system, spf violators - all are attacks on our domains or spoofs of legit biz
 ipset create -exist -q spffail hash:ip maxelem 2000
-for ip in $($SCOPE | grep "mox.*spf fail.*your ip" | awk -F 'your ip | is not' '{print $2}' | sort | uniq); do
-    case "$ip" in
-    "$DONTBLOCK")
-        continue
-        ;;
-    *)
+for ip in $($SCOPE | grep 'm=".*spf fail.*"' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sort | uniq); do
+    if ! echo "$DONTBLOCK" | grep -q "$ip"; then
         # Adds an ip or /netblock to iptables drop list, if it isn't already in there
         # Unless iptables has been flushed recently, this will always be false
         if ! ipset test -q spffail "$ip"; then
-            ipset add -exist -q spffail "$ip"
+            # NOT ADDING THESE AT PRESENT LET'S SEE HOW MANY
+            # ipset add -exist -q spffail "$ip"
             COUNT=$((COUNT + 1))
-            log "spffail DROP $ip"
+            log "spffail WAS NOT DROP - evaluate $ip"
         fi
-        ;;
-    esac
+    fi
 done
-iptables -I INPUT -m set --match-set spffail src -j DROP
+iptables -A INPUT -m set --match-set spffail src -j DROP
 
 # mail system, dnsbl rejects, often for malware
 ipset create -exist -q dnsbl hash:ip maxelem 120000
 # example:
 # 2024-10-10 01:44:33 info mox[3064]: l=info m="rejecting due to listing in dnsbl" pkg=smtpserver zone=sbl.spamhaus.org explanation="Error: open resolver; https://check.spamhaus.org/returnc/pub/104.207.157.76/" mailfrom=yrquvrr@offroderz.de rcptto=hello@solutionroute.ca cid=19272dcede1 delta=175.298792m
 for ip in $($SCOPE | grep "rejecting due to listing in dnsbl" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sort | uniq); do
-    case "$ip" in
-    "$DONTBLOCK")
-        continue
-        ;;
-    *)
+    if ! echo "$DONTBLOCK" | grep -q "$ip"; then
         # Adds an ip or /netblock to iptables drop list, if it isn't already in there
         # Unless iptables has been flushed recently, this will always be false
         if ! ipset test -q dnsbl "$ip"; then
@@ -225,10 +214,9 @@ for ip in $($SCOPE | grep "rejecting due to listing in dnsbl" | grep -oE '[0-9]{
             COUNT=$((COUNT + 1))
             log "dnsbl DROP $ip"
         fi
-        ;;
-    esac
+    fi
 done
-iptables -I INPUT -m set --match-set dnsbl src -j DROP
+iptables -A INPUT -m set --match-set dnsbl src -j DROP
 
 # IMPORTANT: When making changes, don't forget to install it to cron.hourly once tested.
 # To install to cron.hourly run:
@@ -312,13 +300,15 @@ for ip in $BADACTORS; do
     # in case of expansion needs in the loop
     set +f
     unset IFS
-    if ! ipset test -q badactors "$ip"; then
-        ipset add -q -exist badactors "$ip"
-        COUNT=$((COUNT + 1))
-        log "badactors DROP $ip"
+    if ! echo "$DONTBLOCK" | grep -q "$ip"; then
+        if ! ipset test -q badactors "$ip"; then
+            ipset add -q -exist badactors "$ip"
+            COUNT=$((COUNT + 1))
+            log "badactors DROP $ip"
+        fi
     fi
 done
-iptables -I INPUT -m set --match-set badactors src -j DROP
+iptables -A INPUT -m set --match-set badactors src -j DROP
 # again in case there were none
 set +f
 unset IFS
