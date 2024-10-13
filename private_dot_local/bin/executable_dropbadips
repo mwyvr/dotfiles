@@ -224,7 +224,8 @@ iptables -A INPUT -m set --match-set dnsbl src -j DROP
 
 # static list of noted bad actors ranging from frauds/scams to prolific spammers like leaseweb
 # or hosts that repeatedly are reported for malware
-BADACTORS="77.221.157.109
+BADACTORS="
+77.221.157.109
 95.211.0.0/16
 102.210.41.0/24
 176.88.185.0/24
@@ -290,6 +291,15 @@ BADACTORS="77.221.157.109
 209.97.180.160
 165.227.221.227
 62.4.0.0/19
+5.79.64.0/18
+62.173.141.0/24
+62.173.149.0/24
+31.28.27.0/24
+83.149.64.0/18
+95.211.0.0/16
+5.79.64.0/18
+77.90.185.0/24
+185.82.218.0/23
 "
 # newline to loop through badactors
 set -f
