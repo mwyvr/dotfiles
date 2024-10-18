@@ -51,6 +51,8 @@ G = "goto_file_end"
 g.q = ":reflow"
 "tab" = ":buffer-next"
 "S-tab" = ":buffer-previous"
+"A-u" = ["switch_to_lowercase"]
+"A-S-u" = ["switch_to_uppercase"]
 
 # Alt-x shrink selection by one line
 A-x = "extend_to_line_bounds"
@@ -61,5 +63,7 @@ l.f = ":format"
 l.g = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
 l.r = ":lsp-restart"
 l.c = ":config-reload"
+l.t = ":toggle-option auto-format"
+
 q = ":quit"
 w = ":write"
