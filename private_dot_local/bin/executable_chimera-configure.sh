@@ -53,6 +53,17 @@ $ADDCMD helix go nodejs cargo
 if [ -n "$IS_DESKTOP" ]; then
     doas dinitctl enable sshd
 
+    # my Varmilo keyboard firmware IDs as an Apple; the function keys act as
+    # media keys unless pressed with Fn button, which is annoying.
+    VARMILO=$(lsmod | grep hid_apple)
+    if [ -z "$VARMILO" ]; then
+        echo "- Forcing Varmilo/hid_apple function keys as default (2)"
+        # real time temp fix
+        echo 2 >/sys/module/hid_apple/parameters/fnmode
+        # make fix permanent
+        echo "options hid_apple fnmode=2" | tee -a /etc/modprobe.d/$(hostname).conf
+    fi
+
     if ask "Prevent machine from sleeping?" Y; then
         # ensure machine does not suspend at gdm login prompt; may need to configure /etc/elogind
         doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 0
@@ -86,6 +97,10 @@ if [ -n "$IS_GUI" ]; then
         echo "Installing $app"
         flatpak install -y $app
     done
+fi
+# laptop specific (mine are all Intel igpu)
+if [ -n "$IS_LAPTOP" ]; then
+    $ADDCMD intel-media-driver
 fi
 
 # after microcode
