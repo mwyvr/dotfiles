@@ -302,7 +302,9 @@ BADACTORS="
 77.90.185.0/24
 185.82.218.0/23
 185.94.167.0/24
+45.88.186.0/24
 "
+
 # newline to loop through badactors
 set -f
 IFS='
