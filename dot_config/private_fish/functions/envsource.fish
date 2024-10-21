@@ -1,8 +1,8 @@
 function envsource
     set -f envfile "$argv"
     if not test -f "$envfile"
-        echo "Warning: unable to load $envfile"
-        return 1
+        # echo "Warning: unable to load $envfile"
+        # return 1
     end
     while read line
         if not string match -qr '^#|^$' "$line"
