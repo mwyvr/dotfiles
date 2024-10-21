@@ -69,9 +69,9 @@ if [ -n "$IS_DESKTOP" ]; then
         doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 0
         doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
         # the above isn't doing the job so we'll brute for it here for now:
-        if ! grep -q "AllowSuspend=no" /etc/elogind/sleep.conf; then
-            echo "AllowSuspend=no" | doas tee -a /etc/elogind/sleep.conf
-        fi
+        # if ! grep -q "AllowSuspend=no" /etc/elogind/sleep.conf; then
+            # echo "AllowSuspend=no" | doas tee -a /etc/elogind/sleep.conf
+        # fi
     fi
 
     if ask "Include kvm/qemu/virt-manager?" Y; then
@@ -93,7 +93,7 @@ if [ -n "$IS_GUI" ]; then
     # flatpak apps
     $ADDCMD flatpak
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    for app in com.google.Chrome org.signal.Signal us.zoom.Zoom; do
+    for app in com.chromium.Chromium org.signal.Signal us.zoom.Zoom; do
         echo "Installing $app"
         flatpak install -y $app
     done
