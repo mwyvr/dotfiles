@@ -1,5 +1,4 @@
 #!/bin/sh
-# Kinda like .xprofile but with configuration for wlroots compositor like dwl
 # . ~/.wlrprofile
 eval $(gnome-keyring-daemon --start)
 export SSH_AUTH_SOCK

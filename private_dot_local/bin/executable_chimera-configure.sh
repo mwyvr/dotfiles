@@ -65,9 +65,13 @@ if [ -n "$IS_DESKTOP" ]; then
     fi
 
     if ask "Prevent machine from sleeping?" Y; then
-        # ensure machine does not suspend at gdm login prompt; may need to configure /etc/elogind
+        # ensure machine does not suspend at gdm login prompt; if this doesn't work, disable in /etc/elogind
+        # doas -u _gdm dbus-run-session gsettings set org.gnome.desktop.session idle-delay 0 # default 300 (s) / 5 min
+
         doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 0
         doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'nothing'
+        doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 0
+        doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type 'nothing'
         # the above isn't doing the job so we'll brute for it here for now:
         # if ! grep -q "AllowSuspend=no" /etc/elogind/sleep.conf; then
             # echo "AllowSuspend=no" | doas tee -a /etc/elogind/sleep.conf
@@ -77,10 +81,10 @@ if [ -n "$IS_DESKTOP" ]; then
     if ask "Include kvm/qemu/virt-manager?" Y; then
         # kvm/qemu virtual machine support
         $ADDCMD qemu qemu-edk2-firmware qemu-system-x86_64 libvirt virt-manager virt-viewer ufw
-        doas usermod -aG kvm libvirt $USER
+        doas usermod -aG kvm,libvirt $USER
         # virtlockd and virtlogd are enabled automatically by the following
         for svc in virtqemud virtnodedevd virtstoraged virtnetworkd; do
-            dinitctl enable $svc
+            doas dinitctl enable $svc
         done
     fi
 fi
