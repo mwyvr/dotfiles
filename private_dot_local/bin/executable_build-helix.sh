@@ -6,5 +6,5 @@ if [ ! -d helix ]; then
 fi
 cd helix
 git pull
-RUSTFLAGS="-C target-feature=-crt-static" cargo install --path helix-term --locked
+CARGO_TARGET_DIR=/home/$USER/src/helix/target RUSTFLAGS="-C target-feature=-crt-static" cargo install --path helix-term --locked
 ln -Tsv ~/src/helix/runtime ~/.config/helix/runtime
