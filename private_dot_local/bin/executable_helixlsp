@@ -44,7 +44,7 @@ npm i -g @ansible/ansible-language-server # ansible
 npm i -g bash-language-server
 go install mvdan.cc/sh/v3/cmd/shfmt@latest
 # https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing
-wget -q -O - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar zxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
+wget -q -O - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
 
 # go
 go install golang.org/x/tools/gopls@latest                             # LSP
