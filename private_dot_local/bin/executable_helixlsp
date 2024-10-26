@@ -3,31 +3,32 @@ echo "Install lsp, formatters and other components supporting Helix"
 . /etc/os-release
 
 LOCAL=~/.local/bin
-FETCHER=wget
+
+# be sure we're in the right distrobox container
+check_container() {
+    if [ -z "${CONTAINER_ID}" ]; then
+        exit 1
+    fi
+    if [ "${CONTAINER_ID}" != "tumbleweed" ]; then
+        echo "run this in the default tumbleweed container"
+        exit 1
+    fi
+}
 
 case $ID in
 chimera)
-    FETCHER=fetch
     doas apk add go nodejs python-pip cargo
     ;;
 void)
     sudo xbps-install -Su go nodejs python3-pip cargo wget
     ;;
-"opensuse-microos")
-    # Likely in distrobox container
-    sudo zypper install go nodejs python3-pip cargo
-    if [ "$CONTAINER_ID" = "archbox" ]; then
-        sudo ln -svf /usr/bin/helix /usr/bin/hx
-        distrobox-export --bin /usr/bin/hx
-    fi
-    ;;
 "opensuse-tumbleweed")
-    # Likely in distrobox container
+    check_container
     sudo zypper install go nodejs python3-pip cargo
-    if [ "$CONTAINER_ID" = "archbox" ]; then
-        sudo ln -svf /usr/bin/helix /usr/bin/hx
-        distrobox-export --bin /usr/bin/hx
-    fi
+    ;;
+"aeon")
+    check_container
+    sudo zypper install go nodejs python3-pip cargo
     ;;
 *)
     echo "Unknown Linux distribution, terminating."
@@ -43,7 +44,7 @@ npm i -g @ansible/ansible-language-server # ansible
 npm i -g bash-language-server
 go install mvdan.cc/sh/v3/cmd/shfmt@latest
 # https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing
-$FETCHER -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar zxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
+wget -q -O - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar zxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
 
 # go
 go install golang.org/x/tools/gopls@latest                             # LSP
@@ -69,7 +70,7 @@ pip install -U ruff-lsp --break-system-packages                 # lsp for ruff
 pip install -U black --break-system-packages                    # python formatter
 
 # toml
-$FETCHER -o - https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz | gunzip >${LOCAL}/taplo
+wget -q -O - https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz | gunzip >${LOCAL}/taplo
 chmod +x ${LOCAL}/taplo
 
 # yaml
