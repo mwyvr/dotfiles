@@ -6,10 +6,7 @@ LOCAL=~/.local/bin
 
 # be sure we're in the right distrobox container
 check_container() {
-    if [ -z "${CONTAINER_ID}" ]; then
-        exit 1
-    fi
-    if [ "${CONTAINER_ID}" != "tumbleweed" ]; then
+    if [ "$CONTAINER_ID" != "tumbleweed" ]; then
         echo "run this in the default tumbleweed container"
         exit 1
     fi
@@ -27,8 +24,8 @@ void)
     sudo zypper install go nodejs python3-pip cargo
     ;;
 "aeon")
-    check_container
-    sudo zypper install go nodejs python3-pip cargo
+    echo "Install Helix and components within a distrobox. Terminating."
+    exit 1
     ;;
 *)
     echo "Unknown Linux distribution, terminating."
