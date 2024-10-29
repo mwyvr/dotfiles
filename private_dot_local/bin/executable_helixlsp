@@ -14,14 +14,14 @@ check_container() {
 
 case $ID in
 chimera)
-    doas apk add go nodejs python-pip cargo
+    doas apk add go nodejs python-pip cargo wget bash lazygit
     ;;
 void)
-    sudo xbps-install -Su go nodejs python3-pip cargo wget
+    sudo xbps-install -Su go nodejs python3-pip cargo wget lazygit
     ;;
 "opensuse-tumbleweed")
     check_container
-    sudo zypper install go nodejs python3-pip cargo
+    sudo zypper install go nodejs python3-pip cargo lazygit
     ;;
 "aeon")
     echo "Install Helix and components within a distrobox. Terminating."
