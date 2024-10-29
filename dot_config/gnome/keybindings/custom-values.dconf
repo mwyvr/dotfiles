@@ -1,0 +1,29 @@
+[custom0]
+binding='<Shift><Alt>Return'
+command='foot'
+name='term-system'
+
+[custom1]
+binding='<Shift><Super>Return'
+command='foot distrobox enter'
+name='term-default-distrobox'
+
+[custom2]
+binding='<Shift><Super>b'
+command='foot ssh -t mw@bugs tmux new -A -s bugs'
+name='tmux-bugs'
+
+[custom3]
+binding='<Shift><Super>w'
+command='foot ssh -t mw@wabbit tmux new -A -s wabbit'
+name='tmux-wabbit'
+
+[custom4]
+binding='<Shift><Super>c'
+command='foot ssh -t mw@wabbit tmux new -A -s chimera'
+name='irc-chimera'
+
+[custom5]
+binding='<Shift><Super>v'
+command='foot ssh -t mw@wabbit tmux new -A -s void'
+name='irc-void'
