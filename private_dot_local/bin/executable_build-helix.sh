@@ -1,12 +1,30 @@
 #!/bin/sh
 . /etc/os-release
 
+build() {
+    mkdir -p ~/src
+    cd ~/src
+    if [ ! -d helix ]; then
+        git clone https://github.com/helix-editor/helix.git
+    fi
+    cd helix
+    git pull
+
+    # build it
+    RUSTFLAGS="-C target-feature=-crt-static" cargo install --path helix-term --locked
+}
+
 case $ID in
 "opensuse-tumbleweed")
     # be sure we're in the right distrobox container
     if [ "$CONTAINER_ID" != "tumbleweed" ]; then
         echo "run this in the default tumbleweed container"
         exit 1
+    else
+        zypper in cargo
+        build
+        sudo mv ~/.cargo/bin/hx /usr/bin/hx
+        distrobox-export --bin /usr/bin/hx
     fi
     ;;
 "aeon")
@@ -14,6 +32,9 @@ case $ID in
     exit 1
     ;;
 "chimera")
+    doas apk add cargo
+    build
+    doas mv ~/.cargo/bin/hx /usr/bin/hx
     ;;
 *)
     echo "Unknown Linux distribution, terminating."
@@ -21,22 +42,4 @@ case $ID in
     ;;
 esac
 
-mkdir -p ~/src
-cd ~/src
-if [ ! -d helix ]; then
-    git clone https://github.com/helix-editor/helix.git
-fi
-cd helix
-git pull
-
-# build it
-RUSTFLAGS="-C target-feature=-crt-static" cargo install --path helix-term --locked
-
-# if on aeon/in a container
-if [ "$CONTAINER_ID" = "tumbleweed" ]; then
-    echo "Moving hx to /usr/bin"
-    sudo mv ~/.cargo/bin/hx /usr/bin/hx
-    distrobox-export --bin /usr/bin/hx
-fi
-
-ln -Tsvf ~/src/helix/runtime ~/.config/helix/runtime
+ln -svf ~/src/helix/runtime ~/.config/helix/runtime
