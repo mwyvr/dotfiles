@@ -13,6 +13,8 @@ case $ID in
     echo "On Aeon - run this within the default tumbleweed distrobox. Terminating."
     exit 1
     ;;
+"chimera")
+    ;;
 *)
     echo "Unknown Linux distribution, terminating."
     exit 1
