@@ -1,11 +1,13 @@
 if status is-login
     set -gx HOSTNAME (hostname)
     set -gx LIBVIRT_DEFAULT_URI 'qemu:///system'
-    set -gx EDITOR hx
     fish_add_path ~/.cargo/bin
     fish_add_path ~/go/bin
     fish_add_path ~/.local/bin
     envsource ~/.env
+    if test -x $(which hx)
+        set -gx EDITOR hx
+    end
 end
 
 if status is-interactive
