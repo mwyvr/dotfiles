@@ -5,7 +5,7 @@ if status is-login
     fish_add_path ~/go/bin
     fish_add_path ~/.local/bin
     envsource ~/.env
-    if test -x $(which hx)
+    if test -x /usr/bin/hx
         set -gx EDITOR hx
     end
 end
