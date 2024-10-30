@@ -1,2 +1,2 @@
 os:
-  edit: "hx {{filename}} +N {{line}}"
+  edit: "$EDITOR {{filename}} +N {{line}}"
