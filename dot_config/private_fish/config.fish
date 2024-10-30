@@ -7,6 +7,8 @@ if status is-login
     envsource ~/.env
     if test -x /usr/bin/hx
         set -gx EDITOR hx
+        abbr -a vi hx
+        abbr -a vim hx
     end
 end
 

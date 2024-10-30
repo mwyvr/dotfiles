@@ -9,10 +9,6 @@ abbr -a cmu chezmoi update
 abbr -a cmcd chezmoi cd
 abbr -a cme chezmoi edit
 
-# editor
-abbr -a vi hx
-abbr -a vim hx
-
 # git
 abbr -a gl lazygit
 abbr -a gs git status
