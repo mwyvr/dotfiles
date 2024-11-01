@@ -91,13 +91,13 @@ fi
 
 # Desktop and laptop get these
 if [ -n "$IS_GUI" ]; then
-    $ADDCMD foot gnome-tweaks fonts-nerd-roboto-mono
+    $ADDCMD foot fonts-nerd-roboto-mono
     # applications
     $ADDCMD evolution
     # flatpak apps
     $ADDCMD flatpak
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    for app in com.chromium.Chromium org.signal.Signal us.zoom.Zoom; do
+    for app in org.chromium.Chromium org.signal.Signal us.zoom.Zoom; do
         echo "Installing $app"
         flatpak install -y $app
     done
