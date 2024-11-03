@@ -27,3 +27,8 @@ name='irc-chimera'
 binding='<Shift><Super>v'
 command='foot ssh -t mw@wabbit tmux new -A -s void'
 name='irc-void'
+
+[custom6]
+binding='<Shift><Super>p'
+command='foot ssh -t mw@wabbit tmux new -A -s build'
+name='tmux-wabbit pkg-build'
