@@ -5,8 +5,10 @@
 
 do_fw() {
     # Not installed on servers
-    if test -x fwupdmgr; then
+    if test -x $(which fwupdmgr); then
         fwupdmgr get-updates && fwupdmgr update
+    else 
+        echo "fwupdmgr not found"
     fi
 }
 
