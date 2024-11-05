@@ -7,7 +7,7 @@ install_fonts() {
     HOSTNAME=$(hostname)
     if ! [ -f $INSTALLPATH/RobotoMonoNerdFont-Regular.ttf ]; then
         ZIPFILE=$(mktemp)
-        wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/RobotoMono.zip" -O $ZIPFILE
+        wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip" -O $ZIPFILE
         mkdir -p $INSTALLPATH
         unzip -d $INSTALLPATH $ZIPFILE
         rm $ZIPFILE
@@ -45,11 +45,13 @@ EOF
 . /etc/os-release
 case $ID in
 chimera)
-    # like many things in Chimera Linux, just works
+    # does not require a custom fontconfig, pkg handles
     doas apk update
     doas apk add fonts-nerd-roboto-mono
     ;;
 *)
+    # all others
+    # void packages a large bundle of nerd fonts, I just want the one
     install_fonts
     ;;
 esac
