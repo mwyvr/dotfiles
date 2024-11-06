@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# I prefer Roboto Mono; current nvim config demands a patched Nerd Font
-# which is not carried by most distributions, so for thosse, install it ~/.local
+# I prefer Roboto Mono for my terminal / editor (Helix or neovim); a patched
+# Nerd Font makes things nicer still but typically is not packaged in the base
+# repo of most distributions. So, for those, install it in ~/.local.
 install_fonts() {
     INSTALLPATH="/home/$USER/.local/share/fonts/robotomono"
     HOSTNAME=$(hostname)
@@ -45,11 +46,17 @@ EOF
 . /etc/os-release
 case $ID in
 chimera)
-    # like many things in Chimera Linux, just works
+    # no need for a user fontconfig
     doas apk update
     doas apk add fonts-nerd-roboto-mono
     ;;
+opensuse-tumbleweed)
+    # symbols *may* satisfy needs, ymmv
+    sudo zypper in symbols-only-nerd-fonts
+    install_fonts
+    ;;
 *)
+    # void has a large collection-I just want the one; others
     install_fonts
     ;;
 esac
