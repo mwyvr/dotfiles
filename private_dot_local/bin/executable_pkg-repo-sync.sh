@@ -3,7 +3,7 @@
 
 CPORTS_PATH="$HOME/cports"
 KEY_PATH="$CPORTS_PATH/etc/keys/git@mikewatkins.ca-6721c768.rsa.pub"
-REPO="bugs:/var/lib/mox/web/chimera.solutionroute.com/."
+REPO="bugs:/home/mox/web/chimera.solutionroute.com/."
 
 if ! test -d "$CPORTS_PATH"; then
     echo "$CPORTS_PATH does not exist, have you cloned it?"

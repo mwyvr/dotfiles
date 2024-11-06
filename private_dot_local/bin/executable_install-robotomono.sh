@@ -8,7 +8,7 @@ install_fonts() {
     HOSTNAME=$(hostname)
     if ! [ -f $INSTALLPATH/RobotoMonoNerdFont-Regular.ttf ]; then
         ZIPFILE=$(mktemp)
-        wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/RobotoMono.zip" -O $ZIPFILE
+        wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip" -O $ZIPFILE
         mkdir -p $INSTALLPATH
         unzip -d $INSTALLPATH $ZIPFILE
         rm $ZIPFILE
@@ -46,7 +46,7 @@ EOF
 . /etc/os-release
 case $ID in
 chimera)
-    # no need for a user fontconfig
+    # does not require a custom fontconfig, pkg handles
     doas apk update
     doas apk add fonts-nerd-roboto-mono
     ;;
@@ -56,7 +56,8 @@ opensuse-tumbleweed)
     install_fonts
     ;;
 *)
-    # void has a large collection-I just want the one; others
+    # all others
+    # void packages a large bundle of nerd fonts, I just want the one
     install_fonts
     ;;
 esac
