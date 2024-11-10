@@ -6,12 +6,16 @@
 # See also ~/.local/share/applications/winbox.desktop which calls this.
 
 . /etc/os-release
-export EXE="$HOME/.local/bin/winbox64.exe"
+export EXEPATH="$HOME/.local/bin"
+export EXE="WinBox.exe"
+export ZIPFILE="WinBox_Windows.zip"
 
 setup() {
     # download if not already done
     if [ ! -f "$EXE" ]; then
-        $FETCHER -o "$EXE" https://download.mikrotik.com/routeros/winbox/3.41/winbox64.exe
+        $FETCHER -o "$EXEPATH/$ZIPFILE" https://download.mikrotik.com/routeros/winbox/4.0beta9/WinBox_Windows.zip
+        cd $EXEPATH
+        unzip $ZIPFILE
     fi
     if ! command -v "$(which wine64)"; then
         # Some Linux distributions install an absurd volume of packages for Wine,
@@ -33,16 +37,21 @@ distrorun() {
     distrobox-stop -Y tumbleweed
 }
 
+run() {
+    cd $EXEPATH
+    /usr/bin/wine64 "$EXE"
+}
+
 case $ID in
 chimera)
     FETCHER=fetch
     setup
-    /usr/bin/wine64 "$EXE"
+    run
     ;;
 void)
     FETCHER=fetch
     setup
-    /usr/bin/wine64 "$EXE"
+    run
     ;;
 *)
     # probably openSUSE TW or Aeon
