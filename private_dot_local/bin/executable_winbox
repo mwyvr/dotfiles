@@ -1,7 +1,7 @@
 #!/bin/sh
-# Winbox is a Mikrotik router management tool; v4 will provide Linux compatibility
-# but for the time being, running v3.x which is a Windows executable. Update to 4.0x,
-# which offers native Linux support, when out of beta.
+# Winbox is a Mikrotik router management tool; v4 provides Linux compatibility
+# but they don't offer a musl libc compatible version. Fortunately v4 is fully
+# functional as a Wine-run application.
 #
 # See also ~/.local/share/applications/winbox.desktop which calls this.
 
@@ -9,37 +9,38 @@
 export EXEPATH="$HOME/.local/bin"
 export EXE="WinBox.exe"
 export ZIPFILE="WinBox_Windows.zip"
+FETCHER=wget
 
 setup() {
     # download if not already done
-    if [ ! -f "$EXE" ]; then
+    if [ ! -f "$EXEPATH/$EXE" ]; then
         $FETCHER -o "$EXEPATH/$ZIPFILE" https://download.mikrotik.com/routeros/winbox/4.0beta9/WinBox_Windows.zip
         cd $EXEPATH
         unzip $ZIPFILE
     fi
     if ! command -v "$(which wine64)"; then
         # Some Linux distributions install an absurd volume of packages for Wine,
-        # - looking at you, openSUSE - on those run Wine via a distrobox.
+        # - looking at you, openSUSE - on those run we always want Wine via a distrobox.
         echo "Install wine; on openSUSE install within and export wine64 from a distrobox"
         exit 1
     fi
 }
 
 distrorun() {
-    # depends on an already configured distrobox named "archbox"
+    # depends on an already configured distrobox named "chimera"
     if [ -z "${CONTAINER_ID}" ]; then
-        "/usr/bin/distrobox-enter" -n archbox -- '/usr/bin/wine64' "$EXE"
-    elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "tumbleweed" ]; then
-        exec distrobox-host-exec '/home/mw/.local/bin/wine64' "$EXE"
+        "/usr/bin/distrobox-enter" -n chimera -- '/usr/bin/wine64' "$EXEPATH/$EXE"
+    elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "chimera" ]; then
+        exec distrobox-host-exec '/home/$USER/.local/bin/wine64' "$EXEPATH/$EXE"
     else
-        exec '/usr/bin/wine64' "$EXE"
+        exec '/usr/bin/wine64' "$EXEPATH/$EXE"
     fi
-    distrobox-stop -Y tumbleweed
+    distrobox-stop -Y chimera
 }
 
 run() {
     cd $EXEPATH
-    /usr/bin/wine64 "$EXE"
+    /usr/bin/wine64 "$EXEPATH/$EXE"
 }
 
 case $ID in
@@ -49,13 +50,14 @@ chimera)
     run
     ;;
 void)
-    FETCHER=fetch
     setup
     run
     ;;
+aeon)
+    setup
+    distrorun
+    ;;
 *)
-    # probably openSUSE TW or Aeon
-    FETCHER=wget
     setup
     distrorun
     ;;
