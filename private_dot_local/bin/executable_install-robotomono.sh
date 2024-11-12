@@ -1,19 +1,20 @@
 #!/bin/sh
 
-# I prefer Roboto Mono for my terminal / editor (Helix or neovim); a patched
-# Nerd Font makes things nicer still but typically is not packaged in the base
-# repo of most distributions. So, for those, install it in ~/.local.
+# I prefer Roboto Mono; current editor config demands a patched Nerd Font, and it
+# which is not carried by all distributions, so for thosse, install it ~/.local
 install_fonts() {
     INSTALLPATH="/home/$USER/.local/share/fonts/robotomono"
     HOSTNAME=$(hostname)
     if ! [ -f $INSTALLPATH/RobotoMonoNerdFont-Regular.ttf ]; then
+        mkdir -p "$INSTALLPATH"
         ZIPFILE=$(mktemp)
         wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip" -O $ZIPFILE
-        mkdir -p $INSTALLPATH
         unzip -d $INSTALLPATH $ZIPFILE
         rm $ZIPFILE
     fi
-    # higher order # and location overrides the dejavu files to follow
+    #
+    # Override distributions fontconfig for monospace. Higher order # and
+    # location overrides dejavu or other distro defaults.
     cat <<EOF >$HOME/.config/fontconfig/52-$HOSTNAME.conf
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
@@ -50,14 +51,10 @@ chimera)
     doas apk update
     doas apk add fonts-nerd-roboto-mono
     ;;
-opensuse-tumbleweed)
-    # symbols *may* satisfy needs, ymmv
-    sudo zypper in symbols-only-nerd-fonts
-    install_fonts
-    ;;
 *)
     # all others
     # void packages a large bundle of nerd fonts, I just want the one
+    # Aeon/Tumbleweed needed local font config as of Fall 2024
     install_fonts
     ;;
 esac
