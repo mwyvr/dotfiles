@@ -6,46 +6,68 @@
 # See also ~/.local/share/applications/winbox.desktop which calls this.
 
 . /etc/os-release
-export EXEPATH="$HOME/.local/bin"
-export EXE="WinBox.exe"
-export ZIPFILE="WinBox_Windows.zip"
-FETCHER=wget
+FETCHER="wget -O" # for non-Chimera Linux distros
+
+WINBOX="$HOME/.local/bin/WinBox/WinBox.exe"
+DIRPATH=$(dirname "$WINBOX")
+
+unknown() {
+    echo "Unknown distribution: [$ID]; update winbox script."
+}
 
 setup() {
     # download if not already done
-    if [ ! -f "$EXEPATH/$EXE" ]; then
-        $FETCHER -o "$EXEPATH/$ZIPFILE" https://download.mikrotik.com/routeros/winbox/4.0beta9/WinBox_Windows.zip
-        cd $EXEPATH
-        unzip $ZIPFILE
+    if [ ! -f "$WINBOX" ]; then
+        mkdir -p "$DIRPATH"
+        $FETCHER - https://download.mikrotik.com/routeros/winbox/4.0beta9/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
     fi
     if ! command -v "$(which wine64)"; then
-        # Some Linux distributions install an absurd volume of packages for Wine,
-        # - looking at you, openSUSE - on those run we always want Wine via a distrobox.
-        echo "Install wine; on openSUSE install within and export wine64 from a distrobox"
+        echo "Error: wine is not installed."
+        case $ID in
+        foo | chimera)
+            echo "On $ID, install: apk add wine"
+            ;;
+        void)
+            echo "On $ID, install: xbps-install -Su wine"
+            ;;
+        aeon | opensuse-tumbleweed)
+            echo "On $ID, install wine in a distrobox named: [$ID]"
+            echo "    distrobox enter $ID"
+            echo "    sudo zypper install wine"
+            ;;
+        *)
+            unknown
+            ;;
+        esac
         exit 1
     fi
 }
 
 distrorun() {
-    # depends on an already configured distrobox named "chimera"
+    # Some Linux distributions install an absurd volume of packages for Wine,
+    # looking at you, openSUSE - on those run we always want Wine within a
+    # distrobox container.
+
+    # depends on an already configured distrobox named after the OS $ID
     if [ -z "${CONTAINER_ID}" ]; then
-        "/usr/bin/distrobox-enter" -n chimera -- '/usr/bin/wine64' "$EXEPATH/$EXE"
-    elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "chimera" ]; then
-        exec distrobox-host-exec '/home/$USER/.local/bin/wine64' "$EXEPATH/$EXE"
+        /usr/bin/distrobox-enter -n "$ID" -- /usr/bin/wine64 "$WINBOX"
+    elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "$ID" ]; then
+        exec distrobox-host-exec "/home/$USER/.local/bin/wine64" "$WINBOX"
     else
-        exec '/usr/bin/wine64' "$EXEPATH/$EXE"
+        exec /usr/bin/wine64 "$WINBOX"
     fi
-    distrobox-stop -Y chimera
+    distrobox-stop -Y "$ID"
 }
 
 run() {
-    cd $EXEPATH
-    /usr/bin/wine64 "$EXEPATH/$EXE"
+    # for the assets directory
+    cd "$DIRPATH" || exit 1
+    /usr/bin/wine64 "$WINBOX"
 }
 
 case $ID in
 chimera)
-    FETCHER=fetch
+    FETCHER="fetch -o"
     setup
     run
     ;;
@@ -57,8 +79,12 @@ aeon)
     setup
     distrorun
     ;;
-*)
+opensuse-tumbleweed)
     setup
     distrorun
+    ;;
+*)
+    unknown
+    exit 1
     ;;
 esac
