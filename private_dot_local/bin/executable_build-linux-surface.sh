@@ -51,8 +51,8 @@ build_linux_surface() {
 copy_linux
 copy_patches
 build_linux_surface
-
-echo "Build of main/$SURFACE completed.
+echo "
+Build of main/$SURFACE completed.
 
 If successful, run pkg-repo-sync.sh
 "
