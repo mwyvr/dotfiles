@@ -1,53 +1,90 @@
 #!/bin/sh
-# Winbox is a Mikrotik router management tool; v4 will provide Linux compatibility
-# but for the time being, running v3.x which is a Windows executable. Update to 4.0x,
-# which offers native Linux support, when out of beta.
+# Winbox is a Mikrotik router management tool; v4 provides Linux compatibility
+# but they don't offer a musl libc compatible version. Fortunately v4 is fully
+# functional as a Wine-run application.
 #
 # See also ~/.local/share/applications/winbox.desktop which calls this.
 
 . /etc/os-release
-export EXE="$HOME/.local/bin/winbox64.exe"
+FETCHER="wget -O" # for non-Chimera Linux distros
+
+WINBOX="$HOME/.local/bin/WinBox/WinBox.exe"
+DIRPATH=$(dirname "$WINBOX")
+
+unknown() {
+    echo "Unknown distribution: [$ID]; update winbox script."
+}
 
 setup() {
     # download if not already done
-    if [ ! -f "$EXE" ]; then
-        $FETCHER -o "$EXE" https://download.mikrotik.com/routeros/winbox/3.41/winbox64.exe
+    if [ ! -f "$WINBOX" ]; then
+        mkdir -p "$DIRPATH"
+        $FETCHER - https://download.mikrotik.com/routeros/winbox/4.0beta9/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
     fi
     if ! command -v "$(which wine64)"; then
-        # Some Linux distributions install an absurd volume of packages for Wine,
-        # - looking at you, openSUSE - on those run Wine via a distrobox.
-        echo "Install wine; on openSUSE install within and export wine64 from a distrobox"
+        echo "Error: wine is not installed."
+        case $ID in
+        foo | chimera)
+            echo "On $ID, install: apk add wine"
+            ;;
+        void)
+            echo "On $ID, install: xbps-install -Su wine"
+            ;;
+        aeon | opensuse-tumbleweed)
+            echo "On $ID, install wine in a distrobox named: [$ID]"
+            echo "    distrobox enter $ID"
+            echo "    sudo zypper install wine"
+            ;;
+        *)
+            unknown
+            ;;
+        esac
         exit 1
     fi
 }
 
 distrorun() {
-    # depends on an already configured distrobox named "archbox"
+    # Some Linux distributions install an absurd volume of packages for Wine,
+    # looking at you, openSUSE - on those run we always want Wine within a
+    # distrobox container.
+
+    # depends on an already configured distrobox named after the OS $ID
     if [ -z "${CONTAINER_ID}" ]; then
-        "/usr/bin/distrobox-enter" -n archbox -- '/usr/bin/wine64' "$EXE"
-    elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "tumbleweed" ]; then
-        exec distrobox-host-exec '/home/mw/.local/bin/wine64' "$EXE"
+        /usr/bin/distrobox-enter -n "$ID" -- /usr/bin/wine64 "$WINBOX"
+    elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "$ID" ]; then
+        exec distrobox-host-exec "/home/$USER/.local/bin/wine64" "$WINBOX"
     else
-        exec '/usr/bin/wine64' "$EXE"
+        exec /usr/bin/wine64 "$WINBOX"
     fi
-    distrobox-stop -Y tumbleweed
+    distrobox-stop -Y "$ID"
+}
+
+run() {
+    # for the assets directory
+    cd "$DIRPATH" || exit 1
+    /usr/bin/wine64 "$WINBOX"
 }
 
 case $ID in
 chimera)
-    FETCHER=fetch
+    FETCHER="fetch -o"
     setup
-    /usr/bin/wine64 "$EXE"
+    run
     ;;
 void)
-    FETCHER=fetch
     setup
-    /usr/bin/wine64 "$EXE"
+    run
     ;;
-*)
-    # probably openSUSE TW or Aeon
-    FETCHER=wget
+aeon)
     setup
     distrorun
+    ;;
+opensuse-tumbleweed)
+    setup
+    distrorun
+    ;;
+*)
+    unknown
+    exit 1
     ;;
 esac

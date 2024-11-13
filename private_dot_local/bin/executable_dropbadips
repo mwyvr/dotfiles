@@ -106,6 +106,27 @@ block_countries() {
     done
 }
 
+# DANGER - disabled
+dnsbldrop() {
+    # mail system, dnsbl rejects, often for malware
+    # DANGER - will also drop legit senders like sendgrid
+    ipset create -exist -q dnsbl hash:ip maxelem 120000
+    # example:
+    # 2024-10-10 01:44:33 info mox[3064]: l=info m="rejecting due to listing in dnsbl" pkg=smtpserver zone=sbl.spamhaus.org explanation="Error: open resolver; https://check.spamhaus.org/returnc/pub/104.207.157.76/" mailfrom=yrquvrr@offroderz.de rcptto=hello@solutionroute.ca cid=19272dcede1 delta=175.298792m
+    for ip in $($SCOPE | grep "rejecting due to listing in dnsbl" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sort | uniq); do
+        if ! echo "$DONTBLOCK" | grep -q "$ip"; then
+            # Adds an ip or /netblock to iptables drop list, if it isn't already in there
+            # Unless iptables has been flushed recently, this will always be false
+            if ! ipset test -q dnsbl "$ip"; then
+                ipset add -exist -q dnsbl "$ip"
+                COUNT=$((COUNT + 1))
+                log "dnsbl DROP $ip"
+            fi
+        fi
+    done
+    iptables -A INPUT -m set --match-set dnsbl src -j DROP
+}
+
 # command line argument are optional:
 # - install: copy script to root executable location for snooze (Void) or systemd-timer (opensuse-microos)
 # - all: rescan all logs today and prior
@@ -201,23 +222,6 @@ for ip in $($SCOPE | grep 'm=".*spf fail.*"' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\
 done
 iptables -A INPUT -m set --match-set spffail src -j DROP
 
-# mail system, dnsbl rejects, often for malware
-ipset create -exist -q dnsbl hash:ip maxelem 120000
-# example:
-# 2024-10-10 01:44:33 info mox[3064]: l=info m="rejecting due to listing in dnsbl" pkg=smtpserver zone=sbl.spamhaus.org explanation="Error: open resolver; https://check.spamhaus.org/returnc/pub/104.207.157.76/" mailfrom=yrquvrr@offroderz.de rcptto=hello@solutionroute.ca cid=19272dcede1 delta=175.298792m
-for ip in $($SCOPE | grep "rejecting due to listing in dnsbl" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | sort | uniq); do
-    if ! echo "$DONTBLOCK" | grep -q "$ip"; then
-        # Adds an ip or /netblock to iptables drop list, if it isn't already in there
-        # Unless iptables has been flushed recently, this will always be false
-        if ! ipset test -q dnsbl "$ip"; then
-            ipset add -exist -q dnsbl "$ip"
-            COUNT=$((COUNT + 1))
-            log "dnsbl DROP $ip"
-        fi
-    fi
-done
-iptables -A INPUT -m set --match-set dnsbl src -j DROP
-
 # IMPORTANT: When making changes, don't forget to install it to cron.hourly once tested.
 # To install to cron.hourly run:
 #   dropips install
@@ -303,6 +307,13 @@ BADACTORS="
 185.82.218.0/23
 185.94.167.0/24
 45.88.186.0/24
+94.141.120.0/24
+5.30.192.0/19
+169.239.180.0/24
+185.58.207.0/24
+134.34.0.0/16
+212.159.0.0/20
+185.247.118.0/24
 "
 
 # newline to loop through badactors
