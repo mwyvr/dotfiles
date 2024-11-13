@@ -314,6 +314,7 @@ BADACTORS="
 134.34.0.0/16
 212.159.0.0/20
 185.247.118.0/24
+119.192.0.0/11
 "
 
 # newline to loop through badactors
