@@ -48,6 +48,7 @@ repos, i.e.:
 *README.md is updated by pkg-repo-sync.sh*
 " | tee README.md
 
-echo "Syncronizing package directory with public server"
+echo "Syncronizing package directories with public server"
 rsync -av --delete --update main $REPO
+rsync -av --delete --update user $REPO
 scp $KEY_PATH README.md $REPO
