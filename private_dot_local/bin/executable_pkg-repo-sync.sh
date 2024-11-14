@@ -35,9 +35,9 @@ These may include:
 - Create a respository in /etc/apk/repositories.d/ pointing to this
   location, and pin the repo, i.e.:
 
-  02-solutionroute-main.list:
-
-    @cports https://chimera.solutionroute.com/main/
+    # cat 02-solutionroute.list 
+    @cports https://chimera.solutionroute.com/main
+    @cports https://chimera.solutionroute.com/user
 
 Then you can install packages from this pinned repo and they will 
 take precedence over like-named packages in the standard Chimera 
