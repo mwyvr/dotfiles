@@ -1,6 +1,9 @@
 #!/bin/sh
 cd /home/$USER
+# make local copy
+mkdir -p "System/$HOSTNAME"
+doas rsync -av /etc System/$HOSTNAME
+doas chown -R $USER:$USER System/$HOSTNAME
 # copies up all but hidden files
-#
-rsync -aAXv --exclude='go' --exclude="temp" --exclude="bin" --exclude='*.iso' --exclude='src/' * mw@wabbit:/ztank/data/backup/.
+rsync -av --exclude='go' --exclude="temp" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' * mw@wabbit:/usr/local/backup/.
 # rsync --dry-run -aAXv --exclude='go' --exclude="temp" --exclude="bin" --exclude='*.iso' --exclude='src/' * mw@wabbit:/ztank/data/backup/.
