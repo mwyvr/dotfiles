@@ -1,6 +1,7 @@
 if status is-login
     set -gx HOSTNAME (hostname)
-    set -gx LIBVIRT_DEFAULT_URI 'qemu:///system'
+    # set -gx LIBVIRT_DEFAULT_URI 'qemu:///system'
+    set -gx XKB_DEFAULT_OPTIONS ctrl:nocaps
     fish_add_path ~/.cargo/bin
     fish_add_path ~/go/bin
     fish_add_path ~/.local/bin
