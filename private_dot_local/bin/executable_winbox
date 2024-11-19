@@ -24,22 +24,27 @@ setup() {
     if ! command -v "$(which wine64)"; then
         echo "Error: wine is not installed."
         case $ID in
-        foo | chimera)
+        freebsd)
+            doas pkg install -y wine
+            ;;
+        chimera)
             echo "On $ID, install: apk add wine"
+            doas apk add wine
             ;;
         void)
             echo "On $ID, install: xbps-install -Su wine"
+            exit 1
             ;;
         aeon | opensuse-tumbleweed)
             echo "On $ID, install wine in a distrobox named: [$ID]"
             echo "    distrobox enter $ID"
             echo "    sudo zypper install wine"
+            exit 1
             ;;
         *)
             unknown
             ;;
         esac
-        exit 1
     fi
 }
 
@@ -54,7 +59,7 @@ distrorun() {
     elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "$ID" ]; then
         exec distrobox-host-exec "/home/$USER/.local/bin/wine64" "$WINBOX"
     else
-        exec /usr/bin/wine64 "$WINBOX"
+        exec wine64 "$WINBOX"
     fi
     distrobox-stop -Y "$ID"
 }
@@ -62,10 +67,15 @@ distrorun() {
 run() {
     # for the assets directory
     cd "$DIRPATH" || exit 1
-    /usr/bin/wine64 "$WINBOX"
+    wine64 "$WINBOX"
 }
 
 case $ID in
+freebsd)
+    FETCHER="fetch -o"
+    setup
+    run
+;;
 chimera)
     FETCHER="fetch -o"
     setup
