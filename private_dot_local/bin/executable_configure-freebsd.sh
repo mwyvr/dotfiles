@@ -23,7 +23,7 @@ baseconfig() {
     service sshd keygen
     service sshd restart
     
-    pkg install doas git-lite chezmoi lazygit helix fish htop tmux rsync coretemp
+    pkg install doas git-lite chezmoi lazygit bash helix fish htop tmux rsync 
 
     # cpu temp reporting (htop and more)
     sysrc coretemp_load="YES"
@@ -42,6 +42,7 @@ workstation(){
     pw groupmod video -m $USER
     pkg install drm-kmod wayland seatd foot river chromium nerd-fonts noto liberation-fonts-ttf cantarell-fonts source-code-pro-ttf dejavu 
     sysrc kld_list+=amdgpu
+    kldload amdgpu
     sysrc dbus_enable="YES"
     service dbus start
     sysrc seatd_enable="YES"
@@ -60,8 +61,8 @@ widevine(){
     make install
 }
 
-
-pkgupdate
+echo "enable one or more functions in the script $0"
+# pkgupdate
 # baseconfig
 # workstation
 # widevine
