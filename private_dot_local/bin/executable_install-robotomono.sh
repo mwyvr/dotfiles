@@ -1,14 +1,16 @@
 #!/bin/sh
+set -e
 
 # I prefer Roboto Mono; current editor config demands a patched Nerd Font, and it
 # which is not carried by all distributions, so for thosse, install it ~/.local
 install_fonts() {
     INSTALLPATH="/home/$USER/.local/share/fonts/robotomono"
+    mkdir -p /home/$USER/.config/fontconfig
     HOSTNAME=$(hostname)
     if ! [ -f $INSTALLPATH/RobotoMonoNerdFont-Regular.ttf ]; then
         mkdir -p "$INSTALLPATH"
         ZIPFILE=$(mktemp)
-        wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip" -O $ZIPFILE
+        fetch -o $ZIPFILE "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip"
         unzip -d $INSTALLPATH $ZIPFILE
         rm $ZIPFILE
     fi
