@@ -24,7 +24,7 @@ bar:
                 carrier:
                     - string: {text: "󰈁"}
     - network:
-        name: ue0
+        name: enp0s20f0u3
         poll-interval: 30000
         content:
           - map:
@@ -33,6 +33,89 @@ bar:
                 ~carrier: {empty: {}}
                 carrier:
                     - string: {text: "󰈁"}
+    - network:
+        name: wlp0s20f3
+        poll-interval: 30000
+        content:
+          - map:
+              conditions:
+                state == down:
+                  - string: {text: "󰤮"}
+                state == up:
+                  - ramp:
+                      tag: signal
+                      min: -90
+                      max: -30
+                      items:
+                        - string: {text: "󰤯"}
+                        - string: {text: "󰤟"}
+                        - string: {text: "󰤢"}
+                        - string: {text: "󰤥"}
+                        - string: {text: "󰤨"}
+                  - string: {text: " {ssid}", left-margin: 2}
+    - battery:
+        name: BAT0
+        poll-interval: 30000
+        anchors:
+          discharging: &discharging
+            list:
+              items:
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: 󰂎, foreground: ff0000ff, }
+                      - string: {text: 󰁺, foreground: ffa600ff, }
+                      - string: {text: 󰁻, }
+                      - string: {text: 󰁼, }
+                      - string: {text: 󰁽, }
+                      - string: {text: 󰁾, }
+                      - string: {text: 󰁿, }
+                      - string: {text: 󰂀, }
+                      - string: {text: 󰂁, }
+                      - string: {text: 󰂂, }
+                      - string: {text: 󰁹, }
+                - string: {text: " {capacity}%"}
+        content:
+          map:
+            conditions:
+              state == unknown:
+                <<: *discharging
+              state == discharging:
+                <<: *discharging
+              state == charging:
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: 󰢜, foreground: bf616aff, }
+                      - string: {text: 󰂆, foreground: d06f79ff, }
+                      - string: {text: 󰂇, foreground: d9b262ff}
+                      - string: {text: 󰂈, }
+                      - string: {text: 󰢝, }
+                      - string: {text: 󰂉, }
+                      - string: {text: 󰢞, }
+                      - string: {text: 󰂊, }
+                      - string: {text: 󰂋, }
+                      - string: {text: 󰂅, }
+                - string: {text: " {capacity}%"}
+              state == full:
+                - string: {text: 󰁹}
+                - string: {text: " {capacity}%"}
+              state == "not charging":
+                - ramp:
+                    tag: capacity
+                    items:
+                      - string: {text: 󰢜, }
+                      - string: {text: 󰂆, }
+                      - string: {text: 󰂇, }
+                      - string: {text: 󰂈, }
+                      - string: {text: 󰢝, }
+                      - string: {text: 󰂉, }
+                      - string: {text: 󰢞, }
+                      - string: {text: 󰂊, }
+                      - string: {text: 󰂋, }
+                      - string: {text: 󰂅, }
+                      - string: {text: 󰁹, }
+                - string: {text: " {capacity}%"}
     - clock:
         date-format: "%A %b %e %H:%M"
         content:
