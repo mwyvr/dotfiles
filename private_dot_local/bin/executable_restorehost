@@ -3,4 +3,4 @@ cd /home/$USER
 # copies everything from backup on wabbit
 #
 # rsync -aAXv --dry-run mw@wabbit:/ztank/data/backup/* . 
-rsync -aAXv mw@wabbit:/ztank/data/backup/* . 
+rsync -av $USER@wabbit:/usr/local/backup/* . 
