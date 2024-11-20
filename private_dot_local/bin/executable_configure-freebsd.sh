@@ -5,21 +5,32 @@ IS_SERVER=""
 IS_DESKTOP=""
 USER="mw"
 
+pkgupdate() {
+        # set to latest rather than updates
+    mkdir -p /usr/local/etc/pkg/repos
+    echo 'FreeBSD: { url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest" }' > /usr/local/etc/pkg/repos/FreeBSD.conf
+    pkg update -f
+}
 
 baseconfig() {
-pkg install doas helix fish htop tmux rsync coretemp
 
-cat<<EOF >/usr/local/etc/doas.conf
+    # prevent old key types
+    rm /etc/ssh/ssh_host_*
+    sysrc sshd_dsa_enable="no"
+    sysrc sshd_ecdsa_enable="no"
+    sysrc sshd_ed25519_enable="yes"
+    sysrc sshd_rsa_enable="yes"
+    service sshd keygen
+    service sshd restart
+    
+    pkg install doas helix fish htop tmux rsync coretemp
+
+    # cpu temp reporting (htop and more)
+    sysrc coretemp_load="YES"
+
+    cat<<EOF >/usr/local/etc/doas.conf
 permit nopass :wheel
 EOF
-
-# cpu temp reporting (htop and more)
-sysrc coretemp_load="YES"
-
-# set to latest rather than updates
-mkdir -p /usr/local/etc/pkg/repos
-echo 'FreeBSD: { url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest" }' > /usr/local/etc/pkg/repos/FreeBSD.conf
-pkg update -f
     
 }
 
@@ -49,6 +60,8 @@ widevine(){
     make install
 }
 
+
+pkgupdate
 baseconfig
 workstation
 widevine
