@@ -23,7 +23,7 @@ baseconfig() {
     service sshd keygen
     service sshd restart
     
-    pkg install doas helix fish htop tmux rsync coretemp
+    pkg install doas git-lite chezmoi lazygit helix fish htop tmux rsync coretemp
 
     # cpu temp reporting (htop and more)
     sysrc coretemp_load="YES"
@@ -62,6 +62,6 @@ widevine(){
 
 
 pkgupdate
-baseconfig
-workstation
-widevine
+# baseconfig
+# workstation
+# widevine
