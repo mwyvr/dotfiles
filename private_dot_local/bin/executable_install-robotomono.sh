@@ -1,22 +1,27 @@
 #!/bin/sh
 set -e
 
+FETCHER="fetch -o" # freebsd and chimera, others use wget
+
 # I prefer Roboto Mono; current editor config demands a patched Nerd Font, and it
 # which is not carried by all distributions, so for thosse, install it ~/.local
 install_fonts() {
-    INSTALLPATH="/home/$USER/.local/share/fonts/robotomono"
-    mkdir -p /home/$USER/.config/fontconfig
+    INSTALLPATH="$HOME/.local/share/fonts/robotomono"
     HOSTNAME=$(hostname)
     if ! [ -f $INSTALLPATH/RobotoMonoNerdFont-Regular.ttf ]; then
         mkdir -p "$INSTALLPATH"
         ZIPFILE=$(mktemp)
-        fetch -o $ZIPFILE "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip"
+        $FETCHER $ZIPFILE "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/RobotoMono.zip"
         unzip -d $INSTALLPATH $ZIPFILE
         rm $ZIPFILE
     fi
     #
+}
+
+install_fontconfig() {
     # Override distributions fontconfig for monospace. Higher order # and
     # location overrides dejavu or other distro defaults.
+    mkdir -p "$HOME/.config/fontconfig"
     cat <<EOF >$HOME/.config/fontconfig/52-$HOSTNAME.conf
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
@@ -49,14 +54,19 @@ EOF
 . /etc/os-release
 case $ID in
 chimera)
-    # does not require a custom fontconfig, pkg handles
     doas apk update
+    # already has a good selection of fonts in base-desktop
     doas apk add fonts-nerd-roboto-mono
+    ;;
+freebsd)
+    doas pkg install cantarell-fonts roboto-fonts-ttf source-code-pro-ttf liberation-fonts-ttf webfonts nerd-fonts-ttf font-awesome
     ;;
 *)
     # all others
-    # void packages a large bundle of nerd fonts, I just want the one
-    # Aeon/Tumbleweed needed local font config as of Fall 2024
+    echo "ONLY SETTING UP ROBOTO MONO NERD FONT, update font-install.sh"
+    FETCHER="wget -O"
     install_fonts
     ;;
 esac
+
+install_fontconfig
