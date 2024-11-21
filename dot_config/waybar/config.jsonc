@@ -1,0 +1,27 @@
+{
+  "modules-left": [
+    "river/tags",
+  ],
+  "modules-center": [
+    "river/window"
+  ],
+  "modules-right": [
+    // "custom/weather",
+    // "tray",
+    "custom/clock",
+  ],
+  "river/tags": {
+    "num-tags": 4
+  },
+  "custom/clock": {
+    "exec": "date +'%A %b %d %H:%M  '",
+    "tooltip": false,
+    "on-click": "month",
+    "interval": 60
+  },
+  "custom/weather": {
+    "exec": "cat $HOME/weather",
+    "tooltip": false,
+    "signal": 2
+  }
+}
