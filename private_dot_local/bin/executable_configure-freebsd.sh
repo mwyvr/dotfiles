@@ -31,6 +31,13 @@ baseconfig() {
     cat<<EOF >/usr/local/etc/doas.conf
 permit nopass :wheel
 EOF
+    # TODO detect machine
+    echo "setting default sound output, check /etc/sysctl.conf"
+    sysctl hw.snd.default_unit=11
+    cat<<EOF >>/etc/sysctl.conf
+hw.snd.default_unit=11
+EOF
+
     
 }
 
@@ -40,7 +47,7 @@ workstation(){
     service linux start
     # running wayland here
     pw groupmod video -m $USER
-    pkg install drm-kmod wayland seatd foot river chromium nerd-fonts noto liberation-fonts-ttf cantarell-fonts source-code-pro-ttf dejavu 
+    pkg install drm-kmod wayland seatd foot river chromium gnome-keyring nerd-fonts noto liberation-fonts-ttf cantarell-fonts source-code-pro-ttf dejavu 
     sysrc kld_list+=amdgpu
     kldload amdgpu
     sysrc dbus_enable="YES"
@@ -64,5 +71,5 @@ widevine(){
 echo "enable one or more functions in the script $0"
 # pkgupdate
 # baseconfig
-# workstation
+workstation
 # widevine
