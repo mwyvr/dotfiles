@@ -1,21 +1,17 @@
-#!/usr/bin/sh
-# install supports for neovim on various Linux distributions (Chimera Linux, Void Linux, openSUSE Tumbleweed/Aeon in a tw container)
-# helix as backup
+#!/bin/sh
+# install supports for neovim on various Linux distributions and FreeBSD
 . /etc/os-release
 
 case $ID in
 chimera)
     doas apk update
-    doas apk add neovim fonts-nerd-roboto-mono go git nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard clang cmake gmake
-    ln -svf /usr/bin/gmake ~/.local/bin/make
-    # not in chimera cports (yet)
-    go install github.com/jesseduffield/lazygit@latest
-    # echo "install in a distrobox"
-    # exit 1
+    doas apk add neovim go git lazygit bash nodejs python-pip cargo fd ripgrep unzip wget curl wl-clipboard base-devel
+    ;;
+freebsd)
+    doas pkg install go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
     ;;
 arch)
     sudo pacman -Syu --needed neovim luarocks helix ttf-roboto-mono-nerd git lazygit base-devel go python-pip nodejs npm cargo fd ripgrep wl-clipboard
-    ln -svf /usr/bin/helix ~/.local/bin/hx
 
     ;;
 void)
