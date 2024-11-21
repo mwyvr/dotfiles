@@ -48,6 +48,7 @@ install_fontconfig() {
 </fontconfig>
 EOF
     # force, really
+    echo "Running fc-cache -f -r"
     fc-cache -f -r
 }
 
@@ -59,7 +60,7 @@ chimera)
     doas apk add fonts-nerd-roboto-mono
     ;;
 freebsd)
-    doas pkg install cantarell-fonts roboto-fonts-ttf source-code-pro-ttf liberation-fonts-ttf webfonts nerd-fonts-ttf font-awesome
+    doas pkg install cantarell-fonts roboto-fonts-ttf source-code-pro-ttf liberation-fonts-ttf webfonts nerd-fonts font-awesome
     ;;
 *)
     # all others
