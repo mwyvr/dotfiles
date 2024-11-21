@@ -1,32 +1,35 @@
-#!/usr/bin/sh
+#!/bin/sh
 echo "Install lsp, formatters and other components supporting Helix"
 . /etc/os-release
 
-LOCAL=~/.local/bin
-FETCHER=fetch
+set -e
 
-# be sure we're in the right distrobox container
-check_container() {
-    if [ "$CONTAINER_ID" != "tumbleweed" ]; then
-        echo "run this in the default tumbleweed container"
-        exit 1
-    fi
-}
+LOCAL=~/.local/bin
+FETCHER="fetch -o" # chimera, freebsd
 
 case $ID in
 chimera)
-    doas apk add go nodejs python-pip cargo wget bash lazygit
+    doas apk add go nodejs python-pip cargo bash lazygit
+    # https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing
+    # no Haskell on Chimera Linux so...
+    $FETCHER -q -O - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
+    ;;
+freebsd)
+    doas pkg install go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
     ;;
 void)
+    FETCHER="wget -O"
     sudo xbps-install -Su go nodejs python3-pip cargo wget lazygit
     ;;
 "opensuse-tumbleweed")
-    check_container
-    sudo zypper install go nodejs python3-pip cargo lazygit
+    FETCHER="wget -O"
+    sudo zypper install go nodejs python3-pip cargo wget lazygit
     ;;
 "aeon")
-    echo "Install Helix and components within a distrobox. Terminating."
-    exit 1
+    if [ "$CONTAINER_ID" != "tumbleweed" ]; then
+        echo "Install Helix and components within a distrobox. Terminating."
+        exit 1
+    fi
     ;;
 *)
     echo "Unknown Linux distribution, terminating."
@@ -35,14 +38,14 @@ void)
 esac
 
 npm update -g
-npm i -g @ansible/ansible-language-server # ansible
+
+# ansible
+npm i -g @ansible/ansible-language-server
 
 # bash / sh
 # https://github.com/bash-lsp/bash-language-server?tab=readme-ov-file
 npm i -g bash-language-server
 go install mvdan.cc/sh/v3/cmd/shfmt@latest
-# https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing
-$FETCHER -q -O - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
 
 # go
 go install golang.org/x/tools/gopls@latest                             # LSP
@@ -53,10 +56,13 @@ go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.60.3 # Linter
 
 # html, css, json, scss, typescript
 npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
-# also Markdown formatting...
+
+# also does Markdown formatting...
 npm i -g @fsouza/prettierd
+
 # spell and grammar
 cargo install harper-ls --locked
+
 # word completion and snippets
 cargo install --git https://github.com/estin/simple-completion-language-server.git
 
@@ -67,12 +73,11 @@ pip install -U ruff --break-system-packages                     # python linter
 pip install -U ruff-lsp --break-system-packages                 # lsp for ruff
 pip install -U black --break-system-packages                    # python formatter
 
-# toml
-wget -q -O - https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz | gunzip >${LOCAL}/taplo
-chmod +x ${LOCAL}/taplo
+# toml - taplo
+# was doing this on some linux
+# wget -q -O - https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz | gunzip >${LOCAL}/taplo
+# chmod +x ${LOCAL}/taplo
+cargo install taplo-cli --locked
 
 # yaml
 npm i -g yaml-language-server@next
-
-# not lsp components; not in chimera cports (yet), mapped to space-l
-go install -a github.com/jesseduffield/lazygit@latest
