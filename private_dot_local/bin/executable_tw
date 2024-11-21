@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 # On openSUSE Aeon actions happen within a default Tumbleweed container
 . /etc/os-release
 case $ID in
