@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 # package update/upgrade & fw updates for various Linux distributions (Chimera
 # Linux, Void Linux, openSUSE Tumbleweed and Aeon Desktop)
 . /etc/os-release
@@ -7,7 +7,7 @@ do_fw() {
     # Not installed on servers
     if test -x $(which fwupdmgr); then
         fwupdmgr get-updates && fwupdmgr update
-    else 
+    else
         echo "fwupdmgr not found"
     fi
 }
@@ -17,6 +17,11 @@ chimera)
     doas apk update
     doas apk upgrade
     do_fw
+    ;;
+freebsd)
+    doas pkg update
+    doas pkg upgrade
+    # no LVFS / fwupd.org support, boot into linux
     ;;
 void)
     sudo xbps-install -Su
@@ -31,11 +36,15 @@ aeon)
     # fw updates built in
     ;;
 opensuse-microos)
-    # only use this as a server os
+    # server os
     sudo transactional-update dup
     ;;
+arch)
+    sudo pacman -Syu
+    do_fw
+    ;;
 *)
-    echo "Unknown Linux distribution, terminating."
+    echo "Unknown operating system, terminating."
     exit 1
     ;;
 esac
