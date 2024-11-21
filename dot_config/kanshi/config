@@ -1,0 +1,10 @@
+profile multihead {
+	# usually DP-2
+	output "Dell Inc. DELL P2720DC J9HPF9CM02GS" enable position 0,0
+	# usually DP-1
+	output "Dell Inc. S2719DGF CH8ZBY2" enable position 2560,0
+}
+
+profile leftmonitoroff {
+	output "Dell Inc. S2719DGF CH8ZBY2" enable
+}
