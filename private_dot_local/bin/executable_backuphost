@@ -1,9 +1,18 @@
 #!/bin/sh
-cd /home/$USER
-# make local copy
-mkdir -p "System/$HOSTNAME"
-doas rsync -av /etc System/$HOSTNAME
-doas chown -R $USER:$USER System/$HOSTNAME
-# copies up all but hidden files
-rsync -av --exclude='go' --exclude="temp" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' * mw@wabbit:/usr/local/backup/.
-# rsync --dry-run -aAXv --exclude='go' --exclude="temp" --exclude="bin" --exclude='*.iso' --exclude='src/' * mw@wabbit:/ztank/data/backup/.
+
+OS=$(uname)
+HOST=$(hostname)
+
+cd ~
+
+# make local copy of key system files
+mkdir -p "sysbackup/$OS/$HOST/etc"
+mkdir -p "sysbackup/$OS/$HOST/usr/local/etc"
+mkdir -p "sysbackup/$OS/$HOST/boot"
+doas rsync -av /etc sysbackup/$OS/$HOST
+doas rsync -av /usr/local/etc sysbackup/$OS/$HOST/usr/local
+doas rsync -av /boot/loader.conf sysbackup/$OS/$HOST/boot
+doas chown -R $USER:$USER sysbackup/$OS/$HOST
+
+# copies all but hidden files
+rsync -av --exclude='go' --exclude="temp" --excludes="*.core" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' * mw@wabbit:/usr/local/backup/.
