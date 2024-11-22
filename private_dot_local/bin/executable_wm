@@ -1,0 +1,12 @@
+#!/bin/sh
+WM=river
+
+eval $(gnome-keyring-daemon --start)
+export SSH_AUTH_SOCK
+export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+dbus-launch --sh-syntax --exit-with-session $WM
+
+# cleanup the display daemon
+pkill kanshi
+# not cleaning up for some reason, TODO
+pkill chrome
