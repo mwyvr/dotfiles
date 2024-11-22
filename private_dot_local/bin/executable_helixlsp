@@ -12,7 +12,7 @@ chimera)
     doas apk add go nodejs python-pip cargo bash lazygit
     # https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing
     # no Haskell on Chimera Linux so...
-    $FETCHER -q -O - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
+    $FETCHER - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
     ;;
 freebsd)
     doas pkg install go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
