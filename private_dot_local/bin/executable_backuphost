@@ -2,17 +2,33 @@
 
 OS=$(uname)
 HOST=$(hostname)
+SYSBACKUP="sysbackup/$OS/$HOST"
 
 cd ~
 
 # make local copy of key system files
-mkdir -p "sysbackup/$OS/$HOST/etc"
-mkdir -p "sysbackup/$OS/$HOST/usr/local/etc"
-mkdir -p "sysbackup/$OS/$HOST/boot"
+mkdir -p "$SYSBACKUP/etc"
+mkdir -p "$SYSBACKUP/usr/local/etc"
+mkdir -p "$SYSBACKUP/boot"
+
+. /etc/os-release
+case $ID in
+chimera)
+    apk info >"$SYSBACKUP/packages"
+    ;;
+freebsd)
+    pkg info >"$SYSBACKUP/packages"
+    doas rsync -av /boot/loader.conf sysbackup/$OS/$HOST/boot
+    ;;
+*)
+    echo "Unknown operating system: [$OS], terminating."
+    exit 1
+    ;;
+esac
+
 doas rsync -av /etc sysbackup/$OS/$HOST
 doas rsync -av /usr/local/etc sysbackup/$OS/$HOST/usr/local
-doas rsync -av /boot/loader.conf sysbackup/$OS/$HOST/boot
 doas chown -R $USER:$USER sysbackup/$OS/$HOST
 
 # copies all but hidden files
-rsync -av --exclude='go' --exclude="temp" --excludes="*.core" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' * mw@wabbit:/usr/local/backup/.
+rsync -av --exclude='go' --exclude="temp" --exclude="*.core" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' * mw@wabbit:/usr/local/backup/.
