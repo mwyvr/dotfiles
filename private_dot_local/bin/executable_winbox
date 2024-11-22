@@ -1,12 +1,12 @@
 #!/bin/sh
 # Winbox is a Mikrotik router management tool; v4 provides Linux compatibility
 # but they don't offer a musl libc compatible version. Fortunately v4 is fully
-# functional as a Wine-run application.
+# functional as a Wine-run application. Note - it is still in beta as of Nov 2024.
 #
 # See also ~/.local/share/applications/winbox.desktop which calls this.
 
 . /etc/os-release
-FETCHER="wget -O" # for non-Chimera Linux distros
+FETCHER="fetch -o" # chimera, freebsd
 
 WINBOX="$HOME/.local/bin/WinBox/WinBox.exe"
 DIRPATH=$(dirname "$WINBOX")
@@ -19,7 +19,7 @@ setup() {
     # download if not already done
     if [ ! -f "$WINBOX" ]; then
         mkdir -p "$DIRPATH"
-        $FETCHER - https://download.mikrotik.com/routeros/winbox/4.0beta9/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
+        $FETCHER - https://download.mikrotik.com/routeros/winbox/4.0beta12/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
     fi
     if ! command -v "$(which wine64)"; then
         echo "Error: wine is not installed."
@@ -72,24 +72,25 @@ run() {
 
 case $ID in
 freebsd)
-    FETCHER="fetch -o"
     setup
     run
-;;
+    ;;
 chimera)
-    FETCHER="fetch -o"
     setup
     run
     ;;
 void)
+    FETCHER="wget -O"
     setup
     run
     ;;
 aeon)
+    FETCHER="wget -O"
     setup
     distrorun
     ;;
 opensuse-tumbleweed)
+    FETCHER="wget -O"
     setup
     distrorun
     ;;
