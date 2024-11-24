@@ -1,6 +1,6 @@
 * {
   /* `otf-font-awesome` is required to be installed for icons */
-  font-family: FontAwesome, Roboto Mono, Helvetica, Arial, sans-serif;
+  font-family: FontAwesome, RobotoMono Nerd Font, Roboto, Helvetica, Arial, sans-serif;
   font-size: 14px;
 }
 
@@ -9,12 +9,12 @@ window#waybar {
   /* border-bottom: 2px solid rgba(100, 114, 125, 0.5); */
   /* outline-brighter */
   color: #a9abb4;
-  /* surface-container */
-  background-color: #1d2024;
-  /* surface-container-low */
-  border-bottom: 3px solid #191c20;
+  /* surface-container  #1d2024; */
+  background-color: rgba(29, 32, 36, 1.0);
+  /* surface-container-low, #191c20; */
+  border-bottom: 2px solid rgba(25, 28, 32, 1.0);
   transition-property: background-color;
-  transition-duration: .2s;
+  transition-duration: .1s;
 }
 
 window#waybar.hidden {
@@ -100,8 +100,10 @@ button {
 #scratchpad,
 #power-profiles-daemon,
 #mpd {
-  padding: 0 10px;
+  /* padding: 0 10px; */
   color: #ffffff;
+  margin: 0 0;
+  color: red;
 }
 
 #window,
@@ -361,7 +363,7 @@ label:focus {
 }
 
 #tags button:hover {
-  /* font-weight: bold; */
+  font-weight: bold;
 }
 
 #tags button.focused:hover {
