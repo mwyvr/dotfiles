@@ -1,9 +1,10 @@
 #!/bin/sh
+# check out https://leon_plickat.srht.site/writing/river-setup-guide/article.html/
 
 # display configuration daemon
 pkill kanshi
-kanshi &
- 
+# see end for daemon launch
+
 # This is the example configuration file for river.
 #
 # If you wish to edit this, you will probably want to copy it to
@@ -18,16 +19,26 @@ kanshi &
 
 # Alt+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
 riverctl map normal Alt+Shift Return spawn foot
+riverctl map normal Super+Shift R spawn 'foot sh -c "hx ~/.config/river/init"'
+riverctl map normal Super+Shift T spawn 'foot sh -c "hx ~/.config/waybar/*"'
+# reload config
+riverctl map normal Super+Shift X spawn 'sh -c "~/.config/river/init"'
 
 # tmux sessions in various places
 riverctl map normal Super+Shift C spawn "foot ssh -t mw@wabbit tmux new -A -s chimera" # IRC
 riverctl map normal Super+Shift W spawn "foot ssh -t mw@wabbit tmux new -A -s wabbit"
 riverctl map normal Super+Shift B spawn "foot ssh -t mw@bugs tmux new -A -s bugs"
 riverctl map normal Super+Shift E spawn "foot ssh -t mw@elron tmux new -A -s elron"
-riverctl map normal Super+Shift E spawn "foot ssh -t mw@pi tmux new -A -s pi"
+riverctl map normal Super+Shift P spawn "foot ssh -t mw@pi tmux new -A -s pi"
 
 # Super+P launch program menu
 riverctl map normal Alt P spawn fuzzel
+# Super+D for launch pad
+# riverctl declare-mode launcher
+# riverctl map normal Super D enter-mode launcher
+# riverctl map launcher None c spawn chrome
+# riverctl map launcher None m spawn thunderbird
+# riverctl map launcher None Escape enter-mode normal
 
 # Alt+Shift+C to close the focussed view (kill client)
 riverctl map normal Alt+Shift C close
@@ -45,15 +56,15 @@ riverctl map normal Alt+Shift J swap next
 riverctl map normal Alt+Shift K swap previous
 
 # Super+Period and Super+Comma to focus the next/previous output
-riverctl map normal Super Period focus-output next
-riverctl map normal Super Comma focus-output previous
+riverctl map normal Alt Period focus-output next
+riverctl map normal Alt Comma focus-output previous
 
 # Super+Shift+{Period,Comma} to send the focused view to the next/previous output
-riverctl map normal Super+Shift Period send-to-output next
-riverctl map normal Super+Shift Comma send-to-output previous
+riverctl map normal Alt+Shift Period send-to-output next
+riverctl map normal Alt+Shift Comma send-to-output previous
 
 # Super+Return to bump the focused view to the top of the layout stack
-riverctl map normal Super Return zoom
+riverctl map normal Alt Return zoom
 
 # Super+H and Super+L to decrease/increase the main ratio of rivertile(1)
 riverctl map normal Alt H send-layout-cmd rivertile "main-ratio -0.05"
@@ -91,8 +102,7 @@ riverctl map-pointer normal Super BTN_RIGHT resize-view
 # Super + Middle Mouse Button to toggle float
 riverctl map-pointer normal Super BTN_MIDDLE toggle-float
 
-for i in $(seq 1 9)
-do
+for i in $(seq 1 9); do
     tags=$((1 << ($i - 1)))
 
     # Super+[1-9] to focus tag [0-8]
@@ -121,10 +131,10 @@ riverctl map normal Alt Space toggle-float
 riverctl map normal Alt F toggle-fullscreen
 
 # Super+{Up,Right,Down,Left} to change layout orientation
-riverctl map normal Super Up    send-layout-cmd rivertile "main-location top"
+riverctl map normal Super Up send-layout-cmd rivertile "main-location top"
 riverctl map normal Super Right send-layout-cmd rivertile "main-location right"
-riverctl map normal Super Down  send-layout-cmd rivertile "main-location bottom"
-riverctl map normal Super Left  send-layout-cmd rivertile "main-location left"
+riverctl map normal Super Down send-layout-cmd rivertile "main-location bottom"
+riverctl map normal Super Left send-layout-cmd rivertile "main-location left"
 
 # Declare a passthrough mode. This mode has only a single mapping to return to
 # normal mode. This makes it useful for testing a nested wayland compositor
@@ -138,13 +148,12 @@ riverctl map passthrough Super F11 enter-mode normal
 
 # Various media key mapping examples for both normal and locked mode which do
 # not have a modifier
-for mode in normal locked
-do
+for mode in normal locked; do
 
     # Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
-    riverctl map $mode None XF86AudioRaiseVolume  spawn 'mixer vol=+5%'
-    riverctl map $mode None XF86AudioLowerVolume  spawn 'mixer vol=-5%'
-    riverctl map $mode None XF86AudioMute         spawn 'mixer vol.mute=toggle'
+    riverctl map $mode None XF86AudioRaiseVolume spawn 'mixer vol=+5%'
+    riverctl map $mode None XF86AudioLowerVolume spawn 'mixer vol=-5%'
+    riverctl map $mode None XF86AudioMute spawn 'mixer vol.mute=toggle'
 
     # # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
     # riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
@@ -158,9 +167,15 @@ do
 done
 
 # Set background and border color
-riverctl background-color 0x002b36
-riverctl border-color-focused 0x93a1a1
-riverctl border-color-unfocused 0x586e75
+riverctl background-color 0x111318 #  surface-dim
+# riverctl border-color-focused 0x5b5e66 # outline-dimmer
+# riverctl border-color-focused 0x7d9a79   # green
+# riverctl border-color-focused 0x7491c7 # blue
+riverctl border-color-focused 0x284777 # primary-container
+# riverctl border-color-focused 0x415f91 # inverse-primary
+# # riverctl border-color-focused 0xa3903f   # yellow
+riverctl border-color-unfocused 0x44474e # outline-variant
+# riverctl border-color-unfocused 0x415f91 # inverse-primary
 riverctl border-width 2
 
 # Set keyboard repeat rate
@@ -175,26 +190,24 @@ riverctl rule-add -app-id "bar" csd
 # Set the default layout generator to be rivertile and start it.
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivertile
-rivertile -view-padding 4 -outer-padding 4 &
+rivertile -view-padding 2 -outer-padding 2 &
 
 riverctl focus-follows-cursor always
 
 dbus-update-activation-environment \
-	SEATD_SOCK \
-	WAYLAND_DISPLAY \
-	XDG_CURRENT_DESKTOP=river
-
-daemons="kanshi swaybg waybar"
+    SEATD_SOCK \
+    WAYLAND_DISPLAY \
+    XDG_CURRENT_DESKTOP=river
 
 # https://github.com/Tottitov/dotfiles/blob/master/.config/river/init
+# add daemons here
+daemons="kanshi waybar swaybg swayidle lxqt-policykit-agent"
 
 # Start helper daemons that need starting; otherwise continue in case init is re-loaded.
 for d in $daemons; do
     pgrep -q "$d" && continue
     case $d in
-        swaybg) $d -i ~/.config/wallpaper/torri-blue.jpg & ;;
-        kanshi) $d & ;;
-        waybar) $d & ;;
-        *) $d ;;
+    swaybg) $d -i ~/.config/wallpaper/torri-blue.jpg & ;;
+    *) $d & ;;
     esac
 done >/dev/null 2>&1
