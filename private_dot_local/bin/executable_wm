@@ -1,8 +1,8 @@
 #!/bin/sh
 WM=river
 
-eval $(gnome-keyring-daemon --start)
-export SSH_AUTH_SOCK
+# eval $(gnome-keyring-daemon --start)
+# export SSH_AUTH_SOCK
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 dbus-launch --sh-syntax --exit-with-session $WM
 
