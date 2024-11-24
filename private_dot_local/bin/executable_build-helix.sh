@@ -36,8 +36,13 @@ case $ID in
     build
     doas mv ~/.cargo/bin/hx /usr/bin/hx
     ;;
+"freebsd")
+    doas pkg install -y rust
+    build
+    doas mv ~/.cargo/bin/hx /usr/bin/hx
+    ;;
 *)
-    echo "Unknown Linux distribution, terminating."
+    echo "Unknown operating system/distribution, terminating."
     exit 1
     ;;
 esac
