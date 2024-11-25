@@ -14,6 +14,7 @@ pkgupdate() {
 
 baseconfig() {
 
+    beep
     # on every machine
     pkg install -y doas git-lite chezmoi lazygit bash helix fish htop tmux rsync
 
@@ -49,14 +50,17 @@ EOF
         fi
 
     fi
-    pkgupdate
+    # do not run when running beta/rc/etc
+    # pkgupdate
 }
 
 fonts() {
+    beep
     pkg install -y cantarell-fonts dejavu liberation-fonts-ttf nerd-fonts noto source-code-pro-ttf
 }
 
 audio() {
+    beep
     pkg install -y mixertui
     # for mixertui, possibly other uses
     echo 'sysctlinfo_load="YES"' | tee -a /boot/loader.conf
@@ -71,10 +75,8 @@ EOF
 }
 
 wayland() {
-    # running wayland here
-    pw groupmod video -m $USER
     # minimal
-    pkg install -y wayland seatd dbus foot kanshi river swaybg swayidle swaylock waybar fuzzel mako chromium
+    pkg install -y wayland seatd dbus foot kanshi river swaybg swayidle swaylock waybar fuzzel mako lxqt-policykit-agent chromium
 
     # try to avoid this due to large dependencies
     # gnome-keyring
@@ -94,6 +96,9 @@ vmsupport() {
     cp /usr/local/share/examples/vm-bhyve/* /usr/local/vm/.templates/
     vm switch create public
     vm switch add public ue0
+
+    # https://github.com/illuria/jailer
+    # TODO ADD THIS
 }
 
 widevine() {
@@ -111,20 +116,22 @@ widevine() {
 }
 
 workstation() {
+    beep
     echo "Enabling AMD and/or Intel GPUs; skipping NVIDIA (assuming used for passthrough)"
-    if pciconf -lv | grep -B4 VGA | grep -e "vendor.*AMD"; then
-        pkg install -y drm-kmod
+    pw groupmod video -m $USER
+    if pciconf -lv | grep -B4 VGA | grep -ie "vendor.*AMD"; then
+        # pkg install -y drm-kmod
         sysrc kld_list+=amdgpu
         kldload amdgpu
         echo "AMD GPU enabled (amdgpu)" | tee | logger
     fi
     if pciconf -lv | grep -B4 VGA | grep -ie "vendor.*intel"; then
-        pkg install -y drm-kmod
+        # pkg install -y drm-kmod
         sysrc kld_list+=i915kms
         kldload i915kms
         echo "Intel GPU enabled (i915kms)" | tee | logger
     fi
-    if pciconf -lv | grep -B4 VGA | grep -ie "vendor.*intel"; then
+    if pciconf -lv | grep -B4 VGA | grep -ie "vendor.*nvidia"; then
         echo "NVIDIA GPU IS NOT enabled - saved for PCI passthrough; look after this manually if wanted" | tee | logger
     fi
 
@@ -142,6 +149,10 @@ echo "Configure real or virtual FreeBSD machines for basic server use or worksta
 "
 
 # uncomment one or more of these:
-# baseconfig
+baseconfig
 # workstation
+fonts
+audio
+wayland
+# wayland
 # vmsupport
