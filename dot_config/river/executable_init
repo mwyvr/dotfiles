@@ -16,6 +16,10 @@ pkill kanshi
 # Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 
 ## TODO use chezmoi  templates for changing certain spawned apps (mixer vs pamixer, etc)
+#
+
+# summer 2024 added tearing support:
+riverctl rule-add tearing
 
 # Alt+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
 riverctl map normal Alt+Shift Return spawn foot
@@ -207,7 +211,7 @@ daemons="kanshi waybar swaybg swayidle lxqt-policykit-agent"
 for d in $daemons; do
     pgrep -q "$d" && continue
     case $d in
-    swaybg) $d -i ~/.config/wallpaper/torri-blue.jpg & ;;
+    swaybg) $d -i ~/.config/wallpaper/freebsd-ascii.png & ;;
     *) $d & ;;
     esac
 done >/dev/null 2>&1
