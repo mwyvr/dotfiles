@@ -94,6 +94,9 @@ vmsupport() {
     cp /usr/local/share/examples/vm-bhyve/* /usr/local/vm/.templates/
     vm switch create public
     vm switch add public ue0
+
+    # https://github.com/illuria/jailer
+    # TODO ADD THIS
 }
 
 widevine() {
