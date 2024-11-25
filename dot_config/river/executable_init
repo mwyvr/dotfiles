@@ -19,7 +19,16 @@ pkill kanshi
 #
 
 # summer 2024 added tearing support:
-riverctl rule-add tearing
+# riverctl rule-add tearing
+
+# touchpad
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad tap enabled
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad tap-button-map left-middle-right
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad pointer-accel 0.25
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad accel-profile flat
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad disable-while-typing enabled
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad natural-scroll enabled
+
 
 # Alt+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
 riverctl map normal Alt+Shift Return spawn foot
