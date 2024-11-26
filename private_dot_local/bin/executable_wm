@@ -1,6 +1,11 @@
 #!/bin/sh
 WM=river
 
+export XDG_SESSION_TYPE=wayland
+export XDG_SESSION_DESKTOP=river
+export XDG_CURRENT_DESKTOP=river
+export MOZ_ENABLE_WAYLAND=1
+
 # eval $(gnome-keyring-daemon --start)
 # export SSH_AUTH_SOCK
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
