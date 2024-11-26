@@ -4,9 +4,22 @@ WM=river
 # eval $(gnome-keyring-daemon --start)
 # export SSH_AUTH_SOCK
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
-dbus-launch --sh-syntax --exit-with-session $WM
 
-# cleanup the display daemon
+. /etc/os-release
+case $ID in
+chimera)
+    dbus-run-session $WM $@
+    ;;
+freebsd)
+    dbus-launch --sh-syntax --exit-with-session $WM $@
+    # not cleaning up on FreeBSD for some reason, TODO
+    pkill chrome
+    ;;
+*)
+    echo "Unknown operating system: [$OS], terminating."
+    exit 1
+    ;;
+esac
+
+# cleanup the display daemon started in river/init
 pkill kanshi
-# not cleaning up for some reason, TODO
-pkill chrome
