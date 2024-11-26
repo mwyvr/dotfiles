@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/sh
 # cpugov - see https://github.com/mwyvr/dotfiles
 usage() {
 	cat <<EOF
@@ -31,7 +31,7 @@ else
 	COMMAND=$1
 fi
 
-if ! compgen -G "/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor" >/dev/null; then
+if ! command -G "/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor" >/dev/null; then
 	echo "cpugov: scaling_governor not present in devices/system/cpu/... is this a VM?"
 	exit
 fi
