@@ -149,10 +149,10 @@ echo "Configure real or virtual FreeBSD machines for basic server use or worksta
 "
 
 # uncomment one or more of these:
-baseconfig
+pkgupdate
+# baseconfig
 # workstation
-fonts
-audio
-wayland
+# fonts
+# audio
 # wayland
 # vmsupport
