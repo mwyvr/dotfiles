@@ -33,7 +33,7 @@ riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad drag enabled
 riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad tap-button-map left-right-middle
 riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad middle-emulation disabled
 
-riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad pointer-accel 0.20
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad pointer-accel 0.38
 riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad accel-profile adaptive
 
 riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad disable-while-typing enabled

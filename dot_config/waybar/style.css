@@ -103,7 +103,6 @@ button {
   /* padding: 0 10px; */
   color: #ffffff;
   margin: 0 0;
-  color: red;
 }
 
 #window,
@@ -123,6 +122,7 @@ button {
 
 #clock {
   background-color: #64727D;
+  /* color: red; */
 }
 
 #battery {
@@ -359,7 +359,7 @@ label:focus {
 
 #tags button.focused {
   color: #ffb4ab;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
 #tags button:hover {
