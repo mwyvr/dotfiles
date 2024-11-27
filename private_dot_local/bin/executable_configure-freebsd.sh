@@ -36,7 +36,7 @@ EOF
     echo 'kern.coredump=0' | tee -a /etc/sysctl.conf
 
     # real hardware not vm
-    if ! sysctl -a | grep -iq "virt"; then
+    if ! sysctl -a | grep -iq "paravirtual"; then
 
         sysrc microcode_update_enable=YES
         service microcode_update start
@@ -56,7 +56,7 @@ EOF
 
 fonts() {
     beep
-    pkg install -y cantarell-fonts dejavu liberation-fonts-ttf nerd-fonts noto source-code-pro-ttf
+    pkg install -y cantarell-fonts dejavu droid-fonts-ttf liberation-fonts-ttf nerd-fonts noto source-code-pro-ttf
 }
 
 audio() {
@@ -76,7 +76,7 @@ EOF
 
 wayland() {
     # minimal
-    pkg install -y wayland seatd dbus foot kanshi river swaybg swayidle swaylock waybar fuzzel mako lxqt-policykit-agent chromium
+    pkg install -y wayland seatd dbus foot kanshi river swaybg swayidle swaylock waybar fuzzel mako lxqt-policykit chromium
 
     # try to avoid this due to large dependencies
     # gnome-keyring
@@ -105,7 +105,7 @@ widevine() {
     sysrc linux_enable="YES"
     service linux start
     # https://forums.freebsd.org/threads/watching-spotify-and-listening-to-netflix-in-2023.90695/
-    pkg install foreign-cdm
+    pkg -y install foreign-cdm
     mkdir -p /home/$USER/src
     cd /home/$USER/src
     doas -u $USER git clone --depth 1 https://github.com/freebsd/freebsd-ports
@@ -126,10 +126,15 @@ workstation() {
         echo "AMD GPU enabled (amdgpu)" | tee | logger
     fi
     if pciconf -lv | grep -B4 VGA | grep -ie "vendor.*intel"; then
+        # compiling drm for now...
         # pkg install -y drm-kmod
+        pkg install -y libva-intel-driver mesa-libs mesa-dri
         sysrc kld_list+=i915kms
         kldload i915kms
         echo "Intel GPU enabled (i915kms)" | tee | logger
+        beep
+        beep 
+        beep
     fi
     if pciconf -lv | grep -B4 VGA | grep -ie "vendor.*nvidia"; then
         echo "NVIDIA GPU IS NOT enabled - saved for PCI passthrough; look after this manually if wanted" | tee | logger
@@ -149,10 +154,10 @@ echo "Configure real or virtual FreeBSD machines for basic server use or worksta
 "
 
 # uncomment one or more of these:
-pkgupdate
 # baseconfig
 # workstation
-# fonts
-# audio
+fonts
+audio
+wayland
 # wayland
 # vmsupport
