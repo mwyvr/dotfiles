@@ -1,0 +1,12 @@
+# swayidle configuration
+{{- if eq .chezmoi.hostname "elron" }}
+timeout 1200 'swaylock -f -c 000000'
+timeout 1500 'wlopm --off DP-1 --off DP-2' resume 'wlopm --on DP-1 --on DP-2'
+{{- else if eq .chezmoi.hostname "hoppy" }}
+timeout 300 'swaylock -f -c 000000'
+timeout 360 'wlopm --off eDP-1' resume 'wlopm --on eDP-1'
+{{- else }}
+# unknown machine - update template, at least set screen to black
+timeout 300 'swaylock -f -c 000000'
+{{- end }}
+
