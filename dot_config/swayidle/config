@@ -1,2 +1,0 @@
-timeout 300 'swaylock -f -c 000000'
-timeout 600 'wlopm --off DP-1 --off DP-2' resume 'wlopm --on DP-1 --on DP-2'

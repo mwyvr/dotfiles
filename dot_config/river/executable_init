@@ -1,6 +1,9 @@
 #!/bin/sh
 # check out https://leon_plickat.srht.site/writing/river-setup-guide/article.html/
 
+# TODO - fix swayidle config file - set for elron
+# TODO - fix powerd params
+
 # display configuration daemon
 pkill kanshi
 # see end for daemon launch
@@ -22,13 +25,21 @@ pkill kanshi
 # riverctl rule-add tearing
 
 # touchpad
+# tip (see also: man riverctl):
+#  riverctl list-inputs
+#  riverctl list-input-configs
 riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad tap enabled
-riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad tap-button-map left-middle-right
-riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad pointer-accel 0.25
-riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad accel-profile flat
-riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad disable-while-typing enabled
-riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad natural-scroll enabled
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad drag enabled
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad tap-button-map left-right-middle
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad middle-emulation disabled
 
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad pointer-accel 0.38
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad accel-profile adaptive
+
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad disable-while-typing enabled
+
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad scroll-method two-finger
+riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad natural-scroll enabled
 
 # Alt+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
 riverctl map normal Alt+Shift Return spawn foot

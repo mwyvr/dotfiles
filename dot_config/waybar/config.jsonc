@@ -14,7 +14,7 @@
     "num-tags": 4
   },
   "custom/clock": {
-    "exec": "date +'%A %b %d %H:%M  '",
+    "exec": "date +'%A %b %d %H:%M'",
     "tooltip": false,
     "on-click": "month",
     "interval": 60
