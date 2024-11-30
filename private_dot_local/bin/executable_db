@@ -1,24 +1,25 @@
 #!/bin/sh
-# On openSUSE Aeon actions happen within a default Tumbleweed container
-. /etc/os-release
-case $ID in
-chimera)
-    distrobox enter twbox
-    ;;
-void)
-    distrobox enter twbox
-    ;;
-opensuse-aeon)
-    distrobox enter twbox
-    ;;
-opensuse-microos)
-    distrobox enter twbox
-    ;;
-opensuse-tumbleweed)
-    echo "Already in default container"
-    ;;
-*)
-    echo "Unknown Linux distribution, terminating."
+# db - enter, or create and enter, a default DistroBox
+DISTRO="registry.opensuse.org/opensuse/tumbleweed:latest"
+NAME="tumbleweed"
+
+if [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "${NAME}" ]; then
+    echo "In a distrobox; exit and try db command again"
     exit 1
-    ;;
-esac
+elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" = "${NAME}" ]; then
+    echo "Already in distrobox: $NAME"
+    exit
+fi
+
+if ! test -x /bin/distrobox-enter; then
+    echo "distrobox does not appear to be installed, exiting"
+    exit 1
+fi
+
+if [ -z "${CONTAINER_ID}" ]; then
+    if ! /bin/distrobox-list | grep -q "$NAME"; then
+        echo "Creating $NAME distrobox from $DISTRO, please wait"
+        /bin/distrobox-create -n "${NAME}" --image "${DISTRO}"
+    fi
+    exec "/bin/distrobox-enter" -n "${NAME}" "$@"
+fi
