@@ -21,7 +21,7 @@ case $ID in
         echo "run this in the default tumbleweed container"
         exit 1
     else
-        zypper in cargo
+        sudo zypper in cargo
         build
         sudo mv ~/.cargo/bin/hx /usr/bin/hx
         distrobox-export --bin /usr/bin/hx
