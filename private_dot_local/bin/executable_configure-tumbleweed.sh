@@ -10,24 +10,35 @@
 ADDCMD="sudo zypper install -y"
 USER="mw"
 
-# cpu microcode
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Run as the regular user, not as root or sudo/doas"
+    exit 1
+fi
+
+# cpu microcode and presuming intel igpu
 if lscpu | grep "GenuineIntel"; then
     $ADDCMD ucode-intel
+    # laptop specific (mine are all Intel igpu)
+    if [ -d "/proc/acpi/button/lid" ]; then
+        $ADDCMD intel-media-driver
+    fi
 fi
 if lscpu | grep "AuthenticAMD"; then
     $ADDCMD ucode-amd
 fi
 
 # core utils and dotfiles
-$ADDCMD git lazygit git-delta chezmoi fish htop powertop flatpak which
+$ADDCMD git lazygit git-delta chezmoi fish htop powertop distrobox xdg-user-dirs-gtk
+xdg-user-dirs-update --force
 chezmoi init git@github.com:mwyvr/dotfiles.git
 chezmoi apply
 # TODO - move back to distrobox
 # for Helix editor and dev
 # $ADDCMD helix go nodejs cargo
 
-# Desktop and laptop get these
-$ADDCMD river foot
+# Desktop and laptop get the River window manager (Wayland) and supporting tools; Sway is
+# added to pull in components until this is sorted out
+$ADDCMD river patterns-sway-sway foot kanshi mako fuzzel waybar swaybg swayidle swaylock wlopm polkit-gnome libnotify-tools
 
 # applications
 # $ADDCMD evolution
@@ -44,13 +55,10 @@ wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub >/tmp/chrome-
 sudo rpm --import /tmp/chrome-linux_signing_key.pub
 sudo zypper addrepo http://dl.google.com/linux/chrome/rpm/stable/x86_64 Google-Chrome
 sudo zypper refresh
+# set refresh on repo
+sudo zypper ms -f Google-Chrome
 $ADDCMD google-chrome-stable
 
-# laptop specific (mine are all Intel igpu)
-if [ -d "/proc/acpi/button/lid" ]; then
-    $ADDCMD intel-media-driver
-fi
-#
 # doing this first avoids pulling in docker for distrobox
 $ADDCMD podman
 $ADDCMD distrobox
