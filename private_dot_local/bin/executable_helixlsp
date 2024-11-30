@@ -19,11 +19,15 @@ freebsd)
     ;;
 void)
     FETCHER="wget -O"
-    sudo xbps-install -Su go nodejs python3-pip cargo wget lazygit
+    sudo xbps-install -Su go nodejs python3-pip cargo wget lazygit shellcheck
     ;;
 "opensuse-tumbleweed")
+    if [ "$CONTAINER_ID" != "tumbleweed" ]; then
+        echo "Install Helix and components within a distrobox. Terminating."
+        exit 1
+    fi
     FETCHER="wget -O"
-    sudo zypper install go nodejs python3-pip cargo wget lazygit
+    sudo zypper install go nodejs python3-pip cargo wget lazygit ShellCheck
     ;;
 "aeon")
     if [ "$CONTAINER_ID" != "tumbleweed" ]; then
