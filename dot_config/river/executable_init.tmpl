@@ -15,10 +15,10 @@ TOUCHPAD="pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad"
 daemons="kanshi mako waybar swaybg swayidle lxqt-policykit-agent" # launched at end of script
 {{- end }}
 
-# default lower brightness
-brightnessctl set 15000
-# summer 2024 added tearing support:
-riverctl rule-add tearing
+# defaults for a few things
+brightnessctl set 15000   # ~ 16%
+pamixer --set-volume 60   # of 100
+riverctl rule-add tearing # summer 2024 added tearing support:
 
 # touchpad
 # tip (see also: man riverctl):
@@ -44,6 +44,7 @@ riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad scroll-method tw
 riverctl input pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad natural-scroll enabled
 {{- end }}
 
+# The most important key mapping, starting a terminal
 # Alt+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
 riverctl map normal Alt+Shift Return spawn foot
 riverctl map normal Super+Shift Return spawn 'foot distrobox-enter'
@@ -52,10 +53,9 @@ riverctl map normal Super+Shift Return spawn 'foot distrobox-enter'
 riverctl map normal Super+Shift L spawn 'pkill --signal USR1 swayidle'
 
 # edit configs
-riverctl map normal Super+Shift R spawn 'foot sh -c "hx ~/.config/river/init"'
-riverctl map normal Super+Shift T spawn 'foot sh -c "hx ~/.config/waybar/*"'
-# reload/eXecute config
-riverctl map normal Super+Shift X spawn 'sh -c "~/.config/river/init"'
+riverctl map normal Super+Shift R spawn 'foot sh -c "hx ~/.config/river/init"' # edit river
+riverctl map normal Super+Shift T spawn 'foot sh -c "hx ~/.config/waybar/*"'   # edit waybar
+riverctl map normal Super+Shift X spawn 'sh -c "~/.config/river/init"'         # reload/eXecute config
 
 # tmux sessions in various places
 riverctl map normal Super+Shift C spawn "foot ssh -t mw@wabbit tmux new -A -s chimera" # IRC
@@ -137,16 +137,12 @@ riverctl map-pointer normal Super BTN_MIDDLE toggle-float
 
 for i in $(seq 1 9); do
     tags=$((1 << ($i - 1)))
-
     # Super+[1-9] to focus tag [0-8]
     riverctl map normal Alt $i set-focused-tags $tags
-
     # Super+Shift+[1-9] to tag focused view with tag [0-8]
     riverctl map normal Alt+Shift $i set-view-tags $tags
-
     # Super+Control+[1-9] to toggle focus of tag [0-8]
     riverctl map normal Super+Control $i toggle-focused-tags $tags
-
     # Super+Shift+Control+[1-9] to toggle tag [0-8] of focused view
     riverctl map normal Super+Shift+Control $i toggle-view-tags $tags
 done
@@ -191,8 +187,8 @@ for mode in normal locked; do
     {{- if eq .chezmoi.os "linux" }}
     # linux specific, see river.tmpl
     # Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
-    riverctl map $mode None XF86AudioRaiseVolume spawn 'pamixer -i 5%'
-    riverctl map $mode None XF86AudioLowerVolume spawn 'pamixer -d 5%'
+    riverctl map $mode None XF86AudioRaiseVolume spawn 'pamixer -i 5'
+    riverctl map $mode None XF86AudioLowerVolume spawn 'pamixer -d 5'
     riverctl map $mode None XF86AudioMute spawn 'pamixer -t'
     # # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
     riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
