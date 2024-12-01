@@ -1,10 +1,12 @@
 #!/bin/sh
 
+. /etc/os-release
 OS=$(uname)
 HOST=$(hostname)
-SYSBACKUP="sysbackup/$OS/$HOST"
+SYSBACKUP="$HOME/sysbackup/$OS/$ID/$HOST"
+DOAS="doas"
 
-cd ~
+cd "$HOME" || exit
 
 # make local copy of key system files
 mkdir -p "$SYSBACKUP/etc"
@@ -16,9 +18,13 @@ case $ID in
 chimera)
     apk info >"$SYSBACKUP/packages"
     ;;
+"opensuse-tumbleweed")
+    DOAS="sudo"
+    zypper se -i >"$SYSBACKUP/packages"
+    ;;
 freebsd)
     pkg info >"$SYSBACKUP/packages"
-    doas rsync -av /boot/loader.conf sysbackup/$OS/$HOST/boot
+    $DOAS rsync -av /boot/loader.conf $SYSBACKUP/boot
     ;;
 *)
     echo "Unknown operating system: [$OS], terminating."
@@ -26,9 +32,9 @@ freebsd)
     ;;
 esac
 
-doas rsync -av /etc sysbackup/$OS/$HOST
-doas rsync -av /usr/local/etc sysbackup/$OS/$HOST/usr/local
-doas chown -R $USER:$USER sysbackup/$OS/$HOST
+$DOAS rsync -av /etc $SYSBACKUP
+$DOAS rsync -av /usr/local/etc $SYSBACKUP/usr/local
+$DOAS chown -R $USER:$USER $SYSBACKUP
 
 # copies all but hidden files
 rsync -av --exclude='go' --exclude="temp" --exclude="*.core" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' * mw@wabbit:/usr/local/backup/.
