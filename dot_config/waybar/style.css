@@ -79,16 +79,23 @@ window#waybar.solo {
     margin: 0px 6px 0px 10px;
 }
 
+#battery.good {
+    /* green-60; hits 80% mark, can unplug */
+    color: #7d9a59;
+}
 #battery.warning {
-   color: rgba(255, 210, 4, 1);
+/* Yellow-80(yellow primary) */
+    color: #DBC66E;
 }
 
 #battery.critical {
-    color: rgba(238, 46, 36, 1);
+    /* E-60*/
+    color: #ff5449; 
 }
 
 #battery.charging {
-    color: rgba(217, 216, 216, 1);
+    /* blue-60 */
+    color: #7491c7;
 }
 
 #bluetooth.disabled {
