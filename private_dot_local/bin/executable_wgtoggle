@@ -41,7 +41,9 @@ nmcli connection show --active | grep wg0 >/dev/null
 # exitcode=$?
 if [ "$?" -eq 0 ]; then
     con_down
+    notify-send "wireguard" "wg0 down"
 else
     knockknock.sh
     con_up
+    notify-send "wireguard" "wg0 up"
 fi
