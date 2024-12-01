@@ -1,4 +1,7 @@
 {
+    // See: https://github.com/Alexays/Waybar/wiki/Module:-Custom:-Simple
+    //      https://github.com/Alexays/Waybar/wiki/Module:-River
+    //      
     "layer": "top", // Waybar at top layer
     // "position": "bottom", // Waybar position (top|bottom|left|right)
    "height": 32, // Waybar height (to be removed for auto height)
@@ -6,22 +9,18 @@
     // "gtk-layer-shell": "false",
     // Choose the order of the modules
     "modules-left": [ "river/tags",
-    "custom/scratchpad", 
     "tray"],
   "modules-center": [
     "river/window"
   ],
-    "modules-right": ["custom/zypper", "network", "bluetooth", "cpu", "memory", "temperature", "backlight", "battery", "battery#bat2", "pulseaudio", "custom/layout", "clock", "custom/notification"],
-    "custom/layout": {
-        "tooltip": false,
-        "exec": "swaymsg -mrt subscribe '[\"input\"]' | jq -r --unbuffered \"select(.change == \\\"xkb_layout\\\") | .input | select(.type == \\\"keyboard\\\") | .xkb_active_layout_name | .[0:2]\""
-    },
+    "modules-right": [
+        "custom/zypper", "network", "battery", "pulseaudio", "clock", "custom/notification"],
     "custom/zypper": {
         "format": "{} ",
         "interval": 3600,
         "exec": "zypper lu | grep 'v \\+|' | wc -l; echo 'packages to update'",
         "exec-if": "exit 0",
-        "on-click": "exec alacritty -e sudo sh -c 'zypper ref; zypper dup; pkill -SIGRTMIN+8 waybar'",
+        "on-click": "exec foot -e sudo sh -c 'zypper ref; zypper dup; pkill -SIGRTMIN+8 waybar'",
         "signal": 8
     },
     // Modules configuration
@@ -97,7 +96,7 @@
     },
     "battery": {
         "states": {
-            // "good": 95,
+            "good": 80,
             "warning": 30,
             "critical": 15
         },
@@ -107,9 +106,6 @@
         "format-alt": "{capacity}% {time}",
         "format-icons": ["", "", "", "", ""]
     },
-    "battery#bat2": {
-        "bat": "BAT2"
-    },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "",
@@ -117,22 +113,6 @@
         "format-linked": "",
         "format-disconnected": "⚠",
         "format-alt": "{ifname} {essid} ({signalStrength}%)"
-    },
-    "bluetooth": {
-	"format": "",
-	"format-disabled": "",
-	"format-off": "",
-	"format-connected": " {num_connections}",
-	// "format-connected": " {device_alias}",
-	"tooltip-format": "{controller_address} {status}\n\n{num_connections} connected",
-	"tooltip-format-disabled": "{status}",
-	"tooltip-format-connected": "{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
-	"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
-	"format-connected-battery": " {device_alias} {device_battery_percentage}%",
-	"tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
-	// "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device
-	"on-click": "bluetooth toggle; pkill -SIGRTMIN+8 waybar",
-	"on-click-right": "exec alacritty -e sh -c 'bluetoothctl'"
     },
     "pulseaudio": {
         "format": "{icon}",
@@ -152,15 +132,6 @@
         "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
         "on-click-right": "pavucontrol",
         "tooltip": false
-    },
-    "custom/scratchpad": {
-        "format-text": "{}",
-        "return-type": "json",
-        "interval": 3,
-        "exec": "/usr/share/openSUSEway/helpers/scratchpad-indicator.sh 2> /dev/null",
-        "exec-if": "exit 0",
-        "on-click": "swaymsg 'scratchpad show'",
-        "on-click-right": "swaymsg 'move scratchpad'"
     },
     "custom/notification": {
 	"tooltip": true,
