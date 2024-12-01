@@ -1,6 +1,7 @@
 #!/bin/sh
 . /etc/os-release
 
+
 build() {
     mkdir -p ~/src
     cd ~/src
@@ -14,22 +15,25 @@ build() {
     RUSTFLAGS="-C target-feature=-crt-static" cargo install --path helix-term --locked
 }
 
-case $ID in
-"opensuse-tumbleweed")
+build_in_box() {
     # be sure we're in the right distrobox container
     if [ "$CONTAINER_ID" != "tumbleweed" ]; then
         echo "run this in the default tumbleweed container"
         exit 1
     else
-        sudo zypper in cargo
+        sudo zypper in -y cargo git patterns-devel-base-devel_basis
         build
         sudo mv ~/.cargo/bin/hx /usr/bin/hx
         distrobox-export --bin /usr/bin/hx
     fi
+}
+
+case $ID in
+"opensuse-tumbleweed")
+    build_in_box
     ;;
 "aeon")
-    echo "On Aeon - run this within the default tumbleweed distrobox. Terminating."
-    exit 1
+    build_in_box
     ;;
 "chimera")
     doas apk add cargo
