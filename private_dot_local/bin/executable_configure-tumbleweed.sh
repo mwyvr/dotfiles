@@ -49,6 +49,9 @@ for app in org.signal.Signal us.zoom.Zoom; do
     echo "Installing $app"
     flatpak install -y $app
 done
+# video player
+flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
+flatpak install gnome-nightly org.gnome.Showtime.Devel
 
 # install Google Chrome directly
 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub >/tmp/chrome-linux_signing_key.pub
