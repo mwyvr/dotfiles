@@ -1,14 +1,7 @@
 #!/bin/sh
 # db - enter, or create and enter, a default DistroBox
-# DISTRO="registry.opensuse.org/opensuse/tumbleweed:latest"
+DISTRO="registry.opensuse.org/opensuse/tumbleweed:latest"
 NAME="tumbleweed"
-
-# switch to NAME supplied as argument i.e. void
-# distrobox will try to match image to NAME if a distrobox needs to be created
-if [ -n "$1" ]; then
-    NAME="$1"
-    DISTRO="$1"
-fi
 
 if [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "${NAME}" ]; then
     echo "In a distrobox; exit and try db command again"
@@ -23,10 +16,4 @@ if ! test -x /bin/distrobox-enter; then
     exit 1
 fi
 
-if [ -z "${CONTAINER_ID}" ]; then
-    if ! /bin/distrobox-list | grep -q "$NAME"; then
-        echo "Creating $NAME distrobox from $DISTRO, please wait"
-        /bin/distrobox-create -n "${NAME}" --image "${DISTRO}"
-    fi
-    exec "/bin/distrobox-enter" -n "${NAME}" "$@"
-fi
+exec "/bin/distrobox-enter" -n "${NAME}" "$@"
