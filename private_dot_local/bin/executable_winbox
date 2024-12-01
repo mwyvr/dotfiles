@@ -10,35 +10,47 @@ FETCHER="fetch -o" # chimera, freebsd
 
 WINBOX="$HOME/.local/bin/WinBox/WinBox.exe"
 DIRPATH=$(dirname "$WINBOX")
+DISTROBOX="void"
+REQUIRES_DISTROBOX="aeon opensuse-tumbleweed"
 
 unknown() {
     echo "Unknown distribution: [$ID]; update winbox script."
 }
 
+verify_distrobox() {
+    if ! distrobox-list | grep -q $DISTROBOX; then
+        distrobox create --image ghcr.io/void-linux/void-glibc-full:latest --additional-packages wine -d --name $DISTROBOX
+        echo "Run:
+    distrobox enter $DISTROBOX
+    sudo xbps-install -Sy wine"
+        exit 1
+    else
+        if ! type wine64; then
+            echo "Is wine64 exported from the $DISTROBOX distrobox?"
+        fi
+    fi
+}
+
 setup() {
     # download if not already done
-    if [ ! -f "$WINBOX" ]; then
-        mkdir -p "$DIRPATH"
-        $FETCHER - https://download.mikrotik.com/routeros/winbox/4.0beta12/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
-    fi
-    if ! command -v "$(which wine64)"; then
+    if ! type wine64; then
         echo "Error: wine is not installed."
         case $ID in
         freebsd)
             doas pkg install -y wine
             ;;
         chimera)
-            echo "On $ID, install: apk add wine"
             doas apk add wine
             ;;
         void)
-            echo "On $ID, install: xbps-install -Su wine"
-            exit 1
+            xbps-install -Su wine
             ;;
         aeon | opensuse-tumbleweed)
-            echo "On $ID, install wine in a distrobox named: [$ID]"
-            echo "    distrobox enter $ID"
-            echo "    sudo zypper install wine"
+            echo "On $ID within a distrobox, install wine:"
+            echo "distrobox create --image ghcr.io/void-linux/void-glibc-full:latest --additional-packages wine -d --name void"
+            echo "distrobox enter --name void"
+            echo "sudo xbps-install -Su wine"
+            echo "distrobox-export --bin /usr/bin/wine64"
             exit 1
             ;;
         *)
@@ -55,7 +67,7 @@ distrorun() {
 
     # depends on an already configured distrobox named after the OS $ID
     if [ -z "${CONTAINER_ID}" ]; then
-        /usr/bin/distrobox-enter -n "$ID" -- /usr/bin/wine64 "$WINBOX"
+        /usr/bin/distrobox-enter -n "$DISTROBOX" -- /usr/bin/wine64 "$WINBOX"
     elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "$ID" ]; then
         exec distrobox-host-exec "/home/$USER/.local/bin/wine64" "$WINBOX"
     else
@@ -65,9 +77,24 @@ distrorun() {
 }
 
 run() {
+    if [ ! -f "$WINBOX" ]; then
+        mkdir -p "$DIRPATH"
+        $FETCHER - https://download.mikrotik.com/routeros/winbox/4.0beta12/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
+    fi
     # for the assets directory
     cd "$DIRPATH" || exit 1
-    wine64 "$WINBOX"
+    if echo $REQUIRES_DISTROBOX | grep -w -q $ID; then
+        if [ -z "${CONTAINER_ID}" ]; then
+            exec "/bin/distrobox-enter" -n void -- '/usr/bin/wine64' "$@"
+        elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "void" ]; then
+            exec distrobox-host-exec '/home/mw/.local/bin/wine64' "$@"
+        else
+            exec '/usr/bin/wine64' "$@"
+        fi
+
+    else
+        wine64 "$WINBOX"
+    fi
 }
 
 case $ID in
