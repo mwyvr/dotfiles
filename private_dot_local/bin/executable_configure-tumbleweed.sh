@@ -38,8 +38,7 @@ chezmoi apply
 
 # Desktop and laptop get the River window manager (Wayland) and supporting tools; Sway is
 # added to pull in components until this is sorted out
-$ADDCMD river patterns-sway-sway foot kanshi mako fuzzel waybar swaybg swayidle swaylock wlopm \
-    polkit-gnome libnotify-tools nautilus file-roller
+$ADDCMD river patterns-sway-sway foot kanshi mako fuzzel waybar swaybg swayidle swaylock wlopm polkit-gnome libnotify-tools nautilus file-roller
 
 # applications
 # $ADDCMD evolution
