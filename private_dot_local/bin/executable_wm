@@ -5,10 +5,10 @@ export XDG_SESSION_TYPE=wayland
 export XDG_SESSION_DESKTOP=river
 export XDG_CURRENT_DESKTOP=river
 export MOZ_ENABLE_WAYLAND=1
-
-# eval $(gnome-keyring-daemon --start)
-# export SSH_AUTH_SOCK
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+
+eval $(gnome-keyring-daemon --start)
+export SSH_AUTH_SOCK
 
 . /etc/os-release
 case $ID in
@@ -20,6 +20,9 @@ freebsd)
     # not cleaning up on FreeBSD for some reason, TODO
     pkill chrome
     ;;
+"opensuse-tumbleweed")
+    $WM $@
+    ;;
 *)
     echo "Unknown operating system: [$OS], terminating."
     exit 1
@@ -27,4 +30,4 @@ freebsd)
 esac
 
 # cleanup the display daemon started in river/init
-pkill kanshi
+# pkill kanshi
