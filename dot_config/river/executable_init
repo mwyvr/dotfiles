@@ -1,0 +1,71 @@
+#!/bin/sh
+# https://github.com/mwyvr/dotfiles managed by chezmoi dotfile manager https://www.chezmoi.io/
+#
+# See the river(1), riverctl(1), and rivertile(1) man pages
+
+# see os-specific sources
+daemons=""
+wallpaper=""
+os=$(uname)
+case $os in
+"FreeBSD")
+    . "$HOME/.config/river/init-freebsd"
+    # TODO - have freebsd launch a jail
+    initfreebsd
+    ;;
+"Linux")
+    . "$HOME/.config/river/init-linux"
+    riverctl map normal Super+Shift Return spawn 'foot distrobox-enter' # Launches a distrobox
+    initlinux
+    ;;
+esac
+
+# mappings common to all supported systems
+. "$HOME/.config/river/mappings"
+initmappings
+
+# GENERAL SETTINGS
+riverctl focus-follows-cursor normal # none, normal, always - always is too prone to fire esp on laptop/touchpad
+riverctl set-repeat 50 300           # Set keyboard repeat rate
+riverctl rule-add tearing            # summer 2024 added tearing support, unclear if needed
+
+# COLOURS
+riverctl background-color 0x111318       #  surface-dim
+riverctl border-color-focused 0x284777   # primary-container
+riverctl border-color-unfocused 0x44474e # outline-variant
+riverctl border-width 2                  # just a hint
+
+# RULES
+# Make all views with an app-id that starts with "float" and title "foo" start floating.
+riverctl rule-add -app-id 'float*' -title 'foo' float
+# Make all views with app-id "bar" and any title use client-side decorations
+riverctl rule-add -app-id "bar" csd
+# Set the default layout generator to be rivertile and start it.
+# River will send the process group of the init executable SIGTERM on exit.
+riverctl default-layout rivertile
+rivertile -view-padding 2 -outer-padding 2 &
+
+# DAEMONS and ENVIRONMENT
+
+dbus-update-activation-environment \
+    SEATD_SOCK \
+    WAYLAND_DISPLAY \
+    XDG_CURRENT_DESKTOP=river
+
+# https://github.com/Tottitov/dotfiles/blob/master/.config/river/init
+
+# Stop certain helper daemons that are likely to be reconfigured often, like waybar or swaybg
+killdaemons="waybar swaybg"
+for d in $killdaemons; do
+    pkill "$d"
+done
+# Start helper daemons that need starting and are not already running
+for d in $daemons; do
+    if ! pgrep "$d" >/dev/null; then
+        # ; then continue; fi
+        case $d in
+        swaybg) $d -c "#111318" -i "$wallpaper" ;;
+        *) $d & ;;
+        esac
+    fi
+done >/dev/null 2>&1
