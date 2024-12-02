@@ -16,6 +16,7 @@ con_up() {
     else
         exec distrobox-host-exec $UPCMD
     fi
+    notify-send "wireguard" "wg0 up"
 }
 
 con_down() {
@@ -25,6 +26,7 @@ con_down() {
     else
         exec distrobox-host-exec $DOWNCMD
     fi
+    notify-send "wireguard" "wg0 down"
 }
 
 if [ -z "${CONTAINER_ID}" ]; then
@@ -41,9 +43,7 @@ nmcli connection show --active | grep wg0 >/dev/null
 # exitcode=$?
 if [ "$?" -eq 0 ]; then
     con_down
-    notify-send "wireguard" "wg0 down"
 else
     knockknock.sh
     con_up
-    notify-send "wireguard" "wg0 up"
 fi
