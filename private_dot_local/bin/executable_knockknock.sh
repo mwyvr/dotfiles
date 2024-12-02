@@ -1,26 +1,32 @@
 #!/bin/sh
 KNOCKR="$HOME/go/bin/knockr"
+DISTROBOX="tumbleweed"
 
 . /etc/os-release
 
 distrobox_build() {
-    # if not in a container, enter it
+    # if not in a container, enter it to build the app
     if [ -z "${CONTAINER_ID}" ]; then
-        distrobox-enter -n tumbleweed -- /bin/go install github.com/mwyvr/knockr@latest
+        distrobox-enter -n $DISTROBOX -- /bin/go install github.com/mwyvr/knockr@latest
     else
+        if ! type go >/dev/null; then
+            echo "$0: go is not installed in distrobox [$DISTROBOX], terminating"
+            exit 1
+        fi
         go install github.com/mwyvr/knockr@latest
     fi
 }
 
 if [ ! -x "$KNOCKR" ]; then
     case $ID in
-    "opensuse-tumbleweed")
-        distrobox_build
-        ;;
-    "aeon")
+    aeon | "opensuse-tumbleweed")
         distrobox_build
         ;;
     *)
+        if ! type go >/dev/null; then
+            echo "$0: go is not installed, terminating"
+            exit 1
+        fi
         go install github.com/mwyvr/knockr@latest
         ;;
     esac
