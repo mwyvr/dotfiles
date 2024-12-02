@@ -10,10 +10,18 @@
 ADDCMD="sudo zypper install -y"
 USER="mw"
 
-if [ "$(id -u)" -ne 0 ]; then
+if [ "$(id -u)" -eq 0 ]; then
     echo "Run as the regular user, not as root or sudo/doas"
     exit 1
 fi
+
+# fix capslock=control for console keymap
+cat <<EOF >/usr/share/kbd/keymaps/xkb/us-nocaps.map
+include "us.map"
+keycode 58 = Control
+EOF
+gzip /usr/share/kbd/keymaps/xkb/us-nocaps.map
+localectl set-keymap us-nocaps us-nocaps
 
 # cpu microcode and presuming intel igpu
 if lscpu | grep "GenuineIntel"; then
@@ -38,19 +46,19 @@ chezmoi apply
 
 # Desktop and laptop get the River window manager (Wayland) and supporting tools; Sway is
 # added to pull in components until this is sorted out
-$ADDCMD river patterns-sway-sway foot kanshi mako fuzzel waybar swaybg swayidle swaylock wlopm polkit-gnome libnotify-tools nautilus file-roller
+$ADDCMD river patterns-sway-sway foot kanshi fuzzel waybar swaync swaybg swayidle swaylock wlopm polkit-gnome libnotify-tools nautilus file-roller
 
 # applications
 # $ADDCMD evolution
 # flatpak apps
 $ADDCMD flatpak
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 for app in org.signal.Signal us.zoom.Zoom; do
     echo "Installing $app"
     flatpak install -y $app
 done
 # video player
-flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
+flatpak remote-add --if-not-exists --user gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
 flatpak install gnome-nightly org.gnome.Showtime.Devel
 
 # install Google Chrome directly
@@ -67,4 +75,12 @@ $ADDCMD podman
 $ADDCMD distrobox
 echo "Create a default tumbleweed distrobox with: distrobox enter"
 
-echo "Configuration completed"
+echo 'Configuration completed
+
+Tip: adjust /etc/default/grub:
+GRUB_CMDLINE_LINUX_DEFAULT="plymouth.enable=0 splash=silent resume=/dev/system/swap mitigations=auto security=apparmor"
+And then:
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+To disable plymouth and return book log to screen
+'
