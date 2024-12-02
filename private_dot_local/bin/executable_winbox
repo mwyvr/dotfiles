@@ -1,128 +1,41 @@
 #!/bin/sh
 # Winbox is a Mikrotik router management tool; v4 provides Linux compatibility
-# but they don't offer a musl libc compatible version. Fortunately v4 is fully
-# functional as a Wine-run application. Note - it is still in beta as of Nov 2024.
+# but they don't offer a musl libc compatible version, so for certain distributions
+# we need to run the Windows version via Wine, or, in a distrobox.
 #
 # See also ~/.local/share/applications/winbox.desktop which calls this.
 
 . /etc/os-release
-FETCHER="fetch -o" # chimera, freebsd
 
-WINBOX="$HOME/.local/bin/WinBox/WinBox.exe"
-DIRPATH=$(dirname "$WINBOX")
-DISTROBOX="void"
-REQUIRES_DISTROBOX="aeon opensuse-tumbleweed"
+DIRPATH="$HOME/.local/bin"
 
-unknown() {
-    echo "Unknown distribution: [$ID]; update winbox script."
-}
-
-verify_distrobox() {
-    if ! distrobox-list | grep -q $DISTROBOX; then
-        distrobox create --image ghcr.io/void-linux/void-glibc-full:latest --additional-packages wine -d --name $DISTROBOX
-        echo "Run:
-    distrobox enter $DISTROBOX
-    sudo xbps-install -Sy wine"
-        exit 1
-    else
-        if ! type wine64; then
-            echo "Is wine64 exported from the $DISTROBOX distrobox?"
-        fi
-    fi
-}
-
-setup() {
-    # download if not already done
-    if ! type wine64; then
-        echo "Error: wine is not installed."
-        case $ID in
-        freebsd)
-            doas pkg install -y wine
-            ;;
-        chimera)
-            doas apk add wine
-            ;;
-        void)
-            xbps-install -Su wine
-            ;;
-        aeon | opensuse-tumbleweed)
-            echo "On $ID within a distrobox, install wine:"
-            echo "distrobox create --image ghcr.io/void-linux/void-glibc-full:latest --additional-packages wine -d --name void"
-            echo "distrobox enter --name void"
-            echo "sudo xbps-install -Su wine"
-            echo "distrobox-export --bin /usr/bin/wine64"
-            exit 1
-            ;;
-        *)
-            unknown
-            ;;
-        esac
-    fi
-}
-
-distrorun() {
-    # Some Linux distributions install an absurd volume of packages for Wine,
-    # looking at you, openSUSE - on those run we always want Wine within a
-    # distrobox container.
-
-    # depends on an already configured distrobox named after the OS $ID
-    if [ -z "${CONTAINER_ID}" ]; then
-        /usr/bin/distrobox-enter -n "$DISTROBOX" -- /usr/bin/wine64 "$WINBOX"
-    elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "$ID" ]; then
-        exec distrobox-host-exec "/home/$USER/.local/bin/wine64" "$WINBOX"
-    else
-        exec wine64 "$WINBOX"
-    fi
-    distrobox-stop -Y "$ID"
-}
-
-run() {
-    if [ ! -f "$WINBOX" ]; then
-        mkdir -p "$DIRPATH"
-        $FETCHER - https://download.mikrotik.com/routeros/winbox/4.0beta12/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
-    fi
-    # for the assets directory
-    cd "$DIRPATH" || exit 1
-    if echo $REQUIRES_DISTROBOX | grep -w -q $ID; then
-        if [ -z "${CONTAINER_ID}" ]; then
-            exec "/bin/distrobox-enter" -n void -- '/usr/bin/wine64' "$@"
-        elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "void" ]; then
-            exec distrobox-host-exec '/home/mw/.local/bin/wine64' "$@"
-        else
-            exec '/usr/bin/wine64' "$@"
-        fi
-
-    else
-        wine64 "$WINBOX"
-    fi
-}
+# for the runtime assets directory
+cd "$DIRPATH" || exit 1
 
 case $ID in
-freebsd)
-    setup
-    run
-    ;;
-chimera)
-    setup
-    run
-    ;;
-void)
-    FETCHER="wget -O"
-    setup
-    run
-    ;;
-aeon)
-    FETCHER="wget -O"
-    setup
-    distrorun
-    ;;
-opensuse-tumbleweed)
-    FETCHER="wget -O"
-    setup
-    distrorun
+chimera | freebsd)
+    # chimera is musl libc, WinBox for Linux is glibc, so run on wine
+    WINBOX="$DIRPATH/WinBox.exe"
+    if ! type "$WINBOX" >/dev/null; then
+        fetch -o - https://download.mikrotik.com/routeros/winbox/4.0beta13/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
+    fi
+    if ! type wine64 >/dev/null; then
+        echo "$0: This [$ID] operating system requires wine64 to run Windows WinBox.exe"
+        echo "Suggestion: install wine in a distrobox and export wine64."
+        exit 1
+    fi
+    exec "wine64 $DIRPATH/WinBox.exe"
     ;;
 *)
-    unknown
-    exit 1
+    WINBOX="$DIRPATH/WinBox"
+    if ! type "$WINBOX" >/dev/null; then
+        if ! type bsdtar >/dev/null; then
+            echo "$0: bsdtar not found on OS [$ID]; install and try again"
+            exit 1
+        fi
+        wget -O - https://download.mikrotik.com/routeros/winbox/4.0beta13/WinBox_Linux.zip | bsdtar -xvf- -C "$DIRPATH"
+        chmod +x "$DIRPATH/WinBox"
+    fi
+    exec "$DIRPATH/WinBox"
     ;;
 esac
