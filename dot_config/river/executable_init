@@ -35,18 +35,30 @@ riverctl border-color-focused 0x284777   # primary-container
 riverctl border-color-unfocused 0x44474e # outline-variant
 riverctl border-width 2                  # just a hint
 
+# gsettings
+gsettings set org.gnome.desktop.interface accent-color 'purple'
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
 # RULES
+# Brave, chrome, chromium
+riverctl rule-add -title 'Picture-in-picture' float
+# for_window [title="Picture-in-picture"] floating enable
 # Make all views with an app-id that starts with "float" and title "foo" start floating.
 riverctl rule-add -app-id 'float*' -title 'foo' float
-# Make all views with app-id "bar" and any title use client-side decorations
-riverctl rule-add -app-id "bar" csd
+
+riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Compose Message' float
+riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Re*' float
+riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Fwd*' float
+riverctl rule-add -app-id 'org.gnome.Evolution-alarm-notify' float
+riverctl rule-add -app-id 'org.gnome.Nautilus' float
+
 # Set the default layout generator to be rivertile and start it.
 # River will send the process group of the init executable SIGTERM on exit.
 riverctl default-layout rivertile
 rivertile -view-padding 2 -outer-padding 2 &
 
 # DAEMONS and ENVIRONMENT
-
 dbus-update-activation-environment \
     SEATD_SOCK \
     WAYLAND_DISPLAY \

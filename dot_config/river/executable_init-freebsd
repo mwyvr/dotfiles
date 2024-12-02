@@ -19,6 +19,7 @@ initfreebsd() {
     # Dec  1 15:43:24 elron devd[1372]: check_clients:  dropping disconnected client
     # Dec  1 15:43:24 elron syslogd: last message repeated 3 times
     # Dec  1 15:43:37 elron gnome-keyring-daemon[20705]: discover_other_daemon: 1
+    # XXX FIX swaync or move to mako if we must
     daemons="kanshi waybar swaync swaybg swayidle lxqt-policykit-agent" # launched at end of script
 
     # touchpad

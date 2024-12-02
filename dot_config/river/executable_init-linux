@@ -3,7 +3,7 @@
 # this file is sourced by config/river/init
 initlinux() {
     wallpaper="$HOME/.config/wallpaper/freebsd-ascii.png"
-    daemons="kanshi mako waybar swaybg swayidle /usr/libexec/polkit-gnome-authentication-agent-1" # launched at end of script
+    daemons="kanshi swaync waybar swaybg swayidle /usr/libexec/polkit-gnome-authentication-agent-1" # launched at end of script
 
     # touchpad
     # tip (see also: man riverctl):
