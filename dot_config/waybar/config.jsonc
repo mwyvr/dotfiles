@@ -21,7 +21,8 @@
     "pulseaudio",
     "battery",
     "custom/notification",
-    "clock"
+    // "clock"
+    "custom/clock"
   ],
   "custom/zypper": {
     "format": "{} ",
@@ -57,6 +58,12 @@
   "tray": {
     // "icon-size": 21,
     "spacing": 10
+  },
+  // built-in clock doesn't work on freebsd
+  "custom/clock": {
+    "exec": "date +'%a %d %b %H:%M'",
+    "interval": 60,
+    "tooltip": false
   },
   "clock": {
     // "timezone": "America/New_York",
