@@ -5,7 +5,7 @@ FETCHER="fetch -o" # freebsd and chimera, others use wget
 
 # I prefer Roboto Mono; current editor config demands a patched Nerd Font, and it
 # which is not carried by all distributions, so for thosse, install it ~/.local
-install_fonts() {
+install_font() {
     INSTALLPATH="$HOME/.local/share/fonts/robotomono"
     HOSTNAME=$(hostname)
     if ! [ -f $INSTALLPATH/RobotoMonoNerdFont-Regular.ttf ]; then
@@ -60,13 +60,15 @@ chimera)
     doas apk add fonts-nerd-roboto-mono
     ;;
 freebsd)
-    doas pkg install cantarell-fonts roboto-fonts-ttf source-code-pro-ttf liberation-fonts-ttf webfonts nerd-fonts font-awesome
+    doas pkg install -y roboto-fonts-ttf cantarell-fonts roboto-fonts-ttf source-code-pro-ttf liberation-fonts-ttf webfonts nerd-fonts font-awesome
+    # also want the nerd mono
+    install_font
     ;;
 *)
     # all others
     echo "ONLY SETTING UP ROBOTO MONO NERD FONT, update font-install.sh"
     FETCHER="wget -O"
-    install_fonts
+    install_font
     ;;
 esac
 
