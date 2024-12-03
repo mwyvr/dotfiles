@@ -2,7 +2,7 @@
 
 # this file is sourced by config/river/init
 initlinux() {
-    wallpaper="$HOME/.config/wallpaper/freebsd-ascii.png"
+    wallpaper="$HOME/.config/wallpaper/opensuse-black.jpeg"
     daemons="kanshi swaync waybar swaybg swayidle /usr/libexec/polkit-gnome-authentication-agent-1" # launched at end of script
 
     # touchpad

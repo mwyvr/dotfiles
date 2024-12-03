@@ -16,7 +16,8 @@
     "river/window"
   ],
   "modules-right": [
-    "custom/zypper",
+    // "custom/zypper",
+    "custom/checkupdates",
     "network",
     "pulseaudio",
     "battery",
@@ -31,6 +32,15 @@
     "exec-if": "exit 0",
     "on-click": "exec foot -e sudo sh -c 'zypper ref; zypper dup; pkill -SIGRTMIN+8 waybar'",
     "signal": 8
+  },
+  "custom/checkupdates": {
+    "format": "{}",
+    "interval": 3600,
+    "exec": "checkupdates.sh; echo ' '",
+    "on-click": "checkupdates.sh; echo ' '; pkill -SIGRTMIN+9 waybar'",
+    "exec-if": "exit 0",
+    // "on-click": "exec foot -e sudo sh -c 'zypper ref; zypper dup; pkill -SIGRTMIN+8 waybar'",
+    "signal": 9
   },
   // Modules configuration
   //  "sway/workspaces": {
