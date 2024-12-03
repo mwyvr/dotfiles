@@ -15,7 +15,7 @@ chimera)
     $FETCHER - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
     ;;
 freebsd)
-    doas pkg install go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
+    doas pkg install -y go node22 npm-node22 py311-pip rust lazygit bash hs-ShellCheck
     ;;
 void)
     FETCHER="wget -O"
