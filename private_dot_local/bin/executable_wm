@@ -7,21 +7,26 @@ export XDG_CURRENT_DESKTOP=river
 export MOZ_ENABLE_WAYLAND=1
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 
+# TODO - make this all work cross platform on FreeBSD too
+# https://major.io/p/use-gnome-keyring-with-sway/
+# TODO - check out chezmoi on freebsd for cgo
+# https://www.chezmoi.io/reference/templates/keyring-functions/keyring/
+
 eval $(gnome-keyring-daemon --start)
 export SSH_AUTH_SOCK
 
 . /etc/os-release
 case $ID in
 chimera)
-    dbus-run-session $WM $@
+    dbus-run-session $WM "$@"
     ;;
 freebsd)
-    dbus-launch --sh-syntax --exit-with-session $WM $@
+    dbus-launch --sh-syntax --exit-with-session $WM "$@"
     # not cleaning up on FreeBSD for some reason, TODO
     pkill chrome
     ;;
 "opensuse-tumbleweed")
-    $WM $@
+    $WM "$@"
     ;;
 *)
     echo "Unknown operating system: [$OS], terminating."
