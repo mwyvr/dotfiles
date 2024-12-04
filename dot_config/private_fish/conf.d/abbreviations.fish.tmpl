@@ -2,6 +2,11 @@
 alias ls "ls --color=always"
 alias l. "ls -d .*"
 
+{{- if eq .chezmoi.osRelease.id "freebsd" "chimera" }}
+{{- else }}
+abbr -a doas sudo
+{{- end}}
+
 # dotfiles management
 abbr -a cm chezmoi
 abbr -a cma chezmoi apply
