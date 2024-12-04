@@ -13,7 +13,7 @@ freebsd)
     ;;
 "opensuse-tumbleweed")
     sudo zypper refresh >/dev/null
-    NUM=$(sudo zypper dup --dry-run | grep -Eo "The following ([0-9].) package" | cut -d ' ' -f 3)
+    NUM=$(sudo zypper --non-interactive dup --dry-run | grep -Eo "The following ([0-9].) package" | cut -d ' ' -f 3)
     if ! [ "$NUM" = "" ]; then
         notify-send -c critical "$NUM $UPDATES"
     fi
