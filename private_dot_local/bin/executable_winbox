@@ -18,15 +18,17 @@ chimera | freebsd)
     WINBOX="$DIRPATH/WinBox.exe"
     if ! type "$WINBOX" >/dev/null; then
         fetch -o - https://download.mikrotik.com/routeros/winbox/4.0beta13/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
+        chmod +x $WINBOX
     fi
     if ! type wine64 >/dev/null; then
         echo "$0: This [$ID] operating system requires wine64 to run Windows WinBox.exe"
         echo "Suggestion: install wine in a distrobox and export wine64."
         exit 1
     fi
-    exec "wine64 $DIRPATH/WinBox.exe"
+    wine64 $WINBOX
     ;;
 *)
+    # on all other Linux distributions, run the native Linux app
     WINBOX="$DIRPATH/WinBox"
     if ! type "$WINBOX" >/dev/null; then
         if ! type bsdtar >/dev/null; then
@@ -36,6 +38,6 @@ chimera | freebsd)
         wget -O - https://download.mikrotik.com/routeros/winbox/4.0beta13/WinBox_Linux.zip | bsdtar -xvf- -C "$DIRPATH"
         chmod +x "$DIRPATH/WinBox"
     fi
-    exec "$DIRPATH/WinBox"
+    $WINBOX
     ;;
 esac
