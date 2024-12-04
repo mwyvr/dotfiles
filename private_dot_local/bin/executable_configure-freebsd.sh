@@ -38,10 +38,10 @@ EOF
     # real hardware not vm
     if ! sysctl -a | grep -iq "paravirtual"; then
 
-        sysrc microcode_update_enable=YES
+        sysrc microcode_update_enable="YES"
         service microcode_update start
 
-        if sysctl hw.model | grep "Intel"; then
+        if sysctl hw.model | grep -i "Intel"; then
             echo 'coretemp_load="YES"' | tee -a /boot/loader.conf
 
         fi
@@ -50,8 +50,6 @@ EOF
         fi
 
     fi
-    # do not run when running beta/rc/etc
-    # pkgupdate
 }
 
 fonts() {
@@ -64,7 +62,9 @@ audio() {
     pkg install -y mixertui
     # for mixertui, possibly other uses
     echo 'sysctlinfo_load="YES"' | tee -a /boot/loader.conf
+    echo 'sysctlbyname_improved_load="YES"' | tee -a /boot/loader.conf
     kldload sysctlinfo
+    kldload sysctlbyname_improved
     if [ "$(hostname)" = "elron" ]; then
         logger "setting mixer default to pcm11"
         sysctl hw.snd.default_unit=11
@@ -76,7 +76,12 @@ EOF
 
 wayland() {
     # minimal
-    pkg install -y wayland seatd dbus foot kanshi river swaybg swayidle swaylock waybar fuzzel mako lxqt-policykit chromium
+    if ! pkg install -y wayland seatd dbus foot kanshi river swaybg swayidle swaylock waybar fnott fuzzel polkit-gnome chromium \
+        xdg-utils xdg-user-dirs nautilus file-roller evolution; then
+        beep
+        echo "package installation failed; not in CURRENT yet?"
+        exit 1
+    fi
 
     # try to avoid this due to large dependencies
     # gnome-keyring
@@ -115,7 +120,7 @@ widevine() {
     make clean
 }
 
-workstation() {
+graphics() {
     beep
     echo "Enabling AMD and/or Intel GPUs; skipping NVIDIA (assuming used for passthrough)"
     pw groupmod video -m $USER
@@ -133,18 +138,12 @@ workstation() {
         kldload i915kms
         echo "Intel GPU enabled (i915kms)" | tee | logger
         beep
-        beep 
+        beep
         beep
     fi
     if pciconf -lv | grep -B4 VGA | grep -ie "vendor.*nvidia"; then
         echo "NVIDIA GPU IS NOT enabled - saved for PCI passthrough; look after this manually if wanted" | tee | logger
     fi
-
-    # and...
-    fonts
-    audio
-    wayland
-    # widevine
 }
 
 echo "Configure real or virtual FreeBSD machines for basic server use or workstation.
@@ -154,10 +153,11 @@ echo "Configure real or virtual FreeBSD machines for basic server use or worksta
 "
 
 # uncomment one or more of these:
+# do not run pkgupdate when running beta/rc
+# pkgupdate
 # baseconfig
-# workstation
+# graphics
+# audio
 fonts
-audio
 wayland
-# wayland
 # vmsupport
