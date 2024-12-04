@@ -5,7 +5,7 @@
 
 # launchers
 riverctl map normal Alt+Shift Return spawn foot                                        # Alt+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
-riverctl map normal Super+Shift R spawn 'foot sh -c "hx ~/.config/river/*"'            # edit river config
+riverctl map normal Super+Shift R spawn 'foot sh -c "cd ~/.config/river/; hx *"'       # edit river config
 riverctl map normal Super+Shift X spawn 'sh -c "~/.config/river/init"'                 # reload/eXecute river config
 riverctl map normal Super+Shift T spawn 'foot sh -c "hx ~/.config/waybar/*"'           # edit waybar config
 riverctl map normal Super+Shift L spawn 'pkill --signal USR1 swayidle'                 # (L)ock: trigger idle (and lock and suspend S0 if defined in swayidle)
@@ -19,6 +19,9 @@ riverctl map normal Alt P spawn fuzzel                                          
 # kill clients, kill river
 riverctl map normal Alt+Shift C close # kill focussed view (client)
 riverctl map normal Alt+Shift Q exit  # terminate river
+
+# dismiss notifications
+riverctl map normal Super D spawn "fnottctl dismiss"
 
 # VIEW (client/window) navigation and actions
 
