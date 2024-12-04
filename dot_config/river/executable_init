@@ -2,7 +2,6 @@
 # https://github.com/mwyvr/dotfiles managed by chezmoi dotfile manager https://www.chezmoi.io/
 #
 # See the river(1), riverctl(1), and rivertile(1) man pages
-
 # see os-specific sources
 daemons=""
 wallpaper=""
@@ -10,33 +9,28 @@ os=$(uname)
 case $os in
 "FreeBSD")
     . "$HOME/.config/river/init-freebsd"
-    # TODO - have freebsd launch a jail
     initfreebsd
     ;;
 "Linux")
     . "$HOME/.config/river/init-linux"
-    riverctl map normal Super+Shift Return spawn 'foot distrobox-enter' # Launches a distrobox
     initlinux
+    riverctl map normal Super+Shift Return spawn 'foot distrobox-enter' # Launches a distrobox
     ;;
 esac
 
 # mappings common to all supported systems
-. "$HOME/.config/river/mappings"
-initmappings
+sh "$HOME/.config/river/mappings"
 
 # GENERAL SETTINGS
 riverctl focus-follows-cursor normal # none, normal, always - always is too prone to fire esp on laptop/touchpad
 riverctl set-repeat 50 300           # Set keyboard repeat rate
-riverctl rule-add tearing            # summer 2024 added tearing support, unclear if needed
 
 # COLOURS
 riverctl background-color 0x111318       #  surface-dim
 riverctl border-color-focused 0x284777   # primary-container
 riverctl border-color-unfocused 0x44474e # outline-variant
 riverctl border-width 2                  # just a hint
-
 # gsettings
-gsettings set org.gnome.desktop.interface accent-color 'purple'
 gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
@@ -67,6 +61,7 @@ dbus-update-activation-environment \
 # https://github.com/Tottitov/dotfiles/blob/master/.config/river/init
 
 # Stop certain helper daemons that are likely to be reconfigured often, like waybar or swaybg
+set +e
 killdaemons="waybar swaybg"
 for d in $killdaemons; do
     pkill "$d"

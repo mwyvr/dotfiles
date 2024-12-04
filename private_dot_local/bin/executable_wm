@@ -1,4 +1,5 @@
 #!/bin/sh
+# wlroots env vars: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/master/docs/env_vars.md
 WM=river
 
 export XDG_SESSION_TYPE=wayland

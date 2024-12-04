@@ -1,9 +1,9 @@
 #!/bin/sh
+# this file is sourced and executed by config/river/init
 
-# this file is sourced by config/river/init
 initlinux() {
     wallpaper="$HOME/.config/wallpaper/opensuse-black.jpeg"
-    daemons="kanshi swaync waybar swaybg swayidle /usr/libexec/polkit-gnome-authentication-agent-1" # launched at end of script
+    daemons="kanshi waybar swaybg swayidle /usr/libexec/polkit-gnome-authentication-agent-1" # launched at end of script
 
     # touchpad
     # tip (see also: man riverctl):

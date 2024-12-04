@@ -1,8 +1,9 @@
 #!/bin/sh
+# this file is sourced and executed by config/river/init
 
-# this file is sourced by config/river/init
 initfreebsd() {
     wallpaper="$HOME/.config/wallpaper/freebsd-ascii.png"
+    daemons="kanshi waybar swaybg swayidle /usr/libexec/polkit-gnome-authentication-agent-1" # launched at end of script
     # daemons="kanshi mako waybar swaybg swayidle lxqt-policykit-agent" # launched at end of script
     # swaync requires xdg-desktop-portal-wlr/gtk and as a result
     # fusefs needs to be enabled/loaded
@@ -19,8 +20,6 @@ initfreebsd() {
     # Dec  1 15:43:24 elron devd[1372]: check_clients:  dropping disconnected client
     # Dec  1 15:43:24 elron syslogd: last message repeated 3 times
     # Dec  1 15:43:37 elron gnome-keyring-daemon[20705]: discover_other_daemon: 1
-    # XXX FIX swaync; moved to mako for now; does not need to be started as daemon
-    daemons="kanshi waybar swaybg swayidle lxqt-policykit-agent" # launched at end of script
 
     # touchpad
     # tip (see also: man riverctl):
