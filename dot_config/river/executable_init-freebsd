@@ -4,6 +4,7 @@
 initfreebsd() {
     wallpaper="$HOME/.config/wallpaper/freebsd-ascii.png"
     daemons="kanshi waybar swaybg swayidle /usr/libexec/polkit-gnome-authentication-agent-1" # launched at end of script
+    # daemons="kanshi mako waybar swaybg swayidle lxqt-policykit-agent" # launched at end of script
     # swaync requires xdg-desktop-portal-wlr/gtk and as a result
     # fusefs needs to be enabled/loaded
     # doas sysrc kld_list+="fusefs"

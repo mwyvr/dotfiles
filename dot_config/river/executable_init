@@ -3,7 +3,6 @@
 #
 # See the river(1), riverctl(1), and rivertile(1) man pages
 # see os-specific sources
-set -e
 daemons=""
 wallpaper=""
 os=$(uname)
@@ -11,7 +10,6 @@ case $os in
 "FreeBSD")
     . "$HOME/.config/river/init-freebsd"
     initfreebsd
-    echo "here after init"
     ;;
 "Linux")
     . "$HOME/.config/river/init-linux"
@@ -63,6 +61,7 @@ dbus-update-activation-environment \
 # https://github.com/Tottitov/dotfiles/blob/master/.config/river/init
 
 # Stop certain helper daemons that are likely to be reconfigured often, like waybar or swaybg
+set +e
 killdaemons="waybar swaybg"
 for d in $killdaemons; do
     pkill "$d"
