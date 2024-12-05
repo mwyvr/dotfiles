@@ -83,4 +83,21 @@ And then:
 grub2-mkconfig -o /boot/grub2/grub.cfg
 
 To disable plymouth and return book log to screen
+
+TODO XXX the following packages were not installed - these belong in opensuseway, the sway configuration
+determine what is needed
+adobe-sourcesanspro-fonts adobe-sourceserifpro-fonts adwaita-qt5 bluez bluez-cups brightnessctl clipman dejavu-fonts
+  desktop-file-utils ghostscript-fonts-other google-carlito-fonts google-droid-fonts google-noto-coloremoji-fonts
+  google-noto-sans-fonts google-opensans-fonts jq libadwaitaqt5-1 libcairomm-1_16-1 libell0 libfido2-udev libgiomm-2_68-1
+  libglibmm-2_68-1 libgtkmm-4_0-0 libjq1 libmbim libmbim-glib4 libonig5 libpangomm-2_48-1 libqmi-glib5 libqmi-tools
+  libqrtr-glib0 libQt5X11Extras5 libsigc-3_0-0 mbimcli-bash-completion ModemManager ModemManager-bash-completion
+  MozillaFirefox MozillaFirefox-branding-openSUSE mozilla-openh264 mpris-ctl NetworkManager-bluetooth NetworkManager-wwan
+  openSUSEway pamixer pavucontrol playerctl playerctl-bash-completion qt5ct sbc sqlite3-tcl sway-branding-openSUSE sway-marker
+  SwayNotificationCenter SwayNotificationCenter-bash-completion SwayNotificationCenter-fish-completion tcl usb_modeswitch
+  usb_modeswitch-data wl-clipboard wl-clipboard-bash-completion wl-clipboard-fish-completion wob
+
+see: https://github.com/openSUSE/openSUSEway
+
 '
+
+
