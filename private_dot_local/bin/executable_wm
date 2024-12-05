@@ -1,10 +1,14 @@
 #!/bin/sh
 # wlroots env vars: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/master/docs/env_vars.md
+if [ "$1" = "" ]; then
 WM=river
+else
+   WM=$1
+fi
 
 export XDG_SESSION_TYPE=wayland
-export XDG_SESSION_DESKTOP=river
-export XDG_CURRENT_DESKTOP=river
+export XDG_SESSION_DESKTOP=$WM
+export XDG_CURRENT_DESKTOP=$WM
 export MOZ_ENABLE_WAYLAND=1
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 
