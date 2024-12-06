@@ -7,6 +7,8 @@
 test -z "$PROFILEREAD" && . /etc/profile || true
 
 export EDITOR=/usr/bin/hx
+export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+
 
 # add path(s) for non-root
 if [ "$(id -u)" -ne 0 ]; then
