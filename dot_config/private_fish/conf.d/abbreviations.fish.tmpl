@@ -7,7 +7,7 @@ alias l. "ls -d .*"
 abbr -a doas sudo
 {{- end}}
 {{- if eq .chezmoi.osRelease.id "chimera" }}
-abbr pkg apk
+abbr -a pkg apk
 {{- end}}
 {{- if eq .chezmoi.osRelease.id "freebsd" }}
 abbr apk pkg

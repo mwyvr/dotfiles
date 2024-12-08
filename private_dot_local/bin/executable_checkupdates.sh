@@ -16,6 +16,9 @@ freebsd)
     doas apk update -q >/dev/null
     NUM=$(doas apk upgrade -s | grep -E -c "([0-9]+/[0-9]+)")
     ;;
+"void")
+    NUM=$(sudo xbps-install -Su --dry-run | wc -l)
+    ;;
 *)
     notify-send --transient "$0: unsupported $NAME"
     exit

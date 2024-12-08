@@ -1,5 +1,6 @@
 #!/bin/sh
 # wlroots env vars: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/master/docs/env_vars.md
+# https://www.reddit.com/r/voidlinux/comments/11jfioe/anyone_managed_to_get_gnomekeyring_fully/?rdt=56552
 if [ "$1" = "" ]; then
 WM=river
 else
@@ -9,8 +10,11 @@ fi
 export XDG_SESSION_TYPE=wayland
 export XDG_SESSION_DESKTOP=$WM
 export XDG_CURRENT_DESKTOP=$WM
+export XDG_CONFIG_HOME=$HOME/.config
 export MOZ_ENABLE_WAYLAND=1
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+
+xdg-user-dirs-gtk-update --force
 
 # TODO - make this all work cross platform on FreeBSD too
 # https://major.io/p/use-gnome-keyring-with-sway/
@@ -22,6 +26,12 @@ export SSH_AUTH_SOCK
 
 . /etc/os-release
 case $ID in
+void)
+    # pipewire &
+    # dbus-run-session $WM "$@"
+    dbus-run-session $WM
+    # pkill pipewire
+    ;;
 chimera)
     dbus-run-session $WM "$@"
     ;;

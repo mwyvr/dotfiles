@@ -3,9 +3,9 @@
 
 initlinux() {
     wallpaper="$HOME/.config/wallpaper/opensuse-black.jpeg"
-    daemons="kanshi waybar swaybg swayidle /usr/libexec/polkit-gnome-authentication-agent-1" # launched at end of script
+    daemons="kanshi pipewire waybar swaybg swayidle /usr/libexec/polkit-gnome-authentication-agent-1" # launched at end of script
 
-    # touchpad
+    # # touchpad
     # tip (see also: man riverctl):
     #  riverctl list-inputs
     #  riverctl list-input-configs

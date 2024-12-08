@@ -60,8 +60,13 @@ chimera)
     doas apk add fonts-nerd-roboto-mono
     ;;
 freebsd)
-    doas pkg install -y roboto-fonts-ttf cantarell-fonts roboto-fonts-ttf source-code-pro-ttf liberation-fonts-ttf webfonts nerd-fonts font-awesome
+    doas pkg install -y roboto-fonts-ttf cantarell-fonts source-code-pro-ttf liberation-fonts-ttf webfonts nerd-fonts font-awesome
     # also want the nerd mono
+    install_font
+    ;;
+void)
+    FETCHER="wget -O"
+    sudo xbps-install -Su fonts-roboto-ttf cantarell-fonts font-adobe-source-code-pro liberation-fonts-ttf font-awesome6 nerd-fonts-ttf noto-fonts-ttf
     install_font
     ;;
 *)
