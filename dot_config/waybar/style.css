@@ -1,0 +1,104 @@
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "Roboto", "FontAwesome 6 Free";
+  font-size: 15px;
+  box-shadow: none;
+  text-shadow: none;
+  transition-duration: 0s;
+}
+
+window#waybar {
+  /* outline-brighter */
+  /* color: #a9abb4; */
+  /* "white" = "#8F9097"                     # 7; NV-60 */
+  /* color: #a9abb4; */
+  color: #8f9097;
+  /* surface-container  #1d2024; */
+  /* background-color: rgba(29, 32, 36, 1.0); */
+  background-color: rgba(29, 32, 36, 0.7);
+  /* surface-container-low, #191c20; */
+  border-bottom: 2px solid rgba(25, 28, 32, 0.8);
+}
+
+window#waybar.solo {
+  /* not sure what this element is */
+  color: red;
+  /* color: rgba(53, 185, 171, 1); */
+}
+
+#tags {
+  margin: 0 5px;
+}
+
+#custom-scratchpad {
+  margin: 0px 5px;
+  padding: 0px 5px;
+}
+
+#tags button {
+  padding: 0 10px;
+  color: #5b5e66;
+}
+
+#tags button.occupied {
+  color: #a9abb4;
+}
+
+#tags button.focused {
+  /* "primary" = "#aac7ff"                   # P-80; (blue primary, affects NV and surface) */
+  /* "on-primary" = "#0a305f"                # P-20; */
+  color: #aac7ff;
+  background-color: #0a305f;
+}
+
+#mode,
+#battery,
+#cpu,
+#memory,
+#network,
+#bluetooth,
+#pulseaudio,
+#idle_inhibitor,
+#temperature,
+#custom-layout,
+#backlight {
+  margin: 0px 6px 0px 10px;
+}
+
+#clock {
+  margin: 0px 6px 0px 10px;
+}
+
+#battery.good {
+  /* green-60; hits 80% mark, can unplug */
+  color: #7d9a59;
+}
+
+#battery.warning {
+  /* Yellow-80(yellow primary) */
+  color: #DBC66E;
+}
+
+#battery.critical {
+  /* E-60*/
+  color: #ff5449;
+}
+
+#battery.charging {
+  /* blue-60 */
+  color: #7491c7;
+}
+
+
+#bluetooth.disabled {
+  color: rgba(128, 128, 128, 1);
+}
+
+#bluetooth.off {
+  color: rgba(128, 128, 128, 1);
+}
+
+#bluetooth.connected {
+  color: rgba(115, 186, 37, 1);
+}

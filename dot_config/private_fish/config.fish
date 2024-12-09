@@ -4,13 +4,12 @@ if status is-login
     fish_add_path ~/.cargo/bin
     fish_add_path ~/go/bin
     fish_add_path ~/.local/bin
-    envsource ~/.env
     if type -q hx
         set -gx EDITOR hx
-        abbr -a vi hx
-        abbr -a vim hx
     end
 end
+
+envsource $HOME/.env
 
 if status is-interactive
     fish_config theme choose mui-dark
