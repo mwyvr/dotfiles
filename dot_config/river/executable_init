@@ -1,10 +1,18 @@
 #!/bin/sh
+# river Wayland compositor configuration
 # https://github.com/mwyvr/dotfiles managed by chezmoi dotfile manager https://www.chezmoi.io/
-#
-# See the river(1), riverctl(1), and rivertile(1) man pages
-# see os-specific sources
-daemons=""
-wallpaper=""
+# This file is generated from init.tmpl by chezmoi
+
+# defaults
+RIVERSOCK="$XDG_RUNTIME_DIR/river"
+bar="waybar";  bar_opts=""
+menu="wofi"; menu_opts=""
+bg="swaybg"; bg_ops=""
+nc="swaync"; nc_opts=""
+lock="swaylock"; lock_opts="--config /etc/swaylock/openSUSEway.conf"
+idle="swayidle"; idle_opts=""
+progress="wob"; progress_opts=""
+
 os=$(uname)
 case $os in
 "FreeBSD")
@@ -18,8 +26,25 @@ case $os in
     ;;
 esac
 
+# Stop and restart features likely to be reconfigured often
+pkill $bar; $bar $bar_opts &
+pkill $bg; $bg $bg_opts &
+pkill $nc; $nc $nc_opts &
+pkill $idle; $idle $idle_opts &
+pkill $progress
+
+systemctl --user import-environment
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+# volume/brightness progress bar
+test -e $RIVERSOCK.wob || mkfifo $RIVERSOCK.$progress
+tail -f $RIVERSOCK.wob | $progress $progress_opts &
+
 # mappings common to all supported systems
 sh "$HOME/.config/river/mappings"
+#
 
 # GENERAL SETTINGS
 riverctl focus-follows-cursor normal # none, normal, always - always is too prone to fire esp on laptop/touchpad
@@ -30,22 +55,16 @@ riverctl background-color 0x111318       #  surface-dim
 riverctl border-color-focused 0x284777   # primary-container
 riverctl border-color-unfocused 0x44474e # outline-variant
 riverctl border-width 2                  # just a hint
-# gsettings
-gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 # RULES
-# Brave, chrome, chromium
-riverctl rule-add -title 'Picture-in-picture' float
-# for_window [title="Picture-in-picture"] floating enable
-# Make all views with an app-id that starts with "float" and title "foo" start floating.
-riverctl rule-add -app-id 'float*' -title 'foo' float
-
 riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Compose Message' float
 riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Re*' float
 riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Fwd*' float
 riverctl rule-add -app-id 'org.gnome.Evolution-alarm-notify' float
 riverctl rule-add -app-id 'org.gnome.Nautilus' float
+riverctl rule-add -app-id 'org.gnome.Weather' float
+riverctl rule-add -app-id 'org.pulseaudio.pavucontrol' float
+riverctl rule-add -title 'Picture-in-picture' float
 
 # Set the default layout generator to be rivertile and start it.
 # River will send the process group of the init executable SIGTERM on exit.
@@ -60,19 +79,3 @@ dbus-update-activation-environment \
 
 # https://github.com/Tottitov/dotfiles/blob/master/.config/river/init
 
-# Stop certain helper daemons that are likely to be reconfigured often, like waybar or swaybg
-set +e
-killdaemons="waybar swaybg"
-for d in $killdaemons; do
-    pkill "$d"
-done
-# Start helper daemons that need starting and are not already running
-for d in $daemons; do
-    if ! pgrep "$d" >/dev/null; then
-        # ; then continue; fi
-        case $d in
-        swaybg) $d -c "#111318" -i "$wallpaper" ;;
-        *) $d & ;;
-        esac
-    fi
-done >/dev/null 2>&1
