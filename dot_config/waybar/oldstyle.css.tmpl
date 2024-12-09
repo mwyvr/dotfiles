@@ -1,3 +1,4 @@
+{{- if ne .chezmoi.osRelease.id "opensuse-tumbleweed" }}
 * {
   border: none;
   border-radius: 0;
@@ -110,3 +111,4 @@ window#waybar.solo {
 #bluetooth.connected {
   color: rgba(115, 186, 37, 1);
 }
+{{- end }}

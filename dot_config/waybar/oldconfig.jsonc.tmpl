@@ -1,3 +1,4 @@
+{{- if ne .chezmoi.osRelease.id "opensuse-tumbleweed" }}
 {
   // See: https://github.com/Alexays/Waybar/wiki/Module:-Custom:-Simple
   //      https://github.com/Alexays/Waybar/wiki/Module:-River
@@ -191,3 +192,4 @@
   //   "escape": true
   // }
 }
+{{- end }}
