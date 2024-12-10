@@ -14,7 +14,7 @@
     "river/window"
   ],
   "modules-right": [
-    "custom/zypper",
+    "custom/xbps",
     "network",
     // "bluetooth", 
     // "cpu", "memory", 
@@ -30,6 +30,14 @@
   "custom/layout": {
     "tooltip": false,
     "exec": "swaymsg -mrt subscribe '[\"input\"]' | jq -r --unbuffered \"select(.change == \\\"xkb_layout\\\") | .input | select(.type == \\\"keyboard\\\") | .xkb_active_layout_name | .[0:2]\""
+  },
+  "custom/xbps": {
+    "format": "{} ",
+    "interval": 3600,
+    "exec": "xbps-install -Sun | wc -l; echo 'packages to update'",
+    "exec-if": "exit 0",
+    "on-click": "exec foot -e sudo sh -c 'xbps-install -Suy; pkill -SIGRTMIN+8 waybar'",
+    "signal": 8
   },
   "custom/zypper": {
     "format": "{} ",
@@ -109,7 +117,7 @@
     "format": "{icon}",
     "format-charging": "",
     "format-plugged": "",
-    "format-alt": "{capacity}% {time}",
+    "format-alt": "{capacity}% {time} {power:0.1f}W",
     "format-icons": [
       "",
       "",
