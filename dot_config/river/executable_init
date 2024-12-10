@@ -1,81 +1,79 @@
 #!/bin/sh
-# river Wayland compositor configuration
-# https://github.com/mwyvr/dotfiles managed by chezmoi dotfile manager https://www.chezmoi.io/
-# This file is generated from init.tmpl by chezmoi
 
-# defaults
-RIVERSOCK="$XDG_RUNTIME_DIR/river"
-bar="waybar";  bar_opts=""
-menu="wofi"; menu_opts=""
-bg="swaybg"; bg_ops=""
-nc="swaync"; nc_opts=""
-lock="swaylock"; lock_opts="--config /etc/swaylock/openSUSEway.conf"
-idle="swayidle"; idle_opts=""
-progress="wob"; progress_opts=""
+# run mappings first in case errors in script later cause it to terminate or stall
+sh $HOME/.config/river/mappings
 
-os=$(uname)
-case $os in
-"FreeBSD")
-    . "$HOME/.config/river/init-freebsd"
-    initfreebsd
+# set up helper daemons and OS-specific differences
+. /etc/os-release
+OS=$(uname)
+
+swaybg_opts=""
+view_padding=4
+outer_padding=4
+
+case $OS in
+Linux)
+    swaybg_opts="-c #111318 -i $HOME/.config/wallpaper/opensuse-black.jpeg"
+    touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_Touchpad"
+    pamixer --set-volume 60 # of 100
+    brightnessctl set 15000 # ~ 16%
+    for mode in normal locked; do
+        riverctl map $mode None XF86AudioRaiseVolume spawn 'pamixer -i 5'
+        riverctl map $mode None XF86AudioLowerVolume spawn 'pamixer -d 5'
+        riverctl map $mode None XF86AudioMute spawn 'pamixer -t'
+        riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
+        riverctl map $mode None XF86AudioPlay spawn 'playerctl play-pause'
+        riverctl map $mode None XF86AudioPrev spawn 'playerctl previous'
+        riverctl map $mode None XF86AudioNext spawn 'playerctl next'
+        # # Control screen backlight brightness with brightnessctl (https://github.com/Hummer12007/brightnessctl)
+        riverctl map $mode None XF86MonBrightnessUp spawn 'brightnessctl set +5%'
+        # riverctl map $mode None XF86MonBrightnessUp spawn  "brightnessctl -q set +5% && ( echo $((`brightnessctl get` * 100 / `brightnessctl m`)) > $RIVERSOCK.wob )"
+        riverctl map $mode None XF86MonBrightnessDown spawn 'brightnessctl set 5%-'
+        # riverctl map $mode None XF86MonBrightnessDown spawn "brightnessctl -q set 5%- && ( echo $((`brightnessctl get` * 100 / `brightnessctl m`)) > $RIVERSOCK.wob )"
+        # bindsym XF86MonBrightnessDown exec brightnessctl -q set 5%- && ( echo $((`brightnessctl get` * 100 / `brightnessctl m`)) > $SWAYSOCK.wob )
+    done
     ;;
-"Linux")
-    . "$HOME/.config/river/init-linux"
-    initlinux
-    riverctl map normal Super+Shift Return spawn 'foot distrobox-enter' # Launches a distrobox
+FreeBSD)
+    swaybg_opts="$HOME/.config/wallpaper/freebsd-ascii.png"
+    touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad" # capitalization in TouchPad matters
+    mixer vol.mute=off
+    for mode in normal locked; do
+        # desktop feeds a DAC, don't use these there
+        riverctl map $mode None XF86AudioRaiseVolume spawn 'mixer vol=+5%'
+        riverctl map $mode None XF86AudioLowerVolume spawn 'mixer vol=-5%'
+        riverctl map $mode None XF86AudioMute spawn 'mixer vol.mute=toggle'
+    done
     ;;
 esac
+riverctl input "$touchpad" tap enabled
+riverctl input "$touchpad" tap-button-map left-right-middle
+riverctl input "$touchpad" pointer-accel 0.60
+riverctl input "$touchpad" accel-profile adaptive
+riverctl input "$touchpad" disable-while-typing enabled
+riverctl input "$touchpad" scroll-method two-finger
+riverctl input "$touchpad" natural-scroll enabled
 
-# Stop and restart features likely to be reconfigured often
-pkill $bar; $bar $bar_opts &
-pkill $bg; $bg $bg_opts &
-pkill $nc; $nc $nc_opts &
-pkill $idle; $idle $idle_opts &
-pkill $progress
+# only needed while configs are in development
+restart="rivertile waybar swaybg"
+for d in $restart; do
+    pkill $d
+done
 
-systemctl --user import-environment
-gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
-gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
-gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-# volume/brightness progress bar
-test -e $RIVERSOCK.wob || mkfifo $RIVERSOCK.$progress
-tail -f $RIVERSOCK.wob | $progress $progress_opts &
-
-# mappings common to all supported systems
-sh "$HOME/.config/river/mappings"
-#
-
-# GENERAL SETTINGS
-riverctl focus-follows-cursor normal # none, normal, always - always is too prone to fire esp on laptop/touchpad
-riverctl set-repeat 50 300           # Set keyboard repeat rate
-
-# COLOURS
-riverctl background-color 0x111318       #  surface-dim
-riverctl border-color-focused 0x284777   # primary-container
-riverctl border-color-unfocused 0x44474e # outline-variant
-riverctl border-width 2                  # just a hint
-
-# RULES
-riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Compose Message' float
-riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Re*' float
-riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Fwd*' float
-riverctl rule-add -app-id 'org.gnome.Evolution-alarm-notify' float
-riverctl rule-add -app-id 'org.gnome.Nautilus' float
-riverctl rule-add -app-id 'org.gnome.Weather' float
-riverctl rule-add -app-id 'org.pulseaudio.pavucontrol' float
-riverctl rule-add -title 'Picture-in-picture' float
-
-# Set the default layout generator to be rivertile and start it.
-# River will send the process group of the init executable SIGTERM on exit.
-riverctl default-layout rivertile
-rivertile -view-padding 2 -outer-padding 2 &
-
-# DAEMONS and ENVIRONMENT
-dbus-update-activation-environment \
-    SEATD_SOCK \
-    WAYLAND_DISPLAY \
-    XDG_CURRENT_DESKTOP=river
-
-# https://github.com/Tottitov/dotfiles/blob/master/.config/river/init
-
+# start daemons not already running
+daemons="rivertile swaync waybar swaybg"
+for d in $daemons; do
+    if ! pgrep $d 2>&1 >/dev/null; then
+        case $d in
+        rivertile)
+            riverctl default-layout rivertile
+            $d -view-padding $view_padding -outer-padding $outer_padding &
+            ;;
+        swaybg)
+            $d $swaybg_opts &
+            ;;
+        *)
+            $d &
+            ;;
+        esac
+    fi
+done
