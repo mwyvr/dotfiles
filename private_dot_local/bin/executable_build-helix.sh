@@ -1,7 +1,6 @@
 #!/bin/sh
 . /etc/os-release
 
-
 build() {
     mkdir -p ~/src
     cd ~/src
@@ -16,39 +15,36 @@ build() {
 }
 
 build_in_box() {
-    # be sure we're in the right distrobox container
-    if [ "$CONTAINER_ID" != "tumbleweed" ]; then
-        echo "run this in the default tumbleweed container"
+    echo "Assumes an Arch Linux distrobox"
+    if [ -z "$CONTAINER_ID" ]; then
+        echo "run this in the default container"
         exit 1
     else
-        sudo zypper in -y cargo git patterns-devel-base-devel_basis
+        sudo pacman -Syu base-devel git rust
         build
-        sudo mv ~/.cargo/bin/hx /usr/bin/hx
-        distrobox-export --bin /usr/bin/hx
     fi
 }
 
 case $ID in
-"opensuse-tumbleweed")
-    build_in_box
-    ;;
-"aeon")
-    build_in_box
+"freebsd")
+    doas pkg install -y rust
+    build
+    doas mv ~/.cargo/bin/hx /usr/local/bin/hx
     ;;
 "chimera")
     doas apk add cargo
     build
     doas mv ~/.cargo/bin/hx /usr/bin/hx
     ;;
-"freebsd")
-    doas pkg install -y rust
-    build
-    doas mv ~/.cargo/bin/hx /usr/bin/hx
-    ;;
 *)
-    echo "Unknown operating system/distribution, terminating."
-    exit 1
+    build_in_box
+        echo "Installing Helix (hx) and runtime files on host system"
+        echo "- be sure you have uninstalled the system Helix -"
+        # make it available to host system AND distroboxes by copying it
+        distrobox-host-exec sudo sh -c "cp $HOME/.cargo/bin/hx /usr/bin"
+        distrobox-host-exec sudo sh -c "mkdir -p /usr/lib/helix"
+        distrobox-host-exec sudo sh -c "ln -sv $HOME/src/helix/runtime /usr/lib/helix/""
+        ln -svf $HOME/src/helix/runtime $HOME/.config/helix/
     ;;
 esac
 
-ln -svf ~/src/helix/runtime ~/.config/helix/runtime
