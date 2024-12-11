@@ -8,7 +8,7 @@ case $ID in
 freebsd)
     doas pkg update -f >/dev/null
     APP="pkg"
-    PACKAGES="$(pkg upgrade --dry-run | grep -Eo \"^[[:space:]]+(.*)\")"
+    PACKAGES="$(pkg upgrade --dry-run | grep -Eo '^[[:space:]]+(.*)')"
     NUM=$(doas pkg upgrade --dry-run | grep -Eo "The following ([0-9]+) package\(s\) will be affected" | cut -d ' ' -f 3)
     ;;
 "opensuse-tumbleweed")
@@ -20,7 +20,7 @@ freebsd)
     doas apk update -q >/dev/null
     APP="apk"
     PACKAGES=$(doas apk upgrade -s | grep -v "^OK")
-    NUM=$(echo $PACKAGES | wc -l | xargs)
+    NUM=$(echo "$PACKAGES" | wc -l | xargs)
     ;;
 "void")
     APP="xbps"
@@ -43,7 +43,7 @@ esac
 
 if [ -n "$NUM" ]; then
     # for status bar
-    echo $NUM
+    echo "$NUM"
     if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] && [ "$NUM" != "0" ]; then
         notify-send -a "$APP" "System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
     fi
