@@ -1,7 +1,16 @@
 #!/bin/sh
 # db - enter, or create and enter, a default DistroBox
-DISTRO="registry.opensuse.org/opensuse/tumbleweed:latest"
-NAME="tumbleweed"
+. /etc/os-release
+case $ID in
+    void)
+        DISTRO="docker.io/library/archlinux:latest"
+        NAME="arch"
+        ;;
+    *)
+        DISTRO="registry.opensuse.org/opensuse/tumbleweed:latest"
+        NAME="tumbleweed"
+        ;;
+esac
 
 if [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "${NAME}" ]; then
     echo "In a distrobox; exit and try db command again"
@@ -11,9 +20,9 @@ elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" = "${NAME}" ]; then
     exit
 fi
 
-if ! test -x /bin/distrobox-enter; then
+if ! which distrobox-enter; then
     echo "distrobox does not appear to be installed, exiting"
     exit 1
 fi
 
-exec "/bin/distrobox-enter" -n "${NAME}" "$@"
+exec "distrobox-enter" -n "${NAME}" "$@"

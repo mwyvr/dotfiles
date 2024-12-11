@@ -66,7 +66,7 @@ freebsd)
     ;;
 void)
     FETCHER="wget -O"
-    sudo xbps-install -Su fonts-roboto-ttf cantarell-fonts font-adobe-source-code-pro liberation-fonts-ttf font-awesome6 nerd-fonts-ttf noto-fonts-ttf
+    doas xbps-install -Su wget unzip fonts-roboto-ttf cantarell-fonts liberation-fonts-ttf font-awesome6 noto-fonts-ttf
     install_font
     ;;
 *)
