@@ -10,12 +10,13 @@ fi
 . ~/.env
 
 export XDG_SESSION_TYPE=wayland
-export XDG_SESSION_DESKTOP=$WM
-export XDG_CURRENT_DESKTOP=$WM
-export XDG_CONFIG_HOME=$HOME/.config
+export XDG_SESSION_DESKTOP="$WM"
+export XDG_CURRENT_DESKTOP="$WM"
+export XDG_CONFIG_HOME="$HOME/.config"
 export MOZ_ENABLE_WAYLAND=1
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 
+# yes, this is intentional
 xdg-user-dirs-gtk-update
 xdg-user-dirs-gtk-update --force
 
@@ -24,7 +25,7 @@ xdg-user-dirs-gtk-update --force
 # TODO - check out chezmoi on freebsd for cgo
 # https://www.chezmoi.io/reference/templates/keyring-functions/keyring/
 
-eval $(gnome-keyring-daemon --start)
+eval "$(gnome-keyring-daemon --start)"
 export SSH_AUTH_SOCK
 
 . /etc/os-release
@@ -33,13 +34,13 @@ void)
     # if ! pgrep pipewire; then
     #     pipewire &
     # fi
-    dbus-run-session $WM "$@"
+    dbus-run-session "$WM" "$@"
     ;;
 chimera)
-    dbus-run-session $WM "$@"
+    dbus-run-session "$WM" "$@"
     ;;
 freebsd)
-    dbus-launch --sh-syntax --exit-with-session $WM "$@"
+    dbus-launch --sh-syntax --exit-with-session "$WM" "$@"
     # not cleaning up on FreeBSD for some reason, TODO
     pkill chrome
     ;;
