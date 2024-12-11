@@ -1,5 +1,8 @@
 #!/bin/sh
-echo "Install lsp, formatters and other components supporting Helix"
+# This sets up Language Server Processors for Helix
+# Building in a distrobox is an option, however note that there will be
+# some initial Helix startup lag if running Helix from the Distrobox in
+# order to have visbility for the utils installed / built in Distrobox
 
 . /etc/os-release
 LOCAL=~/.local/bin
@@ -82,13 +85,15 @@ build_in_box() {
     fi
 }
 
+# first install utils available as packages, then call build* to finish the rest
 case $ID in
 chimera)
     doas apk add go nodejs python-pip cargo bash lazygit
     build
     ;;
 void)
-    xbps-install -Su go-1.23 nodejs python-pip cargo lazygit bash shellcheck taplo
+    sudo xbps-install -Su go nodejs python3 python3-pip cargo lazygit bash shellcheck taplo
+    build
     ;;
 freebsd)
     if uname -a | grep -q "CURRENT"; then
