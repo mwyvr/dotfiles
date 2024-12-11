@@ -24,9 +24,13 @@ check_host
 if nmcli connection show --active | grep wg0 >/dev/null; then
     # exit 0, found wg0
     nmcli connection down wg0
-    notify-send "wireguard" "wg0 down"
+    if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+        notify-send --transient --app-name=wgtoggle --urgency=critical "wireguard" "wg0 down"
+    fi
 else
     knockknock.sh
     nmcli connection up wg0
-    notify-send "wireguard" "wg0 up"
+    if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+        notify-send --transient --app-name=wgtoggle --urgency=normal "wireguard" "wg0 up"
+    fi
 fi
