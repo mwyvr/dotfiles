@@ -8,7 +8,9 @@
 . /etc/os-release
 
 DIRPATH="$HOME/.local/bin"
+WINBOX="$DIRPATH/WinBox"
 
+mkdir -p "$DIRPATH"
 # for the runtime assets directory
 cd "$DIRPATH" || exit 1
 
@@ -17,25 +19,29 @@ chimera | freebsd)
     # chimera is musl libc, WinBox for Linux is glibc, so run on wine
     WINBOX="$DIRPATH/WinBox.exe"
     if ! type "$WINBOX" >/dev/null; then
-        fetch -o - https://download.mikrotik.com/routeros/winbox/4.0beta13/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
-        chmod +x $WINBOX
+        fetch -o - https://download.mikrotik.com/routeros/winbox/4.0beta14/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
+        chmod +x "$WINBOX"
     fi
     if ! type wine64 >/dev/null; then
         echo "$0: This [$ID] operating system requires wine64 to run Windows WinBox.exe"
         echo "Suggestion: install wine in a distrobox and export wine64."
         exit 1
     fi
-    wine64 $WINBOX
+    wine64 "$WINBOX"
     ;;
 *)
+    case $ID in
+    void)
+        sudo xbps-install -Suy bsdtar libxkbcommon-x11 xcb-util-image xcb-util-keysyms >/dev/null
+        ;;
+    esac
     # on all other Linux distributions, run the native Linux app
-    WINBOX="$DIRPATH/WinBox"
     if ! type "$WINBOX" >/dev/null; then
         if ! type bsdtar >/dev/null; then
             echo "$0: bsdtar not found on OS [$ID]; install and try again"
             exit 1
         fi
-        wget -O - https://download.mikrotik.com/routeros/winbox/4.0beta13/WinBox_Linux.zip | bsdtar -xvf- -C "$DIRPATH"
+        wget -O - https://download.mikrotik.com/routeros/winbox/4.0beta14/WinBox_Linux.zip | bsdtar -xvf- -C "$DIRPATH"
         chmod +x "$DIRPATH/WinBox"
     fi
     $WINBOX
