@@ -1,6 +1,6 @@
 #!/bin/sh
 KNOCKR="$HOME/go/bin/knockr"
-DISTROBOX="tumbleweed"
+DISTROBOX="arch"
 
 . /etc/os-release
 
@@ -20,6 +20,7 @@ distrobox_build() {
 if [ ! -x "$KNOCKR" ]; then
     case $ID in
     aeon | "opensuse-tumbleweed")
+        DISTROBOX="tumbleweed"
         distrobox_build
         ;;
     *)
@@ -31,7 +32,7 @@ if [ ! -x "$KNOCKR" ]; then
         ;;
     esac
 fi
-# port knock router to open wireguard
+# port knock router to open wireguard - not strictly necessary
 . ~/.knock.env
 $KNOCKR $KNOCKARGS
 $KNOCKR $TESTARGS
