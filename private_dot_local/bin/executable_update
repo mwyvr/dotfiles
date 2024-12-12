@@ -1,7 +1,9 @@
 #!/bin/sh
-# package update/upgrade & fw updates for various Linux distributions (Chimera
-# Linux, Void Linux, openSUSE Tumbleweed and Aeon Desktop)
+# package update/upgrade & fw updates for FreeBSD and various Linux
+# distributions (Chimera Linux, Void Linux, openSUSE Tumbleweed and Aeon
+# Desktop)
 . /etc/os-release
+APP=""
 
 do_fw() {
     # Not installed on servers
@@ -14,33 +16,35 @@ do_fw() {
 
 case $ID in
 chimera)
+    APP="apk"
     doas apk update
     doas apk upgrade
     do_fw
     ;;
 freebsd)
+    APP="pkg"
     doas pkg update
     doas pkg upgrade
     # no LVFS / fwupd.org support, boot into linux
     ;;
-void)
-    sudo xbps-install -Su
-    do_fw
-    ;;
 opensuse-tumbleweed)
+    APP="zypper"
     sudo zypper dup
     do_fw
     ;;
 aeon)
+    APP="transactional-update"
     sudo transactional-update dup
     # fw updates built in
     ;;
 opensuse-microos)
     # server os
+    APP="transactional-update"
     sudo transactional-update dup
     ;;
-arch)
-    sudo pacman -Syu
+void)
+    APP="xbps"
+    sudo xbps-install -Su
     do_fw
     ;;
 *)
@@ -48,3 +52,7 @@ arch)
     exit 1
     ;;
 esac
+
+if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    notify-send --transient --app-name="$APP" --urgency=normal "update" "System update script has completed"
+fi

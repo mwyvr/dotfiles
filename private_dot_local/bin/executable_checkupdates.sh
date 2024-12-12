@@ -5,22 +5,22 @@ NUM=""
 PACKAGES=""
 
 case $ID in
+"chimera")
+    APP="apk"
+    doas apk update -q >/dev/null
+    PACKAGES=$(doas apk upgrade -s | grep -v "^OK")
+    NUM=$(echo "$PACKAGES" | wc -l | xargs)
+    ;;
 freebsd)
-    doas pkg update -f >/dev/null
     APP="pkg"
+    doas pkg update -f >/dev/null
     PACKAGES="$(pkg upgrade --dry-run | grep -Eo '^[[:space:]]+(.*)')"
     NUM=$(doas pkg upgrade --dry-run | grep -Eo "The following ([0-9]+) package\(s\) will be affected" | cut -d ' ' -f 3)
     ;;
 "opensuse-tumbleweed")
-    sudo zypper refresh >/dev/null
     APP="zypper"
+    sudo zypper refresh >/dev/null
     NUM=$(sudo zypper --non-interactive dup --dry-run | grep -Eo "The following ([0-9]+) package" | cut -d ' ' -f 3)
-    ;;
-"chimera")
-    doas apk update -q >/dev/null
-    APP="apk"
-    PACKAGES=$(doas apk upgrade -s | grep -v "^OK")
-    NUM=$(echo "$PACKAGES" | wc -l | xargs)
     ;;
 "void")
     APP="xbps"
@@ -33,11 +33,8 @@ freebsd)
 
     ;;
 *)
-    if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
-        notify-send "$0: unsupported $NAME"
-    fi
     echo "$0: $NAME is unsupported"
-    exit
+    exit 1
     ;;
 esac
 
