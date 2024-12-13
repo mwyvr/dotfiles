@@ -18,6 +18,10 @@ case $ID in
 chimera)
     apk info >"$SYSBACKUP/packages"
     ;;
+void)
+    sudo xbps-install -Suy xtools
+    xilog >"$SYSBACKUP/packages"
+    ;;
 "opensuse-tumbleweed")
     DOAS="sudo"
     zypper se -i >"$SYSBACKUP/packages"
@@ -38,3 +42,5 @@ $DOAS chown -R $USER:$USER $SYSBACKUP
 
 # copies all but hidden files
 rsync -av --exclude='go' --exclude="temp" --exclude="*.core" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' * mw@wabbit:/usr/local/backup/.
+# do .config too
+rsync -av --exclude='go' --exclude="temp" --exclude="*.core" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' .config mw@wabbit:/usr/local/backup/.
