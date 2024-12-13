@@ -15,7 +15,7 @@ freebsd)
     APP="pkg"
     doas pkg update -f >/dev/null
     PACKAGES="$(pkg upgrade --dry-run | grep -Eo '^[[:space:]]+(.*)')"
-    NUM=$(doas pkg upgrade --dry-run | grep -Eo "The following ([0-9]+) package\(s\) will be affected" | cut -d ' ' -f 3)
+    NUM=$(pkg upgrade --dry-run | grep -Eo "The following ([0-9]+) package\(s\) will be affected" | cut -d ' ' -f 3)
     ;;
 "opensuse-tumbleweed")
     APP="zypper"
@@ -37,11 +37,12 @@ freebsd)
     exit 1
     ;;
 esac
+# for status bar
+if [ "$NUM" = "" ]; then
+    NUM="0"
+fi
+echo "$NUM"
 
-if [ -n "$NUM" ]; then
-    # for status bar
-    echo "$NUM"
-    if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] && [ "$NUM" != "0" ]; then
-        notify-send -a "$APP" "System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
-    fi
+if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] && [ "$NUM" != "0" ]; then
+    notify-send -a "$APP" "System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
 fi
