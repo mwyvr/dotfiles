@@ -9,7 +9,7 @@ pkgupdate() {
     mkdir -p /usr/local/etc/pkg/repos
     echo 'FreeBSD: { url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest" }' >/usr/local/etc/pkg/repos/FreeBSD.conf
     pkg update -f
-    pkg upgrade
+    echo "run pkg upgrade"
 }
 
 baseconfig() {
@@ -76,8 +76,8 @@ EOF
 
 wayland() {
     # minimal
-    if ! pkg install -y wayland seatd dbus foot kanshi river swaybg swayidle swaylock waybar fnott fuzzel polkit-gnome chromium \
-        xdg-utils xdg-user-dirs nautilus file-roller evolution; then
+    if ! pkg install -y wayland seatd dbus foot kanshi river swaybg swayidle wlopm swaylock waybar fnott fuzzel polkit-gnome gnome-keyring chromium \
+        xdg-utils xdg-user-dirs nautilus file-roller evolution gnome-themes-extra; then
         beep
         echo "package installation failed; not in CURRENT yet?"
         exit 1
@@ -126,7 +126,7 @@ graphics() {
     pw groupmod video -m $USER
     if pciconf -lv | grep -B4 VGA | grep -ie "vendor.*AMD"; then
         # pkg install -y drm-kmod
-        sysrc kld_list+=amdgpu
+        sysrc kld_list+="amdgpu"
         kldload amdgpu
         echo "AMD GPU enabled (amdgpu)" | tee | logger
     fi
@@ -134,7 +134,7 @@ graphics() {
         # compiling drm for now...
         # pkg install -y drm-kmod
         pkg install -y libva-intel-driver mesa-libs mesa-dri
-        sysrc kld_list+=i915kms
+        sysrc kld_list+="i915kms"
         kldload i915kms
         echo "Intel GPU enabled (i915kms)" | tee | logger
         beep
@@ -154,10 +154,10 @@ echo "Configure real or virtual FreeBSD machines for basic server use or worksta
 
 # uncomment one or more of these:
 # do not run pkgupdate when running beta/rc
-# pkgupdate
-# baseconfig
+pkgupdate
+#baseconfig
 # graphics
 # audio
-fonts
-wayland
+# fonts
+# wayland
 # vmsupport
