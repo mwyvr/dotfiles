@@ -21,8 +21,6 @@ export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 xdg-user-dirs-gtk-update
 xdg-user-dirs-gtk-update --force
 
-# TODO - make this all work cross platform on FreeBSD too
-# https://major.io/p/use-gnome-keyring-with-sway/
 # TODO - check out chezmoi on freebsd for cgo
 # https://www.chezmoi.io/reference/templates/keyring-functions/keyring/
 
@@ -38,7 +36,8 @@ chimera)
     dbus-run-session "$WM" "$@" | logger -p daemon.info -t river
     ;;
 freebsd)
-    dbus-launch --sh-syntax --exit-with-session "$WM" "$@" | logger -p daemon.info -t river
+    dbus-run-session "$WM" "$@" | logger -p daemon.info -t river
+    # dbus-launch --sh-syntax --exit-with-session "$WM" "$@" | logger -p daemon.info -t river
     # not cleaning up on FreeBSD for some reason, TODO
     pkill chrome
     ;;
