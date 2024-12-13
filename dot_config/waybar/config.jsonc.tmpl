@@ -15,13 +15,17 @@
   ],
   "modules-right": [
     "custom/checkupdates",
+    {{- if eq .chezmoi.os "linux" }}
     "network",
+    {{- end }}
     // "bluetooth", 
     // "cpu", "memory", 
     // "temperature", 
     // "backlight", 
+    {{- if eq .chezmoi.os "linux" }}
     "battery",
     // "battery#bat2", 
+    {{- end }}
     "pulseaudio",
     // "custom/layout", 
     "clock",
