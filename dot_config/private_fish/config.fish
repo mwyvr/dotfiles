@@ -1,6 +1,6 @@
 if status is-login
     set -gx HOSTNAME (hostname)
-    # set -gx LIBVIRT_DEFAULT_URI 'qemu:///system'
+    envsource $HOME/.env
     fish_add_path ~/.cargo/bin
     fish_add_path ~/go/bin
     fish_add_path ~/.local/bin
@@ -8,8 +8,6 @@ if status is-login
         set -gx EDITOR hx
     end
 end
-
-envsource $HOME/.env
 
 if status is-interactive
     fish_config theme choose mui-dark
