@@ -1,5 +1,9 @@
 {
+  {{- if eq .chezmoi.os "freebsd" }}
+  "$schema": "/usr/local/etc/xdg/swaync/configSchema.json",
+  {{- else }}
   "$schema": "/etc/xdg/swaync/configSchema.json",
+  {{- end }}
   "positionX": "right",
   "positionY": "top",
   "control-center-margin-top": 0,
