@@ -1,7 +1,7 @@
 /* https://cloudninja.pw/docs/wofi.html */
 window {
-  /* "outline" = "#8e9099"                   # NV-60; rgba(142, 144, 153, 1) */
-  border: 1px solid rgba(142, 144, 153, 1);
+  /* same as river wm focus view - "primary-container" = "#284777"         # P-30; rgba(40, 71, 119, 1) */
+  border: 2px solid rgba(40, 71, 119, 1);
   /* "surface-container-high" = "#282a2f"    # N-17; rgba(40, 42, 47, 1) background for all popups, menus, help */
   background-color: rgba(29, 32, 36, 1);
 }
@@ -10,10 +10,14 @@ window {
   /* "on-surface" = "#e2e2e9"                # N-90; rgba(226, 226, 233, 1) */
   color: rgba(226, 226, 233, 1);
   /* "outline" = "#8e9099"                   # NV-60; rgba(142, 144, 153, 1) */
-  border: 1px solid rgba(142, 144, 153, 1);
+  border: 1px solid rgba(142, 144, 153, 0.7);
   /* "surface-container-high" = "#282a2f"    # N-17; rgba(40, 42, 47, 1) background for all popups, menus, help */
   background-color: rgba(29, 32, 36, 1);
-  font-size: 16px;
+  font-size: 15px;
+}
+
+#input:focus {
+  border: 1px solid rgba(40, 71, 119, 1);
 }
 
 #outer-box {
@@ -22,8 +26,7 @@ window {
 
 #scroll {
   margin: 6px 0px;
-  /* font-size: 18px; */
-  font-size: 16px;
+  font-size: 15px;
   /* "on-surface-variant" = "#c4c6d0"        # NV-90; rgba(196, 198, 208, 1) primary text colour */
   color: rgba(196, 198, 208, 1);
 }
