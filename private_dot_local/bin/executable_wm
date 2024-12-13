@@ -1,6 +1,7 @@
 #!/bin/sh
 # wlroots env vars: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/master/docs/env_vars.md
 # https://www.reddit.com/r/voidlinux/comments/11jfioe/anyone_managed_to_get_gnomekeyring_fully/?rdt=56552
+
 if [ "$1" = "" ]; then
     WM=river
 else
@@ -31,16 +32,13 @@ export SSH_AUTH_SOCK
 . /etc/os-release
 case $ID in
 void)
-    # if ! pgrep pipewire; then
-    #     pipewire &
-    # fi
-    dbus-run-session "$WM" "$@"
+    dbus-run-session "$WM" "$@" | logger -p daemon.info -t river
     ;;
 chimera)
-    dbus-run-session "$WM" "$@"
+    dbus-run-session "$WM" "$@" | logger -p daemon.info -t river
     ;;
 freebsd)
-    dbus-launch --sh-syntax --exit-with-session "$WM" "$@"
+    dbus-launch --sh-syntax --exit-with-session "$WM" "$@" | logger -p daemon.info -t river
     # not cleaning up on FreeBSD for some reason, TODO
     pkill chrome
     ;;
