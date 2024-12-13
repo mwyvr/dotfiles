@@ -19,6 +19,7 @@ swaybg_opts="-c 111318"
 
 case $OS in
 Linux)
+    daemons="pipewire swaybg swaync waybar swayidle"
     swaybg_opts="-c 111318 -i $HOME/.config/wallpaper/opensuse-black.jpeg"
     touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_Touchpad"
     pamixer --set-volume 60 # of 100
@@ -40,6 +41,7 @@ Linux)
     done
     ;;
 FreeBSD)
+    daemons="kanshi pipewire swaybg swaync waybar swayidle"
     swaybg_opts="-c 111318 -i $HOME/.config/wallpaper/freebsd-ascii.png"
     touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad" # capitalization in TouchPad matters
     mixer vol.mute=off
@@ -100,7 +102,6 @@ for d in $restart; do
 done
 
 # start daemons not already running; waybar components need pipewire running
-daemons="pipewire swaybg swaync waybar swayidle"
 for d in $daemons; do
     if ! pgrep "$d" >/dev/null 2>&1; then
         case $d in
