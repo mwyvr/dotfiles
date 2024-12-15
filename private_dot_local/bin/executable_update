@@ -7,7 +7,7 @@ APP=""
 
 do_fw() {
     # Not installed on servers
-    if test -x $(which fwupdmgr); then
+    if type fwupdmgr >/dev/null 2>&1; then
         fwupdmgr get-updates && fwupdmgr update
     fi
 }
@@ -52,5 +52,7 @@ void)
 esac
 
 if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
-    notify-send --transient --app-name="$APP" --urgency=normal "update" "System update script has completed"
+    if type notify-send >/dev/null 2>&1; then
+        notify-send --transient --app-name="$APP" --urgency=normal "update" "System update script has completed"
+    fi
 fi
