@@ -1,0 +1,96 @@
+# name: 'mui-dark'
+# preferred_background: black
+# (c) Mike Watkins, MIT licensed: https://github.com/mwyvr/cli-themes/blob/main/LICENSE
+
+# mui_dark is a dark Material Design-inspired theme for the Helix editor, fish shell and others.
+# Matching and other themes can be found at https://github.com/mwyvr/cli-themes.
+
+# surfaces 
+# surface_dim 111318 # N-6; in this scheme, same as Surface; unused 
+# surface 111318 # N-6; the primary editor surface layer; surface neutrals have a weak primary colour tint 
+# surface_bright 37393e # N-24; ui.selection 
+# surface_container_lowest 0c0e13 # N-4; unused
+# Surface_container_low 191c20 # N-10; unused 
+# surface_container 1d2024 # N-12; cursorline, bufferline, statusline 
+# surface_container_high 282a2f # N-17; background for all popups, menus, help
+# surface_container_highest 33353a # N-24; window splitline
+# inverse_surface e2e2e9 # N-90; unused 
+# inverse_on_surface 2e3036 # N-20; unused 
+# inverse_primary 415f91 # P-40
+# primary aac7ff # P-80; (blue primary, affects NV and surface)
+# on_primary 0a305f # P-20;
+# primary_container 284777 # P-30; 
+# on_primary_container d6e3ff # P-90; 
+# secondary bec6dc # S-80; 
+# on_secondary 283141 # S-20;
+# secondary_container 3e4759 # S-30; 
+# on_secondary_container dae2f9 # S-90; 
+# tertiary ddbce0 # T-80; 
+# on_tertiary 3f2844 # T-20
+# tertiary_container 573e5c # T-30; 
+# on_tertiary_container fad8fd # T-90; 
+# on_error 690005 # E-20;
+# error_container 93000a # E-30; 
+# on_error_container ffdad6 # E-90;
+# on_surface_variant c4c6d0 # NV-90; primary text colour 
+# outline_variant 44474e # NV-30; # redefine standard 16 colour names
+# black 24262B # 0; NV-15
+# yellow A3903F # 3; Yellow-60 (yellow primary)
+# blue $primary_container # 4; Primary-60 (blue primary)
+# white 8F9097 # 7; NV-60
+# light_black 44474E # 8; NV-30
+# light_red ffb4ab # 9; Error-80 
+# light_blue AAC7FF # 12; Primary-80 
+# light_magenta DDBCE0 # 13; Tertiary-80 (blue primary)
+# light_cyan A0D0CB # 14; Cyan-80 
+# light_white C4C6D0 # 15; NV-80
+
+# theme
+fish_color_autosuggestion 8e9099 # outline 8e9099 # NV-60; 
+fish_color_cancel --reverse
+fish_color_command B1D18A # 10; Green-80 (green primary)
+fish_color_comment  5B5E66 # outline-dimmer NV-40; comments
+fish_color_cwd 7D9A59 # 2; Green-60(green primary)
+fish_color_cwd_root FF5449 # red 1; Error-60 
+fish_color_end A487A9 # 5; magentia Tertiary-60
+fish_color_error ffb4ab # error E-80; 
+fish_color_escape 6B9995 # 6; Cyan-60 
+fish_color_hg_added  7D9A59 # 2; Green-60(green primary)
+fish_color_hg_clean  7D9A59 # 2; Green-60(green primary)
+fish_color_hg_copied  A487A9 # 5; magentia Tertiary-60
+fish_color_hg_deleted FF5449 # 1; Error-60
+fish_color_hg_dirty FF5449 # 1; Error-60 
+fish_color_hg_modified A3903F # 3; Yellow-60 (yellow primary)
+fish_color_hg_renamed A487A9 # 5; magentia Tertiary-60
+fish_color_hg_unmerged FF5449 # 1; Error-60
+fish_color_hg_untracked A3903F # 3; Yellow-60 (yellow primary)
+fish_color_history_current --bold
+fish_color_host c4c6d0 # NV-90; primary text colour
+fish_color_host_remote FF5449 --bold # 1; Error-60
+fish_color_keyword A487A9 # 5; magentia Tertiary-60
+fish_color_match DBC66E # 11; light-yellow Yellow-80(yellow primary)
+fish_color_normal e2e2e9 # on_surface e2e2e9 # N-90; 
+fish_color_operator A487A9 # 5; magentia Tertiary-60
+# fish_color_option
+fish_color_param A9ABB4 # outline_brighter A9ABB4 # NV-70; 
+fish_color_quote 8e9099 # outline 8e9099 # NV-60
+fish_color_redirection 8F9097 # white 8F9097 # 7; NV-60
+fish_color_search_match DBC66E --background=44474E # 11; light-yellow Yellow-80(yellow primary) $light_yellow '--background=$light_black'
+fish_color_selection 8F9097 --bold --background=44474E
+fish_color_status FF5449 # red 1; Error-60 
+fish_color_user B1D18A # 10; Green-80 (green primary)
+fish_color_valid_path --underline
+# fish_pager_color_background
+# fish_pager_color_completion $normal
+# fish_pager_color_description $yellow
+# fish_pager_color_prefix normal --bold --underline
+# fish_pager_color_progress brwhite '--background=cyan'
+# fish_pager_color_secondary_background
+# fish_pager_color_secondary_completion
+# fish_pager_color_secondary_description
+# fish_pager_color_secondary_prefix
+# fish_pager_color_selected_background --background=brblack
+# fish_pager_color_selected_completion
+# fish_pager_color_selected_description
+# fish_pager_color_selected_prefix
+

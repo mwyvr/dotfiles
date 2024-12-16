@@ -1,24 +1,48 @@
 #!/bin/sh
-WM=river
+# wlroots env vars: https://gitlab.freedesktop.org/wlroots/wlroots/-/blob/master/docs/env_vars.md
+# https://www.reddit.com/r/voidlinux/comments/11jfioe/anyone_managed_to_get_gnomekeyring_fully/?rdt=56552
+
+if [ "$1" = "" ]; then
+    WM=river
+else
+    WM=$1
+fi
+
+. ~/.env
 
 export XDG_SESSION_TYPE=wayland
-export XDG_SESSION_DESKTOP=river
-export XDG_CURRENT_DESKTOP=river
+export XDG_SESSION_DESKTOP="$WM"
+export XDG_CURRENT_DESKTOP="$WM"
+export XDG_CONFIG_HOME="$HOME/.config"
 export MOZ_ENABLE_WAYLAND=1
-
-# eval $(gnome-keyring-daemon --start)
-# export SSH_AUTH_SOCK
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+
+# yes, this is intentional
+xdg-user-dirs-gtk-update
+xdg-user-dirs-gtk-update --force
+
+# TODO - check out chezmoi on freebsd for cgo
+# https://www.chezmoi.io/reference/templates/keyring-functions/keyring/
+
+eval "$(gnome-keyring-daemon --start)"
+export SSH_AUTH_SOCK
 
 . /etc/os-release
 case $ID in
+void)
+    dbus-run-session "$WM" "$@" | logger -p daemon.info -t river
+    ;;
 chimera)
-    dbus-run-session $WM $@
+    dbus-run-session "$WM" "$@" | logger -p daemon.info -t river
     ;;
 freebsd)
-    dbus-launch --sh-syntax --exit-with-session $WM $@
+    dbus-run-session "$WM" "$@" | logger -p daemon.info -t river
+    # dbus-launch --sh-syntax --exit-with-session "$WM" "$@" | logger -p daemon.info -t river
     # not cleaning up on FreeBSD for some reason, TODO
     pkill chrome
+    ;;
+"opensuse-tumbleweed")
+    $WM "$@"
     ;;
 *)
     echo "Unknown operating system: [$OS], terminating."
@@ -27,4 +51,4 @@ freebsd)
 esac
 
 # cleanup the display daemon started in river/init
-pkill kanshi
+# pkill kanshi

@@ -1,0 +1,7 @@
+{{- if eq .chezmoi.osRelease.id "void" "opensuse-tumbleweed" }}
+container_image_default="docker.io/library/archlinux:latest"
+container_name="arch"
+{{- else if eq .chezmoi.osRelease.id "chimera" }}
+container_image_default="chimeralinux/chimera"
+container_name="chimera"
+{{- end }}

@@ -1,0 +1,48 @@
+#!/bin/sh
+. /etc/os-release
+
+NUM=""
+PACKAGES=""
+
+case $ID in
+"chimera")
+    APP="apk"
+    doas apk update -q >/dev/null
+    PACKAGES=$(doas apk upgrade -s | grep -v "^OK")
+    NUM=$(echo "$PACKAGES" | wc -l | xargs)
+    ;;
+freebsd)
+    APP="pkg"
+    doas pkg update -f >/dev/null
+    PACKAGES="$(pkg upgrade --dry-run | grep -Eo '^[[:space:]]+(.*)')"
+    NUM=$(pkg upgrade --dry-run | grep -Eo "The following ([0-9]+) package\(s\) will be affected" | cut -d ' ' -f 3)
+    ;;
+"opensuse-tumbleweed")
+    APP="zypper"
+    sudo zypper refresh >/dev/null
+    NUM=$(sudo zypper --non-interactive dup --dry-run | grep -Eo "The following ([0-9]+) package" | cut -d ' ' -f 3)
+    ;;
+"void")
+    APP="xbps"
+    NUM=$(sudo xbps-install -Su --dry-run | wc -l) # update repo & get count
+    for p in $( # no repo hit, no sudo needed either
+        xbps-install -u --dry-run | cut -f 1 -d ' '
+    ); do
+        PACKAGES="${PACKAGES:+${PACKAGES}\n}${p}"
+    done
+
+    ;;
+*)
+    echo "$0: $NAME is unsupported"
+    exit 1
+    ;;
+esac
+# for status bar
+if [ "$NUM" = "" ]; then
+    NUM="0"
+fi
+echo "$NUM"
+
+if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] && [ "$NUM" != "0" ]; then
+    notify-send -a "$APP" "System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
+fi

@@ -1,12 +1,26 @@
-# swayidle configuration
+# .config/swayidle/config
+# generated config, see swayidle/config.tmpl in chezmoi
+# template supports freebsd + linux (multiple distros)
+
 {{- if eq .chezmoi.hostname "elron" }}
+# desktop
 timeout 1200 'swaylock -f -c 000000'
 timeout 1500 'wlopm --off DP-1 --off DP-2' resume 'wlopm --on DP-1 --on DP-2'
-{{- else if eq .chezmoi.hostname "hoppy" }}
+# not configuring S3 suspend for always-on-elron
+{{- else if eq .chezmoi.hostname "hoppy" "lapin" }}
+# laptops
 timeout 300 'swaylock -f -c 000000'
 timeout 360 'wlopm --off eDP-1' resume 'wlopm --on eDP-1'
+before-sleep 'swaylock -f -c 000000'
 {{- else }}
-# unknown machine - update template, at least set screen to black
+# unknown machine - update template
 timeout 300 'swaylock -f -c 000000'
+{{- end }}
+
+{{- if eq .chezmoi.os "freebsd" }}
+# Note: S3 not available on Dell Latitude 7420 and FreeBSD currently doesn't support S0/S4.
+# timeout 420 'acpiconf -s 3' resume 'wlopm --on eDP-1'
+{{- else if eq .chezmoi.os "linux" }}
+timeout 420 'loginctl suspend' resume 'wlopm --on eDP-1'
 {{- end }}
 

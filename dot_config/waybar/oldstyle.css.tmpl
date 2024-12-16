@@ -1,3 +1,4 @@
+{{- if ne .chezmoi.osRelease.id "opensuse-tumbleweed" }}
 * {
   border: none;
   border-radius: 0;
@@ -10,25 +11,20 @@
 
 window#waybar {
   /* outline-brighter */
-  /* color: #a9abb4; */
-  /* "white" = "#8F9097"                     # 7; NV-60 */
-  /* color: #a9abb4; */
-  color: #8f9097;
+  color: #a9abb4;
   /* surface-container  #1d2024; */
-  /* background-color: rgba(29, 32, 36, 1.0); */
-  background-color: rgba(29, 32, 36, 0.7);
+  background-color: rgba(29, 32, 36, 1.0);
   /* surface-container-low, #191c20; */
-  border-bottom: 2px solid rgba(25, 28, 32, 0.8);
+  border-bottom: 2px solid rgba(25, 28, 32, 1.0);
 }
 
 window#waybar.solo {
-  /* not sure what this element is */
-  color: red;
-  /* color: rgba(53, 185, 171, 1); */
+  color: rgba(53, 185, 171, 1);
 }
 
 #tags {
   margin: 0 5px;
+  padding: 0 0;
 }
 
 #custom-scratchpad {
@@ -42,19 +38,36 @@ window#waybar.solo {
 }
 
 #tags button.occupied {
-  color: #a9abb4;
+  color: #c4c6d0;
 }
 
 #tags button.focused {
-  /* "primary" = "#aac7ff"                   # P-80; (blue primary, affects NV and surface) */
-  /* "on-primary" = "#0a305f"                # P-20; */
-  color: #aac7ff;
-  background-color: #0a305f;
+  color: #ffb4ab;
+}
+
+#tags button:hover {
+  font-weight: bold;
+}
+
+#tags button.focused:hover {
+  color: #ffffee;
+}
+
+#workspaces button.visible {
+  color: rgba(115, 186, 37, 1);
+}
+
+#workspaces button.urgent {
+  color: rgba(33, 164, 223, 1);
 }
 
 #mode,
 #battery,
+#clock,
+#custom-clock,
 #cpu,
+#custom-zypper,
+#custom-checkupdates,
 #memory,
 #network,
 #bluetooth,
@@ -62,11 +75,8 @@ window#waybar.solo {
 #idle_inhibitor,
 #temperature,
 #custom-layout,
+#custom-notification,
 #backlight {
-  margin: 0px 6px 0px 10px;
-}
-
-#clock {
   margin: 0px 6px 0px 10px;
 }
 
@@ -90,7 +100,6 @@ window#waybar.solo {
   color: #7491c7;
 }
 
-
 #bluetooth.disabled {
   color: rgba(128, 128, 128, 1);
 }
@@ -102,3 +111,4 @@ window#waybar.solo {
 #bluetooth.connected {
   color: rgba(115, 186, 37, 1);
 }
+{{- end }}

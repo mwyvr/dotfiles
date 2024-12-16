@@ -1,19 +1,17 @@
 if status is-login
     set -gx HOSTNAME (hostname)
-    # set -gx LIBVIRT_DEFAULT_URI 'qemu:///system'
-    set -gx XKB_DEFAULT_OPTIONS ctrl:nocaps
+    envsource $HOME/.env
     fish_add_path ~/.cargo/bin
     fish_add_path ~/go/bin
     fish_add_path ~/.local/bin
-    envsource ~/.env
-    if test -x "$(which hx)"
+    if type -q hx
         set -gx EDITOR hx
-        abbr -a vi hx
-        abbr -a vim hx
     end
 end
 
 if status is-interactive
+    fish_config theme choose mui-dark
+    set -gx XKB_DEFAULT_OPTIONS ctrl:nocaps
     set -g fish_key_bindings fish_vi_key_bindings
     set -g fish_greeting # disable welcome
 end

@@ -1,83 +1,110 @@
 #!/bin/sh
-echo "Install lsp, formatters and other components supporting Helix"
+# This sets up Language Server Processors for Helix
+# Building in a distrobox is an option, however note that there will be
+# some initial Helix startup lag if running Helix from the Distrobox in
+# order to have visbility for the utils installed / built in Distrobox
+
 . /etc/os-release
+LOCAL=~/.local/bin
 
 set -e
 
-LOCAL=~/.local/bin
-FETCHER="fetch -o" # chimera, freebsd
+build() {
 
+    npm update -g
+
+    # ansible
+    npm i -g @ansible/ansible-language-server
+
+    # bash / sh
+    # https://github.com/bash-lsp/bash-language-server?tab=readme-ov-file
+    npm i -g bash-language-server
+    go install mvdan.cc/sh/v3/cmd/shfmt@latest
+
+    # go
+    go install golang.org/x/tools/gopls@latest                             # LSP
+    go install github.com/go-delve/delve/cmd/dlv@latest                    # Debugger
+    go install golang.org/x/tools/cmd/goimports@latest                     # Formatter
+    go install github.com/nametake/golangci-lint-langserver@latest         # Linter
+    go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.60.3 # Linter
+
+    # html, css, json, scss, typescript
+    npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
+
+    # also does Markdown formatting...
+    npm i -g @fsouza/prettierd
+
+    # word completion and snippets
+    cargo install --git https://github.com/estin/simple-completion-language-server.git
+
+    # python
+    pip install -U 'python-lsp-server[all]' --break-system-packages # python
+    pip install -U python-lsp-ruff --break-system-packages          # plugin to support linter
+    pip install -U ruff --break-system-packages                     # python linter
+    pip install -U ruff-lsp --break-system-packages                 # lsp for ruff
+    pip install -U black --break-system-packages                    # python formatter
+
+    # spell and grammar
+    if ! type harper-ls; then
+        cargo install harper-ls --locked
+    fi
+
+    if ! type taplo; then
+        # toml - taplo
+        wget -q -O - https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz | gunzip >${LOCAL}/taplo
+        chmod +x ${LOCAL}/taplo
+        cargo install taplo-cli --locked
+    fi
+
+    if ! type shellcheck; then
+        # https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing
+        # no Haskell on Chimera Linux so...
+        fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
+    fi
+
+    # yaml
+    npm i -g yaml-language-server@next
+}
+
+# On glibc Linux systems build the components in the default Arch distrobox
+# As everything is glibc and installed in ~/.local/bin, the executables
+# will be available in the host and distrobox systems
+build_in_box() {
+    if [ -z "$CONTAINER_ID" ]; then
+        echo "run this in the default container"
+        exit 1
+    else
+        sudo pacman -Syu base-devel git rust nodejs npm python python-pip go
+        # these are called by helix in the host, so duplicate in local
+        sudo pacman -Syu shellcheck taplo-cli harper
+        cp /usr/bin/shellcheck $LOCAL
+        cp /usr/bin/taplo $LOCAL
+        cp /usr/bin/harper-cli $LOCAL
+        cp /usr/bin/harper-ls $LOCAL
+        build
+    fi
+}
+
+# first install utils available as packages, then call build* to finish the rest
 case $ID in
 chimera)
     doas apk add go nodejs python-pip cargo bash lazygit
-    # https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing
-    # no Haskell on Chimera Linux so...
-    $FETCHER - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
-    ;;
-freebsd)
-    doas pkg install go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
+    build
     ;;
 void)
-    FETCHER="wget -O"
-    sudo xbps-install -Su go nodejs python3-pip cargo wget lazygit
+    sudo xbps-install -Su go nodejs python3 python3-pip cargo lazygit bash shellcheck taplo
+    build
     ;;
-"opensuse-tumbleweed")
-    FETCHER="wget -O"
-    sudo zypper install go nodejs python3-pip cargo wget lazygit
-    ;;
-"aeon")
-    if [ "$CONTAINER_ID" != "tumbleweed" ]; then
-        echo "Install Helix and components within a distrobox. Terminating."
-        exit 1
+freebsd)
+    if uname -a | grep -q "CURRENT"; then
+        doas pkg install -y go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
+    else
+        doas pkg install -y go node22 npm-node22 py311-pip rust lazygit bash hs-ShellCheck
     fi
+    build
     ;;
 *)
-    echo "Unknown operating system/distribution, terminating."
-    exit 1
+    echo "possibly unsupported OS"
+    build_in_box
     ;;
 esac
-
-npm update -g
-
-# ansible
-npm i -g @ansible/ansible-language-server
-
-# bash / sh
-# https://github.com/bash-lsp/bash-language-server?tab=readme-ov-file
-npm i -g bash-language-server
-go install mvdan.cc/sh/v3/cmd/shfmt@latest
-
-# go
-go install golang.org/x/tools/gopls@latest                             # LSP
-go install github.com/go-delve/delve/cmd/dlv@latest                    # Debugger
-go install golang.org/x/tools/cmd/goimports@latest                     # Formatter
-go install github.com/nametake/golangci-lint-langserver@latest         # Linter
-go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.60.3 # Linter
-
-# html, css, json, scss, typescript
-npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
-
-# also does Markdown formatting...
-npm i -g @fsouza/prettierd
-
-# spell and grammar
-cargo install harper-ls --locked
-
-# word completion and snippets
-cargo install --git https://github.com/estin/simple-completion-language-server.git
-
-# python
-pip install -U 'python-lsp-server[all]' --break-system-packages # python
-pip install -U python-lsp-ruff --break-system-packages          # plugin to support linter
-pip install -U ruff --break-system-packages                     # python linter
-pip install -U ruff-lsp --break-system-packages                 # lsp for ruff
-pip install -U black --break-system-packages                    # python formatter
-
-# toml - taplo
-# was doing this on some linux
-# wget -q -O - https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz | gunzip >${LOCAL}/taplo
-# chmod +x ${LOCAL}/taplo
-cargo install taplo-cli --locked
-
-# yaml
-npm i -g yaml-language-server@next

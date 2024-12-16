@@ -2,6 +2,17 @@
 alias ls "ls --color=always"
 alias l. "ls -d .*"
 
+{{- if eq .chezmoi.osRelease.id "freebsd" "chimera" }}
+{{- else }}
+abbr -a doas sudo
+{{- end}}
+{{- if eq .chezmoi.osRelease.id "chimera" }}
+abbr -a pkg apk
+{{- end}}
+{{- if eq .chezmoi.osRelease.id "freebsd" }}
+abbr apk pkg
+{{- end}}
+
 # dotfiles management
 abbr -a cm chezmoi
 abbr -a cma chezmoi apply
@@ -19,4 +30,3 @@ abbr -a forkup git pull --rebase upstream master
 
 # processes
 abbr -a pst ps -o pid,ppid,stat,user,comm -AH
-# abbr -a update doas apk update && doas apk upgrade

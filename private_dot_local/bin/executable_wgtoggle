@@ -1,47 +1,36 @@
 #!/bin/sh
 # wgtoggle.sh activates or deactivates the wg0 connection
-# nmcli must be installed in the host OS (not a Distrobox container)
-# this can be run from cli or as an Exec in a .desktop shortcut
-UPCMD="nmcli connection up wg0"
-DOWNCMD="nmcli connection down wg0"
+# wireguard.desktop calls this
 
-con_up() {
-    if [ -z "${CONTAINER_ID}" ]; then
-        # running in the host os such as openSUSE Aeon or standard distribution
+. /etc/os-release
+
+check_host() {
+    # Aeon Desktop (immutable OS from openSUSE) doesn't install certain tools
+    # in the host OS; add them via transactional-update
+    if [ -z "$CONTAINER_ID" ]; then
         if [ ! -x "/usr/bin/nmcli" ]; then
-            echo "nmcli not installed on host (not container) OS"
+            echo "nmcli not installed on host ($ID) OS"
             exit 1
         fi
-        $UPCMD
     else
-        exec distrobox-host-exec $UPCMD
-    fi
-}
-
-con_down() {
-    if [ -z "${CONTAINER_ID}" ]; then
-        # running in the host os such as openSUSE Aeon or standard distribution
-        $DOWNCMD
-    else
-        exec distrobox-host-exec $DOWNCMD
-    fi
-}
-
-if [ -z "${CONTAINER_ID}" ]; then
-    if [ ! -x "/usr/bin/nmcli" ]; then
-        echo "nmcli not installed on host (not container) OS"
+        # for simplicity, run this script outside the container
+        echo "$0: error, in a distrobox ($CONTAINER_ID), run in a host OS shell"
         exit 1
     fi
-else
-    echo "wgtoggle must be run from host (not container) OS"
-    exit 1
-fi
+}
 
-nmcli connection show --active | grep wg0 >/dev/null
-# exitcode=$?
-if [ "$?" -eq 0 ]; then
-    con_down
+check_host
+
+if nmcli connection show --active | grep wg0 >/dev/null; then
+    # exit 0, found wg0
+    nmcli connection down wg0
+    if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+        notify-send --transient --app-name=wgtoggle --urgency=critical "wireguard" "wg0 down"
+    fi
 else
     knockknock.sh
-    con_up
+    nmcli connection up wg0
+    if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+        notify-send --transient --app-name=wgtoggle --urgency=normal "wireguard" "wg0 up"
+    fi
 fi
