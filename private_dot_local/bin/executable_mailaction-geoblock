@@ -1,0 +1,20 @@
+#!/bin/sh
+# one of several mailaction scripts
+# Add to crontab
+
+TABLE="geoblock"
+TPATH="/usr/local/etc/pftables/$TABLE"
+BASE=$(basename "$0")
+
+log() {
+    /usr/bin/logger -p mail.info -t "$BASE" l=info pkg=mailaction m=\""$BASE - $1"\"
+}
+
+prepare() {
+    curl -s "https://www.ipdeny.com/ipblocks/data/aggregated/{ru,cn,kp,bg,ir}-aggregated.zone" > "$TPATH"
+}
+
+prepare
+COUNT=$(wc -l "$TPATH")
+RESPONSE=$(pfctl -t $TABLE -T replace -f $TPATH 2>&1)
+log "$COUNT blocked via $TABLE; pfctl - $RESPONSE"
