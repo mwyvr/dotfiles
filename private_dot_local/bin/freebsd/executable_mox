@@ -1,0 +1,33 @@
+#!/bin/sh
+# rc script for /usr/local/etc/rc.d/mox
+
+# REQUIRE: NETWORKING syslogd
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name=mox
+mox_chdir="/home/mox"
+
+rcvar=mox_enable
+
+# required_files="${mox_chdir}/config/mox.conf ${mox_chdir}/config/domains.conf"
+# start_cmd="cd ${mox_chdir}; ${name} serve | logger -t mail" 
+# stop_cmd="cd ${mox_chdir}; ${name} stop" 
+
+start_cmd="mox_serve"
+stop_cmd="mox_stop"
+
+mox_serve(){
+    cd $mox_chdir
+    ./mox serve 2>&1 | logger -t mox &
+}
+
+mox_stop(){
+    cd $mox_chdir
+    ./mox stop
+}
+
+load_rc_config $name
+
+run_rc_command "$1"

@@ -1,0 +1,19 @@
+#!/bin/sh
+# one of several mailaction scripts
+# Add to crontab
+
+TPATH="/usr/local/etc/pftables/all-aggregated.zone"
+BASE=$(basename "$0")
+
+log() {
+    /usr/bin/logger -p mail.info -t "$BASE" l=info pkg=mailaction m=\""$1"\"
+}
+
+prepare() {
+    curl -s "https://www.ipdeny.com/ipblocks/data/aggregated/{ru,cn,kp,bg,ir}-aggregated.zone" > "$TPATH"
+}
+
+prepare
+service pf reload
+COUNT=$(wc -l "$TPATH")
+log "renewed $TPATH; reloaded firewall with $COUNT"
