@@ -6,11 +6,10 @@ addtotable() {
     if grep "$1" "$SPAMMERS"; then
         echo "$0: $1 already in table: $SPAMMERS"
     else
-        # add to running
-        pfctl -t spammers -T add "$1"
         # add to our persistent list
         echo "$1" | tee -a "$SPAMMERS"
         echo "$0: added $1 to table: $SPAMMERS"
+        pfctl -t spammers -T replace -f spammers
     fi
     exit
 }
