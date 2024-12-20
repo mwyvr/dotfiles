@@ -1,0 +1,41 @@
+#!/usr/bin/bash
+# checkip ipaddress
+# - grep messages log for examples
+# - perform whois
+# - check if blocked in iptables
+
+# if [ "$(id -u)" -ne 0 ]; then
+# 	echo "$SCRIPT must be run as root."
+# 	exit
+# fi
+
+if [ ! $# -eq 0 ]; then
+	ip=$1
+else
+	echo "checkip requires an ipaddress or netblock as an argument"
+	exit
+fi
+
+. /etc/os-release
+case $ID in
+void)
+	LOGALL="cat /var/log/socklog/messages/@* /var/log/socklog/messages/current"
+	;;
+"opensuse-microos")
+	LOGALL="journalctl -u mox.service -t moxproduction --no-pager"
+	;;
+*)
+	echo "Unsupported Linux distribution. If running in a distrobox, run from the root OS."
+	exit 1
+	;;
+esac
+
+$LOGALL | grep $ip
+whois $ip
+echo "Checking $ip in iptables:"
+
+if ! iptables -C INPUT -j DROP -s "$ip" >/dev/null 2>&1; then
+	echo "$ip not in iptables DROP rule"
+else
+	echo "$ip already in iptables with DROP rule"
+fi
