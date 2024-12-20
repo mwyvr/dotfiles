@@ -15,6 +15,6 @@ prepare() {
 }
 
 prepare
-COUNT=$(wc -l "$TPATH")
+COUNT=$(wc -l $TPATH | cut -w -f 2)
 RESPONSE=$(pfctl -t $TABLE -T replace -f $TPATH 2>&1)
 log "$COUNT blocked via $TABLE; pfctl - $RESPONSE"

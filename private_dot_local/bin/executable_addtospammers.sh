@@ -1,15 +1,22 @@
 #!/bin/sh
 # Appends valid ip addresses or netblocks to spammers table for firewall actions
-SPAMMERS="/usr/local/etc/pftables/spammers"
+TABLE="spammers"
+TPATH="/usr/local/etc/pftables/$TABLE"
+BASE=$(basename "$0")
+
+log() {
+    /usr/bin/logger -p mail.info -t "$BASE" l=info pkg=mailaction m=\""$BASE - $1"\"
+}
 
 addtotable() {
-    if grep "$1" "$SPAMMERS"; then
-        echo "$0: $1 already in table: $SPAMMERS"
+    if grep "$1" "$TPATH"; then
+        echo "$0: $1 already in table: $TPATH"
     else
         # add to our persistent list
-        echo "$1" | tee -a "$SPAMMERS"
-        echo "$0: added $1 to table: $SPAMMERS"
-        pfctl -t spammers -T replace -f spammers
+        echo "$1" | tee -a "$TPATH"
+        COUNT=$(wc -l $TPATH | cut -w -f 2)
+        RESPONSE=$(pfctl -t $TABLE -T replace -f $TPATH 2>&1)
+        log "$COUNT blocked via $TABLE; pfctl - $RESPONSE"
     fi
     exit
 }
