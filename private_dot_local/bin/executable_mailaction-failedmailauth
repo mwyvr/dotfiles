@@ -5,11 +5,25 @@
 
 TABLE="failedmailauth"
 TPATH="/usr/local/etc/pftables/$TABLE"
-BASE=$(basename "$0")
+SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
+BASE=$(basename "$SCRIPT")
 
 log() {
     /usr/bin/logger -p mail.info -t "$BASE" l=info pkg=mailaction m=\""$BASE - $1"\"
 }
+
+install() {
+    cp $SCRIPT $INSPATH/$BASE
+    log "installed to $INSPATH"
+}
+
+
+if [ ! $# -eq 0 ]; then
+    if [ "$1" = "install" ]; then
+        install
+        exit
+    fi
+fi
 
 COUNT=0
 prepare() {
