@@ -4,6 +4,7 @@
 
 TABLE="geoblock"
 TPATH="/usr/local/etc/pftables/$TABLE"
+INSPATH="/usr/local/bin"
 SCRIPT=$(test -L "$0" && readlink "$0" || echo "$0")
 BASE=$(basename "$SCRIPT")
 
@@ -18,6 +19,7 @@ prepare() {
 install() {
     cp $SCRIPT $INSPATH/$BASE
     log "installed to $INSPATH"
+    echo "installed to $INSPATH"
 }
 
 if [ ! $# -eq 0 ]; then

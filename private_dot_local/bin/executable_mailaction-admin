@@ -15,6 +15,7 @@ log() {
 install() {
     cp $SCRIPT $INSPATH/$BASE
     log "installed to $INSPATH"
+    echo "installed to $INSPATH"
 }
 
 
