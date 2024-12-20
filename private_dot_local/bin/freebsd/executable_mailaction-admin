@@ -26,14 +26,19 @@ if [ ! $# -eq 0 ]; then
     fi
 fi
 
-OKIP=$(host  gengar.solutionroute.com | grep "has address" | cut -d ' ' -f 4)
-if [ "$OKIP" != "" ]; then
-    echo "$OKIP" > $TPATH
-    RESPONSE=$(pfctl -t $TABLE -T replace -f $TPATH 2>&1)
-    COUNT=$(wc -l $TPATH | cut -w -f 2)
-    log "$COUNT permitted via $TABLE; pfctl - $RESPONSE"
-else
-    log "ERROR [$OKIP] is null, admin IP not updated"
-    exit 1
-fi
+okhosts="gengar.solutionroute.com test.solutionroute.com"
+truncate -s 0 $TPATH
 
+for hname in $okhosts; do
+    OKIP=$(host $hname | grep "has address" | cut -d ' ' -f 4)
+    if [ "$OKIP" != "" ]; then
+        echo "$OKIP" >> $TPATH
+    else
+        log "ERROR $hname IP [$OKIP] is null, admin IP not updated"
+        exit 1
+    fi
+done
+
+RESPONSE=$(pfctl -t $TABLE -T replace -f $TPATH 2>&1)
+COUNT=$(wc -l $TPATH | cut -w -f 2)
+log "$COUNT permitted via $TABLE; pfctl - $RESPONSE"
