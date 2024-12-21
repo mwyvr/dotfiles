@@ -18,6 +18,9 @@ command = "simple-completion-language-server"
 # feature_unicode_input = true         # enable "unicode input"
 # feature_paths = true                 # enable path completion
 # feature_citations = false            # enable citation completion (only on `citation` feature enabled)
+# 
+[language-server]
+bash-language-server = { command = "bash-language-server", args = ["start"] }
 
 # shells
 [[language]]
