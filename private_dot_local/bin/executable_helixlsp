@@ -34,6 +34,9 @@ build() {
     # also does Markdown formatting...
     npm i -g @fsouza/prettierd
 
+    # yaml
+    npm i -g yaml-language-server@next
+
     # word completion and snippets
     cargo install --git https://github.com/estin/simple-completion-language-server.git
 
@@ -49,21 +52,10 @@ build() {
         cargo install harper-ls --locked
     fi
 
+    # toml
     if ! type taplo; then
-        # toml - taplo
-        wget -q -O - https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz | gunzip >${LOCAL}/taplo
-        chmod +x ${LOCAL}/taplo
         cargo install taplo-cli --locked
     fi
-
-    if ! type shellcheck; then
-        # https://github.com/koalaman/shellcheck?tab=readme-ov-file#installing
-        # no Haskell on Chimera Linux so...
-        fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
-    fi
-
-    # yaml
-    npm i -g yaml-language-server@next
 }
 
 # On glibc Linux systems build the components in the default Arch distrobox
@@ -88,7 +80,9 @@ build_in_box() {
 # first install utils available as packages, then call build* to finish the rest
 case $ID in
 chimera)
-    doas apk add go nodejs python-pip cargo bash lazygit
+    doas apk add go nodejs python-pip cargo bash lazygit taplo
+    # no Haskell on Chimera Linux so...
+    fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
     build
     ;;
 void)
@@ -96,11 +90,7 @@ void)
     build
     ;;
 freebsd)
-    if uname -a | grep -q "CURRENT"; then
-        doas pkg install -y go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
-    else
-        doas pkg install -y go node22 npm-node22 py311-pip rust lazygit bash hs-ShellCheck
-    fi
+    doas pkg install -y go node22 npm-node22 py311-pip rust lazygit bash hs-ShellCheck
     build
     ;;
 *)
