@@ -38,13 +38,12 @@ case $ID in
     ;;
 *)
     build_in_box
-        echo "Installing Helix (hx) and runtime files on host system"
-        echo "- be sure you have uninstalled the system Helix -"
-        # make it available to host system AND distroboxes by copying it
-        distrobox-host-exec sudo sh -c "cp $HOME/.cargo/bin/hx /usr/bin"
-        distrobox-host-exec sudo sh -c "mkdir -p /usr/lib/helix"
-        distrobox-host-exec sudo sh -c "ln -sv $HOME/src/helix/runtime /usr/lib/helix/""
-        ln -svf $HOME/src/helix/runtime $HOME/.config/helix/
+    echo "Installing Helix (hx) and runtime files on host system"
+    echo "- be sure you have uninstalled the system Helix -"
+    # make it available to host system AND distroboxes by copying it
+    distrobox-host-exec sudo sh -c "cp $HOME/.cargo/bin/hx /usr/bin"
+    distrobox-host-exec sudo sh -c "mkdir -p /usr/lib/helix"
+    distrobox-host-exec sudo sh -c "ln -sv $HOME/src/helix/runtime /usr/lib/helix/"
+    ln -svf $HOME/src/helix/runtime $HOME/.config/helix/
     ;;
 esac
-
