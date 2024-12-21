@@ -3,6 +3,10 @@
 # Building in a distrobox is an option, however note that there will be
 # some initial Helix startup lag if running Helix from the Distrobox in
 # order to have visbility for the utils installed / built in Distrobox
+#
+# WARNING: Some utils simply need to be deleted and rebuilt from time to time
+# looking at you bash lsp
+# TODO: make that happen in the script
 
 . /etc/os-release
 LOCAL=~/.local/bin
@@ -90,7 +94,7 @@ void)
     build
     ;;
 freebsd)
-    doas pkg install -y go node22 npm-node22 py311-pip rust lazygit bash hs-ShellCheck
+    doas pkg install -y go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
     build
     ;;
 *)
