@@ -7,23 +7,24 @@
 . /etc/rc.subr
 
 name=mox
-mox_chdir="/home/mox"
+# in a jail
+mox_chdir="/var/mox"
 
 rcvar=mox_enable
 
 # required_files="${mox_chdir}/config/mox.conf ${mox_chdir}/config/domains.conf"
-# start_cmd="cd ${mox_chdir}; ${name} serve | logger -t mail" 
-# stop_cmd="cd ${mox_chdir}; ${name} stop" 
+# start_cmd="cd ${mox_chdir}; ${name} serve | logger -t mail"
+# stop_cmd="cd ${mox_chdir}; ${name} stop"
 
 start_cmd="mox_serve"
 stop_cmd="mox_stop"
 
-mox_serve(){
+mox_serve() {
     cd $mox_chdir
     ./mox serve 2>&1 | logger -t mox &
 }
 
-mox_stop(){
+mox_stop() {
     cd $mox_chdir
     ./mox stop
 }
