@@ -15,3 +15,4 @@ eval "$(gnome-keyring-daemon --start)"
 export SSH_AUTH_SOCK
 
 dbus-run-session river | logger -p daemon.info -t river
+pkill chrome
