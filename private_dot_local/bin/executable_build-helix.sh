@@ -30,11 +30,22 @@ case $ID in
     doas pkg install -y rust
     build
     doas mv ~/.cargo/bin/hx /usr/local/bin/hx
+    doas mkdir -p /usr/local/share/helix
+    doas ln -svf $HOME/src/helix/runtime /usr/local/share/helix
     ;;
 "chimera")
     doas apk add cargo
     build
     doas mv ~/.cargo/bin/hx /usr/bin/hx
+    doas mkdir -p /usr/lib/helix
+    doas ln -svf $HOME/src/helix/runtime /usr/lib/helix
+    ;;
+"void")
+    doas xbps-install -Suy cargo
+    build
+    doas mv ~/.cargo/bin/hx /usr/bin/hx
+    doas mkdir -p /usr/lib/helix
+    doas ln -svf $HOME/src/helix/runtime /usr/lib/helix
     ;;
 *)
     build_in_box
