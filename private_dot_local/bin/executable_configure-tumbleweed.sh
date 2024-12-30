@@ -16,12 +16,12 @@ if [ "$(id -u)" -eq 0 ]; then
 fi
 
 # fix capslock=control for console keymap
-cat <<EOF >/usr/share/kbd/keymaps/xkb/us-nocaps.map
+cat <<EOF | sudo tee /usr/share/kbd/keymaps/xkb/us-nocaps.map
 include "us.map"
 keycode 58 = Control
 EOF
-gzip /usr/share/kbd/keymaps/xkb/us-nocaps.map
-localectl set-keymap us-nocaps us-nocaps
+sudo gzip /usr/share/kbd/keymaps/xkb/us-nocaps.map
+sudo localectl set-keymap us-nocaps us-nocaps
 
 # cpu microcode and presuming intel igpu
 if lscpu | grep "GenuineIntel"; then
@@ -36,7 +36,7 @@ if lscpu | grep "AuthenticAMD"; then
 fi
 
 # core utils and dotfiles
-$ADDCMD git lazygit git-delta chezmoi fish htop powertop distrobox xdg-user-dirs-gtk
+$ADDCMD git lazygit git-delta chezmoi fish htop xdg-user-dirs-gtk
 xdg-user-dirs-update --force
 chezmoi init git@github.com:mwyvr/dotfiles.git
 chezmoi apply
@@ -47,7 +47,6 @@ chezmoi apply
 # Desktop and laptop get the River window manager (Wayland) and supporting tools; Sway is
 # added to pull in components until this is sorted out
 $ADDCMD river patterns-sway-sway foot kanshi fuzzel waybar swaync swaybg swayidle swaylock wlopm polkit-gnome libnotify-tools nautilus file-roller
-
 # applications
 # $ADDCMD evolution
 # flatpak apps
