@@ -93,6 +93,10 @@ void)
     sudo xbps-install -Su go nodejs python3 python3-pip cargo lazygit bash shellcheck taplo
     build
     ;;
+"opensuse-tumbleweed")
+    sudo zypper in -y go nodejs-default npm-default cargo lazygit bash ShellCheck taplo
+    build
+    ;;
 freebsd)
     doas pkg delete -y node22 npm-node22
     doas pkg install -y go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
