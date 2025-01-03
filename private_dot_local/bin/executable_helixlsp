@@ -94,7 +94,6 @@ void)
     build
     ;;
 freebsd)
-    doas pkg delete -y node22 npm-node22
     doas pkg install -y go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
     build
     ;;
