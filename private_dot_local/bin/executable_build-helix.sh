@@ -1,6 +1,8 @@
 #!/bin/sh
 . /etc/os-release
 
+SUDO="doas"
+
 build() {
     mkdir -p ~/src
     cd ~/src
@@ -12,6 +14,18 @@ build() {
 
     # build it
     RUSTFLAGS="-C target-feature=-crt-static" cargo install --path helix-term --locked
+}
+
+wrap() {
+
+    cat <<EOF | sudo tee /usr/bin/hx
+#!/bin/sh
+HELIX_RUNTIME=/usr/lib64/helix/runtime helix "\$@"
+EOF
+    $SUDO chmod +x /usr/bin/hx
+    $SUDO mv ~/.cargo/bin/hx /usr/bin/helix
+    $SUDO mkdir -p /usr/lib64/helix
+    $SUDO ln -svf $HOME/src/helix/runtime /usr/lib64/helix/
 }
 
 build_in_box() {
@@ -36,16 +50,18 @@ case $ID in
 "chimera")
     doas apk add cargo
     build
-    doas mv ~/.cargo/bin/hx /usr/bin/hx
-    doas mkdir -p /usr/lib/helix
-    doas ln -svf $HOME/src/helix/runtime /usr/lib/helix
+    wrap
     ;;
 "void")
     doas xbps-install -Suy cargo
     build
-    doas mv ~/.cargo/bin/hx /usr/bin/hx
-    doas mkdir -p /usr/lib/helix
-    doas ln -svf $HOME/src/helix/runtime /usr/lib/helix
+    wrap
+    ;;
+"opensuse-tumbleweed")
+    SUDO=sudo
+    $SUDO zypper in -y cargo
+    build
+    wrap
     ;;
 *)
     build_in_box
