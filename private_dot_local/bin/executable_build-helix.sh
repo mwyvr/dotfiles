@@ -1,7 +1,8 @@
 #!/bin/sh
 . /etc/os-release
 
-SUDO="doas"
+# default on Chimera; by choice on FreeBSD and Void; not available on openSUSE
+DOAS="doas"
 
 build() {
     mkdir -p ~/src
@@ -18,14 +19,14 @@ build() {
 
 wrap() {
 
-    cat <<EOF | sudo tee /usr/bin/hx
+    cat <<EOF | $DOAS tee /usr/bin/hx
 #!/bin/sh
 HELIX_RUNTIME=/usr/lib64/helix/runtime helix "\$@"
 EOF
-    $SUDO chmod +x /usr/bin/hx
-    $SUDO mv ~/.cargo/bin/hx /usr/bin/helix
-    $SUDO mkdir -p /usr/lib64/helix
-    $SUDO ln -svf $HOME/src/helix/runtime /usr/lib64/helix/
+    $DOAS chmod +x /usr/bin/hx
+    $DOAS mv ~/.cargo/bin/hx /usr/bin/helix
+    $DOAS mkdir -p /usr/lib64/helix
+    $DOAS ln -svf $HOME/src/helix/runtime /usr/lib64/helix/
 }
 
 build_in_box() {
@@ -34,7 +35,7 @@ build_in_box() {
         echo "run this in the default container"
         exit 1
     else
-        sudo pacman -Syu base-devel git rust
+        $DOAS pacman -Syu base-devel git rust
         build
     fi
 }
@@ -53,13 +54,13 @@ case $ID in
     wrap
     ;;
 "void")
-    doas xbps-install -Suy cargo
+    $DOAS xbps-install -Suy cargo
     build
     wrap
     ;;
 "opensuse-tumbleweed")
-    SUDO=sudo
-    $SUDO zypper in -y cargo
+    DOAS=sudo
+    $DOAS zypper in -y cargo
     build
     wrap
     ;;
@@ -68,9 +69,9 @@ case $ID in
     echo "Installing Helix (hx) and runtime files on host system"
     echo "- be sure you have uninstalled the system Helix -"
     # make it available to host system AND distroboxes by copying it
-    distrobox-host-exec sudo sh -c "cp $HOME/.cargo/bin/hx /usr/bin"
-    distrobox-host-exec sudo sh -c "mkdir -p /usr/lib/helix"
-    distrobox-host-exec sudo sh -c "ln -sv $HOME/src/helix/runtime /usr/lib/helix/"
+    distrobox-host-exec $DOAS sh -c "cp $HOME/.cargo/bin/hx /usr/bin"
+    distrobox-host-exec $DOAS sh -c "mkdir -p /usr/lib/helix"
+    distrobox-host-exec $DOAS sh -c "ln -sv $HOME/src/helix/runtime /usr/lib/helix/"
     ln -svf $HOME/src/helix/runtime $HOME/.config/helix/
     ;;
 esac
