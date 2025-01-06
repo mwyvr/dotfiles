@@ -13,6 +13,7 @@ line-number = "relative"
 mouse = false
 true-color = true
 color-modes = true
+end-of-line-diagnostics = "hint"
 
 # persist-old-files = true # when persist branch is merged
 
@@ -22,6 +23,9 @@ insert = "bar"
 [editor.indent-guides]
 render = true
 skip-levels = 1
+
+[editor.inline-diagnostics]
+cursor-line = "error"
 
 [editor.lsp]
 display-messages = true
