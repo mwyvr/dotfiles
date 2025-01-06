@@ -65,7 +65,7 @@ validation = true
 name = "go"
 auto-format = true
 formatter = { command = "goimports" }
-language-servers = ["gopls", "golangci-lint-langserver"]
+language-servers = ["scls", "gopls", "golangci-lint-langserver"]
 
 [[language]]
 name = "python"
