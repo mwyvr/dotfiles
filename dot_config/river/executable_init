@@ -19,7 +19,7 @@ swaybg_opts="-c 111318"
 
 case $OS in
 Linux)
-    daemons="pipewire swaybg swaync waybar swayidle"
+    daemons="swaybg swaync waybar swayidle"
     swaybg_opts="-c 111318 -i $HOME/.config/wallpaper/opensuse-black.jpeg"
     touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_Touchpad"
     pamixer --set-volume 60 # of 100
