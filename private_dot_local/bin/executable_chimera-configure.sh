@@ -55,7 +55,7 @@ if [ -n "$IS_DESKTOP" ]; then
 
     # my Varmilo keyboard firmware IDs as an Apple; the function keys act as
     # media keys unless pressed with Fn button, which is annoying.
-    VARMILO=$(lsmod | grep hid_apple)
+    VARMILO=$(lsmod | grep Varmilo)
     if [ -z "$VARMILO" ]; then
         echo "- Forcing Varmilo/hid_apple function keys as default (2)"
         # real time temp fix
@@ -74,7 +74,7 @@ if [ -n "$IS_DESKTOP" ]; then
         doas -u _gdm dbus-run-session gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-type 'nothing'
         # the above isn't doing the job so we'll brute for it here for now:
         # if ! grep -q "AllowSuspend=no" /etc/elogind/sleep.conf; then
-            # echo "AllowSuspend=no" | doas tee -a /etc/elogind/sleep.conf
+        # echo "AllowSuspend=no" | doas tee -a /etc/elogind/sleep.conf
         # fi
     fi
 
