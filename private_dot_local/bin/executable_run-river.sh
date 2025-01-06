@@ -15,5 +15,5 @@ export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 eval "$(gnome-keyring-daemon --start)"
 export SSH_AUTH_SOCK
 
-dbus-run-session river | logger -p daemon.info -t river
-pkill chrome
+river | logger -p daemon.info -t river
+# pkill chrome # for freebsd
