@@ -39,12 +39,17 @@ FreeBSD)
     swaybg_opts="-c 111318 -i $HOME/.config/wallpaper/freebsd-ascii.png"
     touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad" # capitalization in TouchPad matters
     mixer vol.mute=off
-    for mode in normal locked; do
-        # desktop feeds a DAC, don't use these there
-        riverctl map $mode None XF86AudioRaiseVolume spawn 'mixer vol=+5%'
-        riverctl map $mode None XF86AudioLowerVolume spawn 'mixer vol=-5%'
-        riverctl map $mode None XF86AudioMute spawn 'mixer vol.mute=toggle'
-    done
+    if [ "$ID" = "elron" ]; then
+        # desktop feeds a DAC
+        mixer vol=100%
+    else
+        mixer vol=60%
+        for mode in normal locked; do
+            riverctl map $mode None XF86AudioRaiseVolume spawn 'mixer vol=+5%'
+            riverctl map $mode None XF86AudioLowerVolume spawn 'mixer vol=-5%'
+            riverctl map $mode None XF86AudioMute spawn 'mixer vol.mute=toggle'
+        done
+    fi
     ;;
 esac
 
