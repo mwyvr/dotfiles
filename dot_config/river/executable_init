@@ -2,9 +2,6 @@
 . /etc/os-release
 OS=$(uname)
 
-dbus-update-activation-environment --all
-gnome-keyring-daemon --start --components=secrets
-
 # run mappings first in case errors in script later cause it to terminate or stall
 sh $HOME/.config/river/mappings
 
@@ -14,30 +11,27 @@ outer_padding=4
 riverctl default-layout rivertile
 rivertile -view-padding $view_padding -outer-padding $outer_padding &
 
-# daemon opts
-swaybg_opts="-c 111318"
+# sockets
+WOBSOCK=$XDG_RUNTIME_DIR/wob.sock
 
 case $OS in
 Linux)
-    daemons="kanshi swaybg swaync waybar swayidle"
+    daemons="kanshi swaybg swaync waybar swayidle wob"
     swaybg_opts="-c 111318 -i $HOME/.config/wallpaper/opensuse-black.jpeg"
     touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_Touchpad"
     pamixer --set-volume 60 # of 100
-    brightnessctl set 15000 # ~ 16%
+    brillo -S 20            # display brightness
+    # media key binds
     for mode in normal locked; do
-        riverctl map $mode None XF86AudioRaiseVolume spawn 'pamixer -i 5'
-        riverctl map $mode None XF86AudioLowerVolume spawn 'pamixer -d 5'
+        riverctl map $mode None XF86AudioRaiseVolume spawn "pamixer -i 5 && pamixer --get-volume > $WOBSOCK"
+        riverctl map $mode None XF86AudioLowerVolume spawn "pamixer -d 5 && pamixer --get-volume > $WOBSOCK"
         riverctl map $mode None XF86AudioMute spawn 'pamixer -t'
         riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
         riverctl map $mode None XF86AudioPlay spawn 'playerctl play-pause'
         riverctl map $mode None XF86AudioPrev spawn 'playerctl previous'
         riverctl map $mode None XF86AudioNext spawn 'playerctl next'
-        # # Control screen backlight brightness with brightnessctl (https://github.com/Hummer12007/brightnessctl)
-        riverctl map $mode None XF86MonBrightnessUp spawn 'brightnessctl set +5%'
-        # riverctl map $mode None XF86MonBrightnessUp spawn  "brightnessctl -q set +5% && ( echo $((`brightnessctl get` * 100 / `brightnessctl m`)) > $RIVERSOCK.wob )"
-        riverctl map $mode None XF86MonBrightnessDown spawn 'brightnessctl set 5%-'
-        # riverctl map $mode None XF86MonBrightnessDown spawn "brightnessctl -q set 5%- && ( echo $((`brightnessctl get` * 100 / `brightnessctl m`)) > $RIVERSOCK.wob )"
-        # bindsym XF86MonBrightnessDown exec brightnessctl -q set 5%- && ( echo $((`brightnessctl get` * 100 / `brightnessctl m`)) > $SWAYSOCK.wob )
+        riverctl map $mode None XF86MonBrightnessUp spawn "brillo -A 5 && brillo -G | cut -f1 -d '.'  > $WOBSOCK"
+        riverctl map $mode None XF86MonBrightnessDown spawn "brillo -U 5 && brillo -G | cut -f1 -d '.'  > $WOBSOCK"
     done
     ;;
 FreeBSD)
@@ -89,16 +83,23 @@ gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
 gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
+# daemons
 # only for configs while in dev
-restart=""
-# restart="waybar swaybg"
-# restart="waybar"
+# restart="waybar swaybg wob"
+restart="wob"
 for d in $restart; do
-    # swaync-client will be relaunched by waybar's config
-    if [ "$d" = "waybar" ]; then
+    case $d in
+    waybar)
+        # swaync-client will be relaunched by waybar's config
         pkill swaync-client
-    fi
-    pkill "$d"
+        ;;
+    wob)
+        pkill -f "tail.*wob"
+        ;;
+    *)
+        pkill "$d"
+        ;;
+    esac
 done
 
 # start daemons not already running; waybar components need pipewire running
@@ -106,8 +107,12 @@ for d in $daemons; do
     if ! pgrep "$d" >/dev/null 2>&1; then
         case $d in
         swaybg)
-            # don't quote
             $d $swaybg_opts &
+            ;;
+        wob)
+            [ -e "$WOBSOCK" ] || mkfifo "$WOBSOCK"
+            pkill -f "tail.*wob"
+            tail --follow=name -s 0 "$WOBSOCK" | wob &
             ;;
         *)
             $d &
