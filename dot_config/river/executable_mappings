@@ -4,18 +4,17 @@
 # These keybindings are shared across platforms
 
 # launchers
-riverctl map normal Alt+Shift Return spawn foot                                        # Alt+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
-riverctl map normal Super+Shift R spawn 'foot sh -c "cd ~/.config/river/; hx *"'       # edit river config
-riverctl map normal Super+Shift X spawn 'sh -c "~/.config/river/init"'                 # reload/eXecute river config
-riverctl map normal Super+Shift T spawn 'foot sh -c "hx ~/.config/waybar/*"'           # edit waybar config
-riverctl map normal Super+Shift L spawn 'pkill --signal USR1 swayidle'                 # (L)ock: trigger idle (and lock and suspend S0 if defined in swayidle)
-riverctl map normal Super+Shift C spawn "foot ssh -t mw@wabbit tmux new -A -s chimera" # IRC
-riverctl map normal Super+Shift V spawn "foot ssh -t mw@wabbit tmux new -A -s void"    # IRC
-riverctl map normal Super+Shift W spawn "foot ssh -t mw@wabbit tmux new -A -s wabbit"  #
-riverctl map normal Super+Shift B spawn "foot ssh -t mw@bugs tmux new -A -s bugs"      #
-riverctl map normal Super+Shift E spawn "foot ssh -t mw@elron tmux new -A -s elron"    #
-riverctl map normal Super+Shift P spawn "foot ssh -t mw@pi tmux new -A -s pi"          #
-riverctl map normal Alt P spawn "wofi"                                                 # application menu
+riverctl map normal Alt+Shift Return spawn foot                                       # Alt+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
+riverctl map normal Super+Shift R spawn 'foot sh -c "cd ~/.config/river/; hx *"'      # edit river config
+riverctl map normal Super+Shift X spawn 'sh -c "~/.config/river/init"'                # reload/eXecute river config
+riverctl map normal Super+Shift T spawn 'foot sh -c "hx ~/.config/waybar/*"'          # edit waybar config
+riverctl map normal Super+Shift L spawn 'pkill --signal USR1 swayidle'                # (L)ock: trigger idle (and lock and suspend S0 if defined in swayidle)
+riverctl map normal Super+Shift I spawn "foot ssh -t mw@wabbit tmux new -A -s soju"   # IRC
+riverctl map normal Super+Shift W spawn "foot ssh -t mw@wabbit tmux new -A -s wabbit" #
+riverctl map normal Super+Shift B spawn "foot ssh -t mw@bugs tmux new -A -s bugs"     #
+riverctl map normal Super+Shift E spawn "foot ssh -t mw@elron tmux new -A -s elron"   #
+riverctl map normal Super+Shift P spawn "foot ssh -t mw@pi tmux new -A -s pi"         #
+riverctl map normal Alt P spawn "wofi"                                                # application menu
 
 # kill clients, kill river
 riverctl map normal Alt+Shift C close # kill focussed view (client)
