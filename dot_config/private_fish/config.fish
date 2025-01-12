@@ -12,6 +12,7 @@ end
 if status is-interactive
     fish_config theme choose mui-dark
     set -gx XKB_DEFAULT_OPTIONS ctrl:nocaps
+    set -gx GTK_THEME Adwaita:dark
     set -g fish_key_bindings fish_vi_key_bindings
     set -g fish_greeting # disable welcome
 end
