@@ -96,7 +96,7 @@ gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 # daemons
 # only for configs while in dev
 # restart="waybar swaybg wob"
-restart="wob"
+restart=""
 for d in $restart; do
     case $d in
     waybar)
