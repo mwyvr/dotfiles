@@ -30,13 +30,13 @@ chimera | freebsd)
     wine64 "$WINBOX"
     ;;
 *)
-    case $ID in
-    void)
-        sudo xbps-install -Suy bsdtar libxkbcommon-x11 xcb-util-image xcb-util-keysyms >/dev/null
-        ;;
-    esac
     # on all other Linux distributions, run the native Linux app
     if ! type "$WINBOX" >/dev/null; then
+        case $ID in
+        void)
+            sudo xbps-install -Suy bsdtar libxkbcommon-x11 xcb-util-image xcb-util-keysyms >/dev/null
+            ;;
+        esac
         if ! type bsdtar >/dev/null; then
             echo "$0: bsdtar not found on OS [$ID]; install and try again"
             exit 1
