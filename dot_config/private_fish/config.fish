@@ -13,6 +13,8 @@ fish_add_path ~/go/bin
 fish_add_path ~/.local/bin
 set -gx XKB_DEFAULT_OPTIONS ctrl:nocaps
 set -gx GTK_THEME Adwaita:dark
+set -gx SIGNAL_PASSWORD_STORE gnome-libsecret
+set -gx GDK_BACKEND wayland
 envsource $HOME/.env
 
 # make ctrl-f accept auto suggestion in vi mode as it does in emacs mode
