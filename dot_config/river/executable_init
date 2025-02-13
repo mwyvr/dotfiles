@@ -19,24 +19,29 @@ Linux)
     daemons="kanshi swaybg swaync waybar swayidle wob"
     swaybg_opts="-c 111318 -i $HOME/.config/wallpaper/opensuse-black.jpeg"
     touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_Touchpad"
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
+
     if [ "$ID" = "elron" ]; then
-        # desktop feeds a DAC
-        pamixer --set-volume 100 # desktop feeds a DAC
+        # desktop feeds a DAC, always leave at 100%
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ 100%
     else
-        pamixer --set-volume 60 # of 100
-        brillo -S 20            # display brightness
+        # laptops
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ 50%
+        brightnessctl 13%
     fi
     # media key binds
     for mode in normal locked; do
-        riverctl map $mode None XF86AudioRaiseVolume spawn "pamixer -i 5 && pamixer --get-volume > $WOBSOCK"
-        riverctl map $mode None XF86AudioLowerVolume spawn "pamixer -d 5 && pamixer --get-volume > $WOBSOCK"
-        riverctl map $mode None XF86AudioMute spawn 'pamixer -t'
+        riverctl map $mode None XF86AudioRaiseVolume spawn "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+ \
+            && wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -f 2 -d ' ' | sed -e 's/^0\.//' -e 's/\.//' > $WOBSOCK"
+        riverctl map $mode None XF86AudioLowerVolume spawn "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- \
+            && wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -f 2 -d ' ' | sed -e 's/^0\.//' -e 's/\.//' > $WOBSOCK"
+        riverctl map $mode None XF86AudioMute spawn "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
         riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause'
         riverctl map $mode None XF86AudioPlay spawn 'playerctl play-pause'
         riverctl map $mode None XF86AudioPrev spawn 'playerctl previous'
         riverctl map $mode None XF86AudioNext spawn 'playerctl next'
-        riverctl map $mode None XF86MonBrightnessUp spawn "brightnessctl -m s +5% | cut -f4 -d ',' | cut -f1 -d '%' > $WOBSOCK"
-        riverctl map $mode None XF86MonBrightnessDown spawn "brightnessctl -m s 5%- | cut -f4 -d ',' | cut -f1 -d '%' > $WOBSOCK"
+        riverctl map $mode None XF86MonBrightnessUp spawn "brightnessctl -m s +5% | sed -r 's/.*,([0-9].*)\%+.*/\1/' > $WOBSOCK"
+        riverctl map $mode None XF86MonBrightnessDown spawn "brightnessctl -m s 5%- | sed -r 's/.*,([0-9].*)\%+.*/\1/' > $WOBSOCK"
     done
     ;;
 FreeBSD)
@@ -95,9 +100,9 @@ gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 # daemons
-# only for configs while in dev
+# only for configs while in development/tweaking
 # restart="waybar swaybg wob"
-restart=""
+restart="wob"
 for d in $restart; do
     case $d in
     waybar)
