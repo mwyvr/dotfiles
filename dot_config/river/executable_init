@@ -5,13 +5,13 @@ OS=$(uname)
 # run mappings first in case errors in script later cause it to terminate or stall
 sh $HOME/.config/river/mappings
 
-# LAYOUT
+# Layout
 view_padding=4
 outer_padding=4
 riverctl default-layout rivertile
 rivertile -view-padding $view_padding -outer-padding $outer_padding &
 
-# sockets
+# OSD of brightness, volume
 WOBSOCK=$XDG_RUNTIME_DIR/wob.sock
 
 case $OS in
@@ -21,13 +21,13 @@ Linux)
     touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_Touchpad"
     wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
 
-    if [ "$ID" = "elron" ]; then
-        # desktop feeds a DAC, always leave at 100%
-        wpctl set-volume @DEFAULT_AUDIO_SINK@ 100%
-    else
+    if [ -d "/proc/acpi/button/lid" ]; then
         # laptops
         wpctl set-volume @DEFAULT_AUDIO_SINK@ 50%
         brightnessctl 13%
+    else
+        # desktop feeds a DAC, always leave at 100%
+        wpctl set-volume @DEFAULT_AUDIO_SINK@ 100%
     fi
     # media key binds
     for mode in normal locked; do
@@ -102,7 +102,7 @@ gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 # daemons
 # only for configs while in development/tweaking
 # restart="waybar swaybg wob"
-restart="wob"
+restart=""
 for d in $restart; do
     case $d in
     waybar)
