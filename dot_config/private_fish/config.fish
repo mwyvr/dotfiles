@@ -15,7 +15,7 @@ set -gx XKB_DEFAULT_OPTIONS ctrl:nocaps
 set -gx GTK_THEME Adwaita:dark
 set -gx SIGNAL_PASSWORD_STORE gnome-libsecret
 set -gx GDK_BACKEND wayland
-envsource $HOME/.env
+# envsource $HOME/.env
 
 # make ctrl-f accept auto suggestion in vi mode as it does in emacs mode
 # this has to be in config.fish for some reason
