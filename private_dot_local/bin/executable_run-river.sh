@@ -1,5 +1,6 @@
 #!/bin/sh
 # called by greetd on linux
+. $HOME/.env
 WM=river
 export XDG_SESSION_TYPE=wayland
 export XDG_SESSION_DESKTOP="$WM"
