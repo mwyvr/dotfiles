@@ -7,9 +7,12 @@ PACKAGES=""
 case $ID in
 "chimera")
     APP="apk"
-    doas apk update -q >/dev/null
-    PACKAGES=$(doas apk upgrade -s | grep -v "^OK")
-    NUM=$(echo "$PACKAGES" | wc -l | xargs)
+    doas apk update -q
+    PACKAGES=$(apk upgrade -s 2>/dev/null | grep -o "^(.*" | cut -f3 -d' ')
+    NUM=0
+    for p in $PACKAGES; do
+        NUM=$NUM+1
+    done
     ;;
 freebsd)
     APP="pkg"
