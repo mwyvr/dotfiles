@@ -45,7 +45,7 @@ if lscpu | grep "AuthenticAMD"; then
 fi
 
 # core utils
-$ADDCMD git lazygit delta chezmoi fish-shell btop htop
+$ADDCMD git lazygit delta chezmoi fish-shell htop
 # for Helix editor and dev
 $ADDCMD helix go nodejs cargo
 
@@ -55,7 +55,7 @@ if [ -n "$IS_DESKTOP" ]; then
 
     # my Varmilo keyboard firmware IDs as an Apple; the function keys act as
     # media keys unless pressed with Fn button, which is annoying.
-    VARMILO=$(lsmod | grep Varmilo)
+    VARMILO=$(doas dmesg | grep Varmilo)
     if [ -z "$VARMILO" ]; then
         echo "- Forcing Varmilo/hid_apple function keys as default (2)"
         # real time temp fix
