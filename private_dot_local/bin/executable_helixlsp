@@ -1,19 +1,11 @@
 #!/bin/sh
-# This sets up Language Server Processors for Helix
-# Building in a distrobox is an option, however note that there will be
-# some initial Helix startup lag if running Helix from the Distrobox in
-# order to have visbility for the utils installed / built in Distrobox
-#
-# WARNING: Some utils simply need to be deleted and rebuilt from time to time
-# looking at you bash lsp
-# TODO: make that happen in the script
+# Install various Language Server Processors for Helix
 
-. /etc/os-release
-LOCAL=~/.local/bin
-
-set -e
+# WARNING: npm i sometimes seems to leave bash lsp in a bad state - may be a FreeBSD only oddity;
+# delete and reinstall bash-language-server if you see CPU utilization ramp
 
 build() {
+    # for some, check if the package manager has installed
 
     npm update -g
 
@@ -62,26 +54,10 @@ build() {
     fi
 }
 
-# On glibc Linux systems build the components in the default Arch distrobox
-# As everything is glibc and installed in ~/.local/bin, the executables
-# will be available in the host and distrobox systems
-build_in_box() {
-    if [ -z "$CONTAINER_ID" ]; then
-        echo "run this in the default container"
-        exit 1
-    else
-        sudo pacman -Syu base-devel git rust nodejs npm python python-pip go
-        # these are called by helix in the host, so duplicate in local
-        sudo pacman -Syu shellcheck taplo-cli harper
-        cp /usr/bin/shellcheck $LOCAL
-        cp /usr/bin/taplo $LOCAL
-        cp /usr/bin/harper-cli $LOCAL
-        cp /usr/bin/harper-ls $LOCAL
-        build
-    fi
-}
+. /etc/os-release
+LOCAL=~/.local/bin
 
-# first install utils available as packages, then call build* to finish the rest
+# first install utils available as packages, then call build
 case $ID in
 chimera)
     doas apk add go nodejs python-pip cargo bash lazygit taplo
@@ -102,7 +78,7 @@ freebsd)
     build
     ;;
 *)
-    echo "possibly unsupported OS"
-    build_in_box
+    echo "$0: unsupported OS"
+    exit
     ;;
 esac
