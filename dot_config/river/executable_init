@@ -128,7 +128,8 @@ for d in $daemons; do
         wob)
             [ -e "$WOBSOCK" ] || mkfifo "$WOBSOCK"
             pkill -f "tail.*wob"
-            tail --follow=name -s 0 "$WOBSOCK" | wob &
+            # chimera/freeBSD doesn't support -s 0 (sleep) argument
+            tail -F "$WOBSOCK" | wob &
             ;;
         *)
             $d &
