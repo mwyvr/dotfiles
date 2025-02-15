@@ -40,10 +40,10 @@ freebsd)
     exit 1
     ;;
 esac
-# for status bar
 if [ "$NUM" = "" ]; then
     NUM="0"
 fi
+# for status bar
 echo "$NUM"
 
 if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] && [ "$NUM" != "0" ]; then
