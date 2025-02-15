@@ -37,11 +37,15 @@ build() {
     cargo install --git https://github.com/estin/simple-completion-language-server.git
 
     # python
-    pip install -U 'python-lsp-server[all]' --break-system-packages # python
-    pip install -U python-lsp-ruff --break-system-packages          # plugin to support linter
-    pip install -U ruff --break-system-packages                     # python linter
-    pip install -U ruff-lsp --break-system-packages                 # lsp for ruff
-    pip install -U black --break-system-packages                    # python formatter
+    for pypkg in python-lsp-ruff ruff ruff-lsp black python-lsp-server; do
+        if test -d "$HOME/.local/share/pipx/venvs/$pypkg"; then
+            PIPXCMD="upgrade"
+            echo "$PIPXCMD running"
+        else
+            PIPXCMD="install"
+        fi
+        pipx $PIPXCMD $pypkg
+    done
 
     # spell and grammar
     if ! type harper-ls; then
