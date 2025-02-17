@@ -102,12 +102,13 @@ gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 # daemons
 # only for configs while in development/tweaking
 # restart="waybar swaybg wob"
-restart=""
+restart="waybar"
 for d in $restart; do
     case $d in
     waybar)
         # swaync-client will be relaunched by waybar's config
         pkill swaync-client
+        pkill waybar
         ;;
     wob)
         pkill -f "tail.*wob"
@@ -128,7 +129,8 @@ for d in $daemons; do
         wob)
             [ -e "$WOBSOCK" ] || mkfifo "$WOBSOCK"
             pkill -f "tail.*wob"
-            # chimera/freeBSD doesn't support -s 0 (sleep) argument
+            # FreeBSD/Chimera userland's tail does not support -s interval parameter
+            # tail -F -s 0 "$WOBSOCK" | wob &
             tail -F "$WOBSOCK" | wob &
             ;;
         *)
