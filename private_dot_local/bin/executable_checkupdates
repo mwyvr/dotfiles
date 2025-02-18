@@ -1,4 +1,5 @@
 #!/bin/sh
+# updates toolbar (waybar in use here currently)
 . /etc/os-release
 
 NUM=""
@@ -7,7 +8,8 @@ PACKAGES=""
 case $ID in
 "chimera")
     APP="apk"
-    doas apk update -q
+    doas apk update --cache-max-age 20 --quiet --no-interactive >/dev/null 2>&1
+    # doas apk update --quiet --no-interactive >/dev/null 2>&1
     PACKAGES=$(apk upgrade -s 2>/dev/null | grep -o "^(.*" | cut -f3 -d' ')
     NUM=0
     for p in $PACKAGES; do
@@ -33,19 +35,28 @@ freebsd)
     ); do
         PACKAGES="${PACKAGES:+${PACKAGES}\n}${p}"
     done
-
     ;;
 *)
     echo "$0: $NAME is unsupported"
-    exit 1
     ;;
 esac
+
 if [ "$NUM" = "" ]; then
     NUM="0"
 fi
-# for status bar
-echo "$NUM"
 
-if [ -n "$DBUS_SESSION_BUS_ADDRESS" ] && [ "$NUM" != "0" ]; then
-    notify-send -a "$APP" "System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
+if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    if [ "$NUM" != "0" ]; then
+        ICON="$NUM 󰔽"
+        notify-send -a "$APP" "󰔽 System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
+    else
+        # ICON="$NUM 󰔽"
+        ICON="󱊝"
+    fi
+    if pgrep waybar >/dev/null 2>&1; then
+        # if pgrep waybar; then
+        echo $ICON
+        # pkill -SIGRTMIN+8 waybar
+    fi
 fi
+exit 0
