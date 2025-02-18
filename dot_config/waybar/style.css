@@ -59,15 +59,21 @@ window#waybar.solo {
 #network,
 #bluetooth,
 #pulseaudio,
+#wireplumber,
 #idle_inhibitor,
 #temperature,
 #custom-layout,
+#custom-checkupdates,
+#custom-notification,
+#custom-wg,
 #backlight {
-  margin: 0px 6px 0px 10px;
+
+  font-size: 18px;
+  margin: 0 0.3em;
 }
 
 #clock {
-  margin: 0px 6px 0px 10px;
+  margin-right: 10px;
 }
 
 #battery.good {
