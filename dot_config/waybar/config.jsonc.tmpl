@@ -19,9 +19,10 @@
   ],
   "battery": {
     "states": {
+      "charged": 100,
       "good": 80,
       "warning": 30,
-      "critical": 15
+      "critical": 10,
     },
     "format": "{icon}",
     "format-charging": "󰂄",
@@ -43,12 +44,12 @@
   },
 {{- if eq .chezmoi.osRelease.id "chimera" "freebsd" }}
   "clock": {
-    "format": "{:%a %d %b %H:%M}",
-    "interval": 1
+    "format": "{:%A %d %b %H:%M}",
+    "interval": 60
   },
 {{- else }}
     "clock": {
-    "format": "{:%a %d %b %H:%M}",
+    "format": "{:%A %d %b %H:%M}",
     "tooltip-format": "<span color='#35b9ab'><tt><small>{calendar}</small></tt></span>",
     "calendar": {
       "mode-mon-col": 4,
@@ -67,7 +68,7 @@
       "on-scroll-up": "shift_up",
       "on-scroll-down": "shift_down"
     },
-    "interval": 1
+    "interval": 60
   },
 {{- end }}
   "custom/checkupdates": {
@@ -81,9 +82,9 @@
     "tooltip": true,
     "format": "{icon}",
     "format-icons": {
-      "notification": "<span foreground='red'><small><sup>⬤</sup></small></span>",
-      "none": "󰂚 ",
-      "dnd-notification": "<span foreground='red'><small><sup>⬤</sup></small></span>",
+      "notification": "<span foreground='#B1D18A'>󰂚</span>",
+      "none": "󰂚",
+      "dnd-notification": "<span foreground='#DBC66E'>󰂛</span>",
       "dnd-none": "󰂛"
     },
     "return-type": "json",
@@ -112,18 +113,18 @@
     "format": "{icon}",
     "format-alt": "{volume} {icon}",
     "format-alt-click": "click-right",
-    "format-muted": "",
+    "format-muted": "󰝟",
     "format-icons": {
-      "headphones": "",
-      "handsfree": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
+      "headphones": "󰋋",
+      "handsfree": "󰋎",
+      "headset": "󰋎",
+      "phone": "󰏲",
+      "portable": "󰄞",
+      "car": "󰄋",
       "default": [
-        "",
-        "",
-        ""
+        "󰕿",
+        "󰖀",
+        "󰕾"
       ]
     },
     "scroll-step": 10,
