@@ -11,7 +11,7 @@ case $ID in
     PACKAGES=$(apk upgrade -s 2>/dev/null | grep -o "^(.*" | cut -f3 -d' ')
     NUM=0
     for p in $PACKAGES; do
-        NUM=$NUM+1
+        NUM=$((NUM + 1))
     done
     ;;
 freebsd)
