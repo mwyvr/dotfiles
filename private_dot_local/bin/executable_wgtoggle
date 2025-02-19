@@ -2,22 +2,23 @@
 # wgtoggle activates or deactivates the wg0 connection
 # - wireguard.desktop calls this
 # - updates waybar status if running
+# wg0 must be defined.
 
 . /etc/os-release
 
 IF=wg0
 
 if nmcli connection show --active | grep -qF wg0; then
-    nmcli connection down wg0
+    nmcli connection down wg0 >/dev/null 2>&1
     MSG="interface down"
 else
     # knockknock.sh
-    nmcli connection up wg0
+    nmcli connection up wg0 >/dev/null 2>&1
     MSG="interface up"
 fi
 if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
     notify-send --transient --app-name=wgtoggle --urgency=normal "wireguard" "$IF $MSG"
-    if pgrep waybar; then
+    if pgrep waybar >/dev/null 2>&1; then
         ip add show | grep -qF wg0 && echo "󰦝" || echo "󱦛"
         pkill -SIGRTMIN+9 waybar
     fi
