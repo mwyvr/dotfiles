@@ -1,18 +1,14 @@
 * {
   border: none;
   border-radius: 0;
-  font-family: "Inter", "Roboto", "FontAwesome 6 Free";
-  font-size: 15px;
+  font-family: "Roboto", "FontAwesome 6 Free", "sans";
+  font-size: 16px;
   box-shadow: none;
   text-shadow: none;
   transition-duration: 0s;
 }
 
 window#waybar {
-  /* outline-brighter */
-  /* color: #a9abb4; */
-  /* "white" = "#8F9097"                     # 7; NV-60 */
-  /* color: #a9abb4; */
   color: #8f9097;
   /* surface-container  #1d2024; */
   /* background-color: rgba(29, 32, 36, 1.0); */
@@ -21,19 +17,8 @@ window#waybar {
   border-bottom: 2px solid rgba(25, 28, 32, 0.8);
 }
 
-window#waybar.solo {
-  /* not sure what this element is */
-  color: red;
-  /* color: rgba(53, 185, 171, 1); */
-}
-
 #tags {
   margin: 0 5px;
-}
-
-#custom-scratchpad {
-  margin: 0px 5px;
-  padding: 0px 5px;
 }
 
 #tags button {
@@ -46,34 +31,24 @@ window#waybar.solo {
 }
 
 #tags button.focused {
-  /* "primary" = "#aac7ff"                   # P-80; (blue primary, affects NV and surface) */
   /* "on-primary" = "#0a305f"                # P-20; */
   color: #aac7ff;
   background-color: #0a305f;
 }
 
-#mode,
 #battery,
-#cpu,
-#memory,
-#network,
-#bluetooth,
-#pulseaudio,
-#wireplumber,
-#idle_inhibitor,
-#temperature,
-#custom-layout,
+#clock,
 #custom-checkupdates,
 #custom-notification,
 #custom-wg,
-#backlight {
-
-  font-size: 18px;
+#network,
+#wireplumber {
+  font-size: 20px;
   margin: 0 0.3em;
 }
 
 #clock {
-  margin-right: 10px;
+  font-size: 16px;
 }
 
 #battery.good {
@@ -94,17 +69,4 @@ window#waybar.solo {
 #battery.charging {
   /* blue-60 */
   color: #7491c7;
-}
-
-
-#bluetooth.disabled {
-  color: rgba(128, 128, 128, 1);
-}
-
-#bluetooth.off {
-  color: rgba(128, 128, 128, 1);
-}
-
-#bluetooth.connected {
-  color: rgba(115, 186, 37, 1);
 }
