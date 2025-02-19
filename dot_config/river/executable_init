@@ -90,6 +90,7 @@ riverctl rule-add -app-id 'org.gnome.Evolution' -title 'Fwd*' float
 riverctl rule-add -app-id 'org.gnome.Evolution-alarm-notify' float
 riverctl rule-add -app-id 'org.gnome.Nautilus' float
 riverctl rule-add -app-id 'org.gnome.Weather' float
+riverctl rule-add -app-id 'nmtui' float # for waybar click-to-launch
 riverctl rule-add -app-id 'org.pulseaudio.pavucontrol' float
 riverctl rule-add -title 'Picture-in-picture' float
 
@@ -99,10 +100,10 @@ gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
 gsettings set org.gnome.desktop.interface cursor-theme 'Adwaita'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
-# daemons
-# only for configs while in development/tweaking
+# kill-daemons: only for configs while in development/tweaking
 # restart="waybar swaybg wob"
 restart="waybar"
+# restart=""
 for d in $restart; do
     case $d in
     waybar)
@@ -119,7 +120,7 @@ for d in $restart; do
     esac
 done
 
-# start daemons not already running; waybar components need pipewire running
+# start daemons not already running; note: waybar wireplumber component requires pipewire running first
 for d in $daemons; do
     if ! pgrep "$d" >/dev/null 2>&1; then
         case $d in
