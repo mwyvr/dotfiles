@@ -23,7 +23,7 @@
       "charged": 100,
       "good": 80,
       "warning": 30,
-      "critical": 10,
+      "critical": 10
     },
     "format": "{icon}",
     "format-charging": "󰂄",
@@ -78,7 +78,8 @@
     "interval": 3600,
     "exec-if": "which checkupdates",
     "exec": "checkupdates",
-    "tooltip-format": "󰔽 updates available"
+    "on-click": "checkupdates",
+    "tooltip-format": "{} updates available"
   },
   "custom/notification": {
     "tooltip": true,
