@@ -55,7 +55,8 @@ if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
     if type notify-send >/dev/null 2>&1; then
         notify-send --transient --app-name="$APP" --urgency=normal "update" "System update script has completed"
     fi
-    # if pgrep waybar; then
-    # checkupdates
-    # fi
+    # force update of the status bar
+    if pgrep waybar >/dev/null 2>&1; then
+        pkill -SIGRTMIN+8 waybar
+    fi
 fi
