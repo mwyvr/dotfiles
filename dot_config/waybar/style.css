@@ -47,6 +47,10 @@ window#waybar {
   margin: 0 0.3em;
 }
 
+#custom-checkupdates {
+  margin: 0 0.5em;
+}
+
 #clock {
   font-size: 16px;
 }

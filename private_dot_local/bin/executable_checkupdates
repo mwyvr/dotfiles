@@ -47,7 +47,7 @@ fi
 if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
     if [ "$NUM" != "0" ]; then
         ICON="󰔽"
-        notify-send -a "$APP" "󰔽 System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
+        notify-send -a "$APP" "$ICON  System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
     else
         ICON="󱊝"
     fi
