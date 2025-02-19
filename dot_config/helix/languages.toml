@@ -19,6 +19,11 @@ command = "simple-completion-language-server"
 # feature_paths = true                 # enable path completion
 # feature_citations = false            # enable citation completion (only on `citation` feature enabled)
 # 
+# https://docs.astral.sh/ruff/editors/setup/#helix
+[language-server.ruff]
+command = "ruff"
+args = ["server"]
+
 [language-server]
 bash-language-server = { command = "bash-language-server", args = ["start"] }
 
@@ -69,7 +74,7 @@ language-servers = ["scls", "gopls", "golangci-lint-langserver"]
 
 [[language]]
 name = "python"
-language-servers = ["ruff-lsp"]
+language-servers = ["ruff"]
 # In case you'd like to use ruff alongside black for code formatting:
 auto-format = true
 formatter = { command = "black", args = ["--quiet", "-"] }
@@ -125,6 +130,3 @@ name = "json"
 language-servers = ["vscode-json-language-server"]
 formatter = { command = 'prettier', args = ["--parser", "json"] }
 auto-format = true
-
-[language-server.ruff-lsp]
-command = "ruff-lsp"
