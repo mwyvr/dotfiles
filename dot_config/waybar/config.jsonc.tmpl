@@ -103,11 +103,11 @@
     "tooltip-format": "󰦝 toggle wireguard vpn"
   },
   "network": {
-    // "interface": "wlp2*", // (Optional) To force the use of this interface
+    "on-click": "foot -a nmtui -e sh -c nmtui",
     "format-wifi": "󰖩",
     "format-ethernet": "󰛳",
     "format-linked": "󰲛",
-    "format-disconnected": "⚠",
+    "format-disconnected": "󰖪",
     "tooltip-format": "󰖩 {ifname} {essid} ({signalStrength}%)"
   },
   "wireplumber": {
