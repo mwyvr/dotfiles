@@ -4,5 +4,5 @@
 MENU="Current Output
 Selected Region
 "
-MODE=$(printf "%s" "$MENU" | wofi -p "screenshot" --dmenu --lines=6 --matching=fuzzy | awk '{print tolower ($2)}')
+MODE=$(printf "%s" "$MENU" | wofi -p "screenshot" --dmenu --lines=4 --matching=fuzzy | awk '{print tolower ($2)}')
 shotman --capture "$MODE"
