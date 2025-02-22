@@ -5,8 +5,6 @@
 # delete and reinstall bash-language-server if you see CPU utilization ramp
 
 build() {
-    # for some, check if the package manager has installed
-
     npm update -g
 
     # ansible
@@ -40,7 +38,6 @@ build() {
     for pypkg in python-lsp-ruff ruff ruff-lsp black python-lsp-server; do
         if test -d "$HOME/.local/share/pipx/venvs/$pypkg"; then
             PIPXCMD="upgrade"
-            echo "$PIPXCMD running"
         else
             PIPXCMD="install"
         fi
@@ -64,13 +61,13 @@ LOCAL=~/.local/bin
 # first install utils available as packages, then call build
 case $ID in
 chimera)
-    doas apk add go nodejs python-pip cargo bash lazygit taplo
+    doas apk add go nodejs pipx cargo bash lazygit taplo
     # no Haskell on Chimera Linux so...
     fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
     build
     ;;
 void)
-    sudo xbps-install -Su go nodejs python3 python3-pip cargo lazygit bash shellcheck taplo
+    sudo xbps-install -Su go nodejs python3-pipx cargo lazygit bash shellcheck taplo
     build
     ;;
 "opensuse-tumbleweed")
@@ -78,7 +75,7 @@ void)
     build
     ;;
 freebsd)
-    doas pkg install -y go node23 npm-node23 py311-pip rust lazygit bash hs-ShellCheck
+    doas pkg install -y go node23 npm-node23 py311-pipx rust lazygit bash hs-ShellCheck
     build
     ;;
 *)
