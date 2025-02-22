@@ -33,6 +33,6 @@ if [ ! -x "$KNOCKR" ]; then
     esac
 fi
 # port knock router to open wireguard - not strictly necessary
-. ~/.knock.env
+. ~/.env
 $KNOCKR $KNOCKARGS
 $KNOCKR $TESTARGS
