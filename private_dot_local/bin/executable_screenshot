@@ -10,9 +10,9 @@ MODE=$(printf "%s" "$MENU" | wofi -p "screenshot" --dmenu --lines=4 --matching=f
 
 case $MODE in
 workspace)
-    grim -g "$(slurp -o -r -c '#A3903FFF')" -t png - | satty --filename - --output-filename $LOCATION/$(date '+%Y%m%d-%H%M%S').png
+    grim -g "$(slurp -o -r -c '#284777FF')" -t png - | satty --filename - --output-filename "$LOCATION/$(date '+%Y%m%d-%H%M%S').png" --save-after-copy
     ;;
 area)
-    grim -g "$(slurp -c '#A3903FFF')" -t png - | satty --filename - --output-filename $LOCATION/$(date '+%Y%m%d-%H%M%S').png
+    grim -g "$(slurp -b '#44474E44' -s '#44474E11' -c '#284777FF')" -t png - | satty --filename - --output-filename "$LOCATION/$(date '+%Y%m%d-%H%M%S').png" --save-after-copy
     ;;
 esac
