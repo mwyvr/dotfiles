@@ -1,0 +1,8 @@
+#!/bin/sh
+# screenshot - simple wofi menu wrapping shotman
+
+MENU="Current Output
+Selected Region
+"
+MODE=$(printf "%s" "$MENU" | wofi -p "screenshot" --dmenu --lines=6 --matching=fuzzy | awk '{print tolower ($2)}')
+shotman --capture "$MODE"

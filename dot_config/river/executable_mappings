@@ -15,6 +15,7 @@ riverctl map normal Super+Shift B spawn "foot ssh -t mw@bugs tmux new -A -s bugs
 riverctl map normal Super+Shift E spawn "foot ssh -t mw@elron tmux new -A -s elron"   #
 riverctl map normal Super+Shift P spawn "foot ssh -t mw@pi tmux new -A -s pi"         #
 riverctl map normal Alt P spawn "wofi"                                                # application menu
+riverctl map normal None Print spawn 'screenshot'                                     # wofi menu wrapping shotman
 
 # kill clients, kill river
 riverctl map normal Alt+Shift C close # kill focussed view (client)
