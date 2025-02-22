@@ -1,8 +1,18 @@
 #!/bin/sh
-# screenshot - simple wofi menu wrapping shotman
+# screenshot - simple wofi menu wrapping grim/satty
 
-MENU="Current Output
-Selected Region
+LOCATION="$HOME/Pictures/screenshots"
+MENU="Current Workspace
+Select Area
 "
+mkdir -p "$LOCATION"
 MODE=$(printf "%s" "$MENU" | wofi -p "screenshot" --dmenu --lines=4 --matching=fuzzy | awk '{print tolower ($2)}')
-shotman --capture "$MODE"
+
+case $MODE in
+workspace)
+    grim -g "$(slurp -o -r -c '#A3903FFF')" -t png - | satty --filename - --output-filename $LOCATION/$(date '+%Y%m%d-%H%M%S').png
+    ;;
+area)
+    grim -g "$(slurp -c '#A3903FFF')" -t png - | satty --filename - --output-filename $LOCATION/$(date '+%Y%m%d-%H%M%S').png
+    ;;
+esac
