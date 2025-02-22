@@ -44,12 +44,13 @@ if [ "$NUM" = "" ]; then
     NUM="0"
 fi
 
+if [ "$NUM" != "0" ]; then
+    ICON="󰔽"
+else
+    ICON="󱊝"
+fi
+
 if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
-    if [ "$NUM" != "0" ]; then
-        ICON="󰔽"
-        notify-send -a "$APP" "$ICON  System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
-    else
-        ICON="󱊝"
-    fi
+    notify-send -a "$APP" "$ICON  System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
     echo $ICON
 fi
