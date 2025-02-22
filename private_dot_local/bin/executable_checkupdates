@@ -1,5 +1,5 @@
 #!/bin/sh
-# updates toolbar (waybar in use here currently)
+# updates waybar + issues notification
 . /etc/os-release
 
 NUM=""
@@ -44,12 +44,12 @@ if [ "$NUM" = "" ]; then
     NUM="0"
 fi
 
-if [ "$NUM" != "0" ]; then
-    ICON="󰔽"
-    if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+    if [ "$NUM" != "0" ]; then
+        ICON="󰔽"
         notify-send -a "$APP" "$ICON  System Updates" "$NUM updates are available for $NAME\n\n$PACKAGES"
+    else
+        ICON="󱊝"
     fi
-else
-    ICON="󱊝"
+    echo $ICON
 fi
-echo $ICON
