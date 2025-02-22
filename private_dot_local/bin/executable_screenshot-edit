@@ -1,0 +1,10 @@
+#!/bin/sh
+# screenshot-edit - wofi menu wrapping satty to edit files
+
+LOCATION="$HOME/Pictures/screenshots"
+mkdir -p "$LOCATION"
+cd "$LOCATION"
+
+MENU=$(ls)
+IMAGE=$(printf "%s" "$MENU" | wofi -p "edit screenshot" --dmenu)
+satty -f "$IMAGE"
