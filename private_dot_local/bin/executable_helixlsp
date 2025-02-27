@@ -16,11 +16,12 @@ build() {
     go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
     # go
-    go install golang.org/x/tools/gopls@latest                             # LSP
-    go install github.com/go-delve/delve/cmd/dlv@latest                    # Debugger
-    go install golang.org/x/tools/cmd/goimports@latest                     # Formatter
-    go install github.com/nametake/golangci-lint-langserver@latest         # Linter
-    go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.60.3 # Linter
+    go install golang.org/x/tools/gopls@latest                     # LSP
+    go install github.com/go-delve/delve/cmd/dlv@latest            # Debugger
+    go install golang.org/x/tools/cmd/goimports@latest             # Formatter
+    go install github.com/nametake/golangci-lint-langserver@latest # Linter
+    # get latest version number from: https://golangci-lint.run/welcome/install/#install-from-sources
+    go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.5 # Linter
 
     # html, css, json, scss, typescript
     npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
