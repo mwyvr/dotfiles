@@ -28,13 +28,26 @@ Linux)
         swaybg_opts="-c 111318 -i $HOME/.config/wallpaper/opensuse-black.jpeg"
         ;;
     esac
-    touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_Touchpad"
     wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
 
     if [ -d "/proc/acpi/button/lid" ]; then
         # laptops
         wpctl set-volume @DEFAULT_AUDIO_SINK@ 50%
         brightnessctl 13%
+        for mode in normal locked; do
+            riverctl map $mode None XF86MonBrightnessUp spawn "brightnessctl -m s +5% | sed -r 's/.*,([0-9].*)\%+.*/\1/' > $WOBSOCK"
+            riverctl map $mode None XF86MonBrightnessDown spawn "brightnessctl -m s 5%- | sed -r 's/.*,([0-9].*)\%+.*/\1/' > $WOBSOCK"
+        done
+        # see https://wayland.freedesktop.org/libinput/doc/latest/tools.html#libinput-list-devices
+        touchpad=$(riverctl list-inputs | grep -i touchpad)
+        riverctl input "$touchpad" tap enabled
+        riverctl input "$touchpad" tap-button-map left-right-middle
+        riverctl input "$touchpad" pointer-accel 0.40
+        riverctl input "$touchpad" accel-profile adaptive
+        riverctl input "$touchpad" disable-while-typing enabled
+        riverctl input "$touchpad" scroll-method two-finger
+        riverctl input "$touchpad" natural-scroll enabled
+
     else
         # desktop feeds a DAC, always leave at 100%
         wpctl set-volume @DEFAULT_AUDIO_SINK@ 100%
@@ -51,14 +64,13 @@ Linux)
         riverctl map $mode None XF86AudioPlay spawn 'playerctl play-pause'
         riverctl map $mode None XF86AudioPrev spawn 'playerctl previous'
         riverctl map $mode None XF86AudioNext spawn 'playerctl next'
-        riverctl map $mode None XF86MonBrightnessUp spawn "brightnessctl -m s +5% | sed -r 's/.*,([0-9].*)\%+.*/\1/' > $WOBSOCK"
-        riverctl map $mode None XF86MonBrightnessDown spawn "brightnessctl -m s 5%- | sed -r 's/.*,([0-9].*)\%+.*/\1/' > $WOBSOCK"
     done
     ;;
 FreeBSD)
     daemons="kanshi pipewire swaybg swaync waybar swayidle"
     swaybg_opts="-c 111318 -i $HOME/.config/wallpaper/freebsd-ascii.png"
-    touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad" # capitalization in TouchPad matters
+    # touchpad="pointer-1160-4122-DELL0A36:00_0488:101A_TouchPad" # capitalization in TouchPad matters
+    touchpad=$(riverctl list-inputs | grep -i touchpad)
     mixer vol.mute=off
     if [ "$ID" = "elron" ]; then
         # desktop feeds a DAC
@@ -73,15 +85,6 @@ FreeBSD)
     fi
     ;;
 esac
-
-# see https://wayland.freedesktop.org/libinput/doc/latest/tools.html#libinput-list-devices
-riverctl input "$touchpad" tap enabled
-riverctl input "$touchpad" tap-button-map left-right-middle
-riverctl input "$touchpad" pointer-accel 0.40
-riverctl input "$touchpad" accel-profile adaptive
-riverctl input "$touchpad" disable-while-typing enabled
-riverctl input "$touchpad" scroll-method two-finger
-riverctl input "$touchpad" natural-scroll enabled
 
 # GENERAL SETTINGS
 riverctl focus-follows-cursor normal # none, normal, always - always is too prone to fire esp on laptop/touchpad
@@ -141,9 +144,18 @@ for d in $daemons; do
         wob)
             [ -e "$WOBSOCK" ] || mkfifo "$WOBSOCK"
             pkill -f "tail.*wob"
-            # FreeBSD/Chimera userland's tail does not support -s interval parameter
-            # tail -F -s 0 "$WOBSOCK" | wob &
-            tail -F "$WOBSOCK" | wob &
+            # FreeBSD/Chimera Linux userland's tail does not support -s interval parameter
+            case $ID in
+            chimera)
+                tail -F "$WOBSOCK" | wob &
+                ;;
+            freebsd)
+                tail -F "$WOBSOCK" | wob &
+                ;;
+            *)
+                tail -F -s 0 "$WOBSOCK" | wob &
+                ;;
+            esac
             ;;
         *)
             $d &
