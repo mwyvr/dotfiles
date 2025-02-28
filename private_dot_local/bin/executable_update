@@ -8,10 +8,12 @@ APP=""
 do_fw() {
     # Not installed on servers
     if type fwupdmgr >/dev/null 2>&1; then
+        echo "Checking firmware"
         fwupdmgr get-updates && fwupdmgr update
     fi
 }
 
+echo "Checking packages"
 case $ID in
 chimera)
     APP="apk"
@@ -50,6 +52,11 @@ void)
     exit 1
     ;;
 esac
+
+if type flatpak >/dev/null; then
+    echo "Checking flatpak"
+    flatpak update -y
+fi
 
 if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
     if type notify-send >/dev/null 2>&1; then
