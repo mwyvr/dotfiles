@@ -36,19 +36,19 @@ window#waybar {
   background-color: #0a305f;
 }
 
-#battery,
-#clock,
 #custom-checkupdates,
-#custom-notification,
+#wireplumber,
+#battery,
 #custom-wg,
 #network,
-#wireplumber {
+#clock,
+#custom-notification {
   font-size: 20px;
-  margin: 0 0.3em;
+  margin: 0 0.4em;
 }
 
 #custom-checkupdates {
-  margin: 0 0.4em;
+  margin: 0 0.5em;
 }
 
 #clock {

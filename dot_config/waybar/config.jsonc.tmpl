@@ -15,8 +15,8 @@
     "battery",
     "custom/wg",
     "network",
-    "clock",
-    "custom/notification"
+    "custom/notification",
+    "clock"
   ],
   "battery": {
     "states": {
@@ -76,9 +76,8 @@
     "signal": 8, // called by script: update
     "format": "{}",
     "interval": 3600,
-    "exec-if": "which checkupdates",
     "exec": "checkupdates",
-    "on-click": "checkupdates",
+    "on-click": "foot sh -c update",
     "tooltip-format": "{} click to check for updates"
   },
   "custom/notification": {
