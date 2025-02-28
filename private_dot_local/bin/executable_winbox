@@ -19,7 +19,7 @@ chimera | freebsd)
     # chimera is musl libc, WinBox for Linux is glibc, so run on wine
     WINBOX="$DIRPATH/WinBox.exe"
     if ! type "$WINBOX" >/dev/null; then
-        fetch -o - https://download.mikrotik.com/routeros/winbox/4.0beta14/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
+        fetch -o - https://download.mikrotik.com/routeros/winbox/4.0beta17/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
         chmod +x "$WINBOX"
     fi
     if ! type wine64 >/dev/null; then
@@ -41,7 +41,7 @@ chimera | freebsd)
             echo "$0: bsdtar not found on OS [$ID]; install and try again"
             exit 1
         fi
-        wget -O - https://download.mikrotik.com/routeros/winbox/4.0beta16/WinBox_Linux.zip | bsdtar -xvf- -C "$DIRPATH"
+        wget -O - https://download.mikrotik.com/routeros/winbox/4.0beta17/WinBox_Linux.zip | bsdtar -xvf- -C "$DIRPATH"
         chmod +x "$DIRPATH/WinBox"
     fi
     $WINBOX
