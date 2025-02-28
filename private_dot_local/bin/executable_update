@@ -6,14 +6,14 @@
 APP=""
 
 do_fw() {
-    # Not installed on servers
+    # Only installed on my laptops; see https://fwupd.org
     if type fwupdmgr >/dev/null 2>&1; then
         echo "Checking firmware"
         fwupdmgr get-updates && fwupdmgr update
     fi
 }
 
-echo "Checking packages"
+echo "Checking $ID packages"
 case $ID in
 chimera)
     APP="apk"
@@ -25,7 +25,6 @@ freebsd)
     APP="pkg"
     doas pkg update
     doas pkg upgrade
-    # no LVFS / fwupd.org support, boot into linux
     ;;
 opensuse-tumbleweed)
     APP="zypper"
@@ -53,7 +52,7 @@ void)
     ;;
 esac
 
-if type flatpak >/dev/null; then
+if type flatpak >/dev/null 2>&1; then
     echo "Checking flatpak"
     flatpak update -y
 fi
