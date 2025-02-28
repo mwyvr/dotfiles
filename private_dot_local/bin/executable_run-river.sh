@@ -2,6 +2,7 @@
 # called by greetd on linux
 . $HOME/.env
 WM=river
+export QT_QPA_PLATFORM=wayland
 export XDG_SESSION_TYPE=wayland
 export XDG_SESSION_DESKTOP="$WM"
 export XDG_CURRENT_DESKTOP="$WM"
