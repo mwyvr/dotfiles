@@ -15,8 +15,6 @@ true-color = true
 color-modes = true
 end-of-line-diagnostics = "hint"
 
-# persist-old-files = true # when persist branch is merged
-
 [editor.cursor-shape]
 insert = "bar"
 
@@ -25,8 +23,8 @@ render = true
 skip-levels = 1
 
 # new in 25.01 but feels clunky
-# [editor.inline-diagnostics]
-# cursor-line = "error"
+[editor.inline-diagnostics]
+cursor-line = "error"
 
 [editor.lsp]
 display-messages = true
@@ -42,8 +40,6 @@ left = [
 
 [keys.insert]
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
-"C-k" = ["page_cursor_half_up"]
-"C-j" = ["page_cursor_half_down"]
 
 [keys.select]
 esc = ["collapse_selection", "keep_primary_selection", "normal_mode"]
@@ -58,10 +54,6 @@ G = "goto_file_end"
 g.q = ":reflow"
 tab = ":buffer-next"
 S-tab = ":buffer-previous"
-A-u = ["switch_to_lowercase"]
-A-S-u = ["switch_to_uppercase"]
-C-k = ["page_cursor_half_up"]
-C-j = ["page_cursor_half_down"]
 
 # Alt-x shrink selection by one line
 A-x = "extend_to_line_bounds"
