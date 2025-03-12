@@ -9,11 +9,12 @@ theme = "mui_dark"
 [editor]
 bufferline = "multiple"
 cursorline = true
-line-number = "relative"
+# line-number = "relative"
 mouse = false
 true-color = true
 color-modes = true
 end-of-line-diagnostics = "hint"
+
 
 [editor.cursor-shape]
 insert = "bar"
@@ -28,6 +29,7 @@ cursor-line = "error"
 
 [editor.lsp]
 display-messages = true
+snippets = true
 
 [editor.statusline]
 left = [

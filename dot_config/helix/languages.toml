@@ -1,127 +1,58 @@
-[[languages]]
-# https://github.com/helix-editor/helix/wiki/Language-Server-Configurations
-# https://github.com/helix-editor/helix/wiki/External-formatter-configuration
-
-# TODO Word completion and snippets:
-# https://github.com/estin/simple-completion-language-server
+# Add only customizations required; system defaults will work for many.
 
 # https://github.com/estin/simple-completion-language-server
+# Added for markdown
 [language-server.scls]
 command = "simple-completion-language-server"
 
-# https://docs.astral.sh/ruff/editors/setup/#helix
-[language-server.ruff]
-command = "ruff"
-args = ["server"]
+# spelling and grammar
+[language-server.harper-ls]
+# https://writewithharper.com/docs/integrations/helix
+command = "harper-ls"
+args = ["--stdio"]
+
+[language-server.harper-ls.config.harper-ls]
+userDictPath = "~/.config/harperls-user.spell" # in code action, "global" dictionary
+
+[language-server.harper-ls.config.harper-ls.linters]
+SpellCheck = true # default
 
 [language-server]
-bash-language-server = { command = "bash-language-server", args = ["start"] }
-
-# shells
-[[language]]
-name = "fish"
-formatter = { command = "fish_indent" }
-auto-format = true
+emmet-ls = { command = "emmet-ls", args = [ "--stdio" ]}
 
 [[language]]
-name = "bash"
-indent = { tab-width = 4, unit = "    " }
-formatter = { command = 'shfmt', args = ["-i", "4"] }
-auto-format = true
-
-# text documents
-[[language]]
-name = "markdown"
+name = "markdown" # marksman isn't directly available on musl libc Linux distribution (Chimera)
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "markdown"] }
 language-servers = ["scls", "harper-ls"]
 
-# spelling and grammar
-[language-server.harper-ls]
-command = "harper-ls"
-args = ["--stdio"]
-
-# configuration or data markup languages
+# https://github.com/helix-editor/helix/blob/master/languages.toml#L898
+# Customizing so including the default
 [[language]]
-name = "toml"
-formatter = { command = "taplo", args = ["format", "-"] }
+name = "html"
+scope = "text.html.basic"
+injection-regex = "html"
+file-types = ["html", "htm", "shtml", "xhtml", "xht", "jsp", "asp", "aspx", "jshtm", "volt", "rhtml", "cshtml"]
+block-comment-tokens = { start = "<!--", end = "-->" }
+language-servers = [ "vscode-html-language-server", "superhtml", "emmet-ls" ]
 auto-format = true
-
-[language-server.yaml-language-server.config.yaml]
-format = { enable = true }
-validation = true
-
-[language-server.yaml-language-server.config.yaml.schemas]
-"https://json.schemastore.org/github-workflow.json" = ".github/workflows/*.{yml,yaml}"
-"https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible-tasks.json" = "roles/{tasks,handlers}/*.{yml,yaml}"
-
-# programming languages
-[[language]]
-name = "go"
-auto-format = true
-formatter = { command = "goimports" }
-language-servers = ["scls", "gopls", "golangci-lint-langserver"]
+indent = { tab-width = 2, unit = "  " }
 
 # go templating
 [[language]]
 name = "templ"
-auto-format = true
+language-servers = ["templ", "emmet-ls"] # add snippets
+auto-format = true # off by default
 
 [[language]]
-name = "python"
-language-servers = ["ruff"]
-# In case you'd like to use ruff alongside black for code formatting:
+name = "gotmpl"
+file-types = ["gohtml"]
 auto-format = true
-formatter = { command = "black", args = ["--quiet", "-"] }
-
-# hypertext and related
-[[language]]
-name = "html"
-indent.tab-width = 2
-indent.unit = " "
-language-servers = ["vscode-html-language-server", "emmet-ls"]
+language-servers = ["gopls", "vscode-html-language-server", "emmet-ls"]
 formatter = { command = 'prettier', args = [
   "--parser",
   "html",
   "--tab-width",
   "2",
 ] }
-auto-format = true
 
-[[language]]
-name = "javascript"
-indent.tab-width = 4
-indent.unit = " "
-language-servers = ["typescript-language-server"]
-formatter = { command = 'prettier', args = [
-  "--parser",
-  "javascript",
-  "--tab-width",
-  "4",
-] }
-auto-format = true
-
-[[language]]
-name = "typescript"
-indent.tab-width = 4
-indent.unit = " "
-language-servers = ["typescript-language-server"]
-formatter = { command = 'prettier', args = [
-  "--parser",
-  "typescript",
-  "--tab-width",
-  "4",
-] }
-auto-format = true
-
-[[language]]
-name = "css"
-language-servers = ["vscode-css-language-server"]
-formatter = { command = 'prettier', args = ["--parser", "css"] }
-auto-format = true
-
-[[language]]
-name = "json"
-language-servers = ["vscode-json-language-server"]
-formatter = { command = 'prettier', args = ["--parser", "json"] }
-auto-format = true
