@@ -27,7 +27,8 @@ build() {
     npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
 
     # also does Markdown formatting...
-    npm i -g @fsouza/prettierd
+    # npm i -g @fsouza/prettierd
+    npm i -g prettier
 
     # yaml
     npm i -g yaml-language-server@next
@@ -65,6 +66,8 @@ chimera)
     doas apk add go nodejs pipx cargo bash lazygit taplo
     # no Haskell on Chimera Linux so...
     fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
+    # superhtml (zig) nicely provides a musl build
+    fetch -o - https://github.com/kristoff-it/superhtml/releases/latest/download/x86_64-linux-musl.tar.gz | tar zxf - --strip-components 2 -C $LOCAL x86_64-linux-musl/superhtml
     build
     ;;
 void)
