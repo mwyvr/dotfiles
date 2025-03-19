@@ -17,8 +17,13 @@ userDictPath = "~/.config/harperls-user.spell" # in code action, "global" dictio
 [language-server.harper-ls.config.harper-ls.linters]
 SpellCheck = true # default
 
-[language-server]
-emmet-ls = { command = "emmet-ls", args = [ "--stdio" ]}
+[language-server.emmet-ls]
+command = "emmet-ls"
+args = [ "--stdio" ]
+
+[language-server.superhtml]
+command = "superhtml"
+args = [ "lsp" ]
 
 [[language]]
 name = "markdown" # marksman isn't directly available on musl libc Linux distribution (Chimera)
@@ -45,14 +50,28 @@ language-servers = ["templ", "emmet-ls"] # add snippets
 auto-format = true # off by default
 
 [[language]]
-name = "gotmpl"
-file-types = ["gohtml"]
+name = "go"
 auto-format = true
-language-servers = ["gopls", "vscode-html-language-server", "emmet-ls"]
-formatter = { command = 'prettier', args = [
-  "--parser",
-  "html",
-  "--tab-width",
-  "2",
-] }
+formatter = { command = "goimports" }
 
+[[language]]
+name = "gotmpl"
+scope = "source.gotmpl"
+injection-regex = "gotmpl"
+file-types = ["gotmpl", "tmpl"]
+# comment-token = "<!--"
+# does not work as yet:
+block-comment-tokens = { start = "<!--", end = "-->" }
+language-servers = ["gopls", "vscode-html-language-server", "emmet-ls"]
+auto-format=true
+formatter = { command = "gotmplfmt" }
+indent = { tab-width = 2, unit = " " }
+
+
+# ego is erb comparable go templating
+[[language]]
+# not in default helix; co-opting erb setup in ~/.config/helix/runtime/queries/erb
+name = "erb"
+file-types = ["erb", "ego"]
+# auto-format = true
+language-servers = ["gopls", "vscode-html-language-server"]

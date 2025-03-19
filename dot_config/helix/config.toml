@@ -13,7 +13,8 @@ cursorline = true
 mouse = false
 true-color = true
 color-modes = true
-end-of-line-diagnostics = "hint"
+# can be annoying
+# end-of-line-diagnostics = "hint"
 
 
 [editor.cursor-shape]
@@ -29,6 +30,7 @@ cursor-line = "error"
 
 [editor.lsp]
 display-messages = true
+display-inlay-hints = false
 snippets = true
 
 [editor.statusline]
