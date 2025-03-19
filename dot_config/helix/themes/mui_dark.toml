@@ -7,7 +7,7 @@
 # Matching and other themes can be found at https://github.com/mwyvr/cli-themes.
 
 # UI
-"ui.selection" = { bg = "on-secondary" }                                       # only Helix theme attribute that *must* be defined
+"ui.selection" = { bg = "on-primary" }                                         # only Helix theme attribute that *must* be defined
 "ui.background" = { bg = "surface" }                                           # set bg = "" for transparency 
 "ui.text" = { fg = "on-surface" }                                              # Default text style, overridden with specific rules
 "ui.text.focus" = { fg = "on-primary-container", bg = "primary-container" }    # Selected line in the file/buffer/jumplist/symbol/etc picker 
