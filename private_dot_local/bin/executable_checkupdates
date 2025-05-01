@@ -28,6 +28,7 @@ case $ID in
     ;;
 "void")
     APP="xbps"
+    sudo xbps-install -S
     NUM=$(sudo xbps-install -Su --dry-run | wc -l) # update repo & get count
     for p in $( # no repo hit, no sudo needed either
         xbps-install -u --dry-run | cut -f 1 -d ' '
