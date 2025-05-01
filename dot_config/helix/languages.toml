@@ -29,6 +29,7 @@ args = [ "lsp" ]
 name = "markdown" # marksman isn't directly available on musl libc Linux distribution (Chimera)
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "markdown"] }
+file-types = ["md", "eml"]
 language-servers = ["scls", "harper-ls"]
 
 # https://github.com/helix-editor/helix/blob/master/languages.toml#L898
