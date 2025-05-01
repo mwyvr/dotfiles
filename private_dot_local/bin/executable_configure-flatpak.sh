@@ -1,19 +1,18 @@
 #!/bin/sh
 ADDCMD=""
-# eyedropper does not appear to support wlr
-APPS="org.chromium.Chromium org.signal.Signal us.zoom.Zoom com.github.finefindus.eyedropper "
+APPS="com.google.Chrome org.signal.Signal us.zoom.Zoom"
 
 . /etc/os-release
 case $ID in
 void)
     ADDCMD="sudo xbps-install -Suy"
+    # chrome in repo
     APPS="org.signal.Signal us.zoom.Zoom"
     echo "Install Chromium from packages"
     ;;
 chimera)
-    # presumes running GNOME
-    doas apk update -y
-    ADDCMD="doas apk add -y"
+    doas apk update --no-interactive
+    ADDCMD="doas apk add --no-interactive"
     ;;
 aeon | "opensuse-tumbleweed")
     ADDCMD="sudo zypper in -y"
@@ -21,7 +20,7 @@ aeon | "opensuse-tumbleweed")
 esac
 
 $ADDCMD flatpak
-flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 for app in $APPS; do
     echo "Installing $app"
     flatpak install -y "$app"
