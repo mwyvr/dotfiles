@@ -19,14 +19,9 @@ command='foot ssh -t mw@wabbit tmux new -A -s wabbit'
 name='tmux-wabbit'
 
 [custom4]
-binding='<Shift><Super>c'
-command='foot ssh -t mw@wabbit tmux new -A -s chimera'
-name='irc-chimera'
-
-[custom5]
-binding='<Shift><Super>v'
-command='foot ssh -t mw@wabbit tmux new -A -s void'
-name='irc-void'
+binding='<Shift><Super>i'
+command='foot ssh -t mw@wabbit tmux new -A -s soju'
+name='irc-soju'
 
 [custom6]
 binding='<Shift><Super>p'
