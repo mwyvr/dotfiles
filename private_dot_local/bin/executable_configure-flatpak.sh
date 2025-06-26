@@ -1,6 +1,6 @@
 #!/bin/sh
 ADDCMD=""
-APPS="com.google.Chrome org.signal.Signal us.zoom.Zoom"
+APPS="com.google.Chrome org.signal.Signal us.zoom.Zoom org.gnome.Showtime"
 
 . /etc/os-release
 case $ID in
@@ -26,5 +26,5 @@ for app in $APPS; do
     flatpak install -y "$app"
 done
 
-flatpak remote-add --if-not-exists --user gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
-flatpak install -y gnome-nightly org.gnome.Showtime.Devel
+# flatpak remote-add --if-not-exists --user gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
+# flatpak install -y gnome-nightly org.gnome.Showtime.Devel
