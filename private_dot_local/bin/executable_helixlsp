@@ -38,6 +38,9 @@ build() {
     cargo install --git https://github.com/estin/simple-completion-language-server.git
 
     # python
+    # python3 get-pip.py --break-system-packages
+    doas apk del pipx
+    doas apk add pipx
     for pypkg in python-lsp-ruff ruff ruff-lsp black python-lsp-server; do
         if test -d "$HOME/.local/share/pipx/venvs/$pypkg"; then
             PIPXCMD="upgrade"
