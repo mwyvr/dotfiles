@@ -4,28 +4,28 @@
         <family>monospace</family>
         <prefer>
             <family>RobotoMono Nerd Font</family>
-            <family>Noto Color Emoji</family>
+        </prefer>
+    </alias>
+    <alias>
+        <family>sans</family>
+        <prefer>
+            <family>Adwaita Sans</family>
+            <family>Roboto</family>
+            <family>Noto Sans</family>
+            <family>DejaVu Sans</family>
+            <family>Liberation Sans</family>
         </prefer>
     </alias>
     <alias>
         <family>sans-serif</family>
         <prefer>
-            <family>Roboto</family>Plus
-            <family>Noto Color Emoji</family>
+            <family>Adwaita Sans</family>
+            <family>Roboto</family>
+            <family>Noto Sans</family>
+            <family>DejaVu Sans</family>
+            <family>Liberation Sans</family>
         </prefer>
     </alias>
-    <alias>
-        <family>serif</family>
-        <prefer>
-            <family>Noto Serif</family>
-            <family>Noto Color Emoji</family>
-        </prefer>
-    </alias>
-    <!-- fallback -->
-    <match target="pattern">
-        <test qual="any" name="family" compare="contains"><string>serif</string></test>
-        <edit name="family" mode="assign" binding="same"><string>Caladea</string></edit>
-    </match>
 </fontconfig>
 
 <!-- To test, run script: -->
