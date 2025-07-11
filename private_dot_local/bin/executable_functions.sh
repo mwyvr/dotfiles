@@ -1,5 +1,44 @@
 #!/bin/sh
-# reusble functions for posix shells, no bashisms
+# reusble variables and functions for posix shells, no bashisms
+
+. /etc/os-release
+
+CPUTYPE=""
+if lscpu | grep "GenuineIntel" >/dev/null 2>&1; then
+    CPUTYPE="intel"
+fi
+if lscpu | grep "AuthenticAMD" >/dev/null 2>&1; then
+    CPUTYPE="amd"
+fi
+
+# which su util to use
+DOAS=""
+if command -v sudo >/dev/null 2>&1; then
+    DOAS=$(which sudo)
+elif command -v doas >/dev/null 2>&1; then
+    # chimera linux by default, others optionally
+    DOAS=$(which doas)
+fi
+if [ -z "$DOAS" ]; then
+    echo "cpugov: No sudo or doas available"
+fi
+
+case $ID in
+"chimera")
+    ADDCMD="$DOAS apk add"
+    ;;
+"opensuse-tumbleweed")
+    ADDCMD="$DOAS zypper install"
+    ;;
+"void")
+    ADDCMD="$DOAS xbps-install -Su"
+    ;;
+*)
+    echo "Unsupported distribution $ID"
+    exit 1
+    ;;
+esac
+
 
 ask() {
     # usage:
@@ -33,22 +72,3 @@ ask() {
         esac
     done
 }
-
-CPUTYPE=""
-if lscpu | grep "GenuineIntel" >/dev/null 2>&1; then
-    CPUTYPE="intel"
-fi
-if lscpu | grep "AuthenticAMD" >/dev/null 2>&1; then
-    CPUTYPE="amd"
-fi
-
-DOAS=""
-if command -v sudo >/dev/null 2>&1; then
-    DOAS=$(which sudo)
-elif command -v doas >/dev/null 2>&1; then
-    # chimera linux by default, others optionally
-    DOAS=$(which doas)
-fi
-if [ -z "$DOAS" ]; then
-    echo "cpugov: No sudo or doas available"
-fi
