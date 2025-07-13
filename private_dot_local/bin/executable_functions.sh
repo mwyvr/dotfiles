@@ -26,12 +26,15 @@ fi
 case $ID in
 "chimera")
     ADDCMD="$DOAS apk add"
+    FETCHER="fetch -o" # freebsd and chimera, others use wget
     ;;
 "opensuse-tumbleweed")
     ADDCMD="$DOAS zypper install"
+    FETCHER="wget -O"
     ;;
 "void")
     ADDCMD="$DOAS xbps-install -Su"
+    FETCHER="wget -O"
     ;;
 *)
     echo "Unsupported distribution $ID"

@@ -4,6 +4,8 @@
 # WARNING: npm i sometimes seems to leave bash lsp in a bad state - may be a FreeBSD only oddity;
 # delete and reinstall bash-language-server if you see CPU utilization ramp
 
+. ~/.local/bin/functions.sh
+
 build() {
     npm update -g
 
@@ -67,7 +69,7 @@ LOCAL=~/.local/bin
 # first install utils available as packages, then call build
 case $ID in
 chimera)
-    doas apk add go nodejs pipx cargo bash lazygit taplo
+    $ADDCMD go nodejs pipx cargo bash lazygit taplo
     # no Haskell on Chimera Linux so...
     fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
     # superhtml (zig) nicely provides a musl build
@@ -75,15 +77,15 @@ chimera)
     build
     ;;
 void)
-    sudo xbps-install -Su go nodejs python3-pipx cargo lazygit bash shellcheck taplo
+    $ADDCMD go nodejs python3-pipx cargo lazygit bash shellcheck taplo
     build
     ;;
 "opensuse-tumbleweed")
-    sudo zypper in -y go nodejs-default npm-default cargo lazygit bash ShellCheck taplo
+    $ADDCMD -y go nodejs-default npm-default cargo lazygit bash ShellCheck taplo
     build
     ;;
 freebsd)
-    doas pkg install -y go node23 npm-node23 py311-pipx rust lazygit bash hs-ShellCheck
+    $ADDCMD -y go node23 npm-node23 py311-pipx rust lazygit bash hs-ShellCheck
     build
     ;;
 *)
