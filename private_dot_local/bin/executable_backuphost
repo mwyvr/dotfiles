@@ -41,6 +41,6 @@ $DOAS rsync -av /usr/local/etc $SYSBACKUP/usr/local
 $DOAS chown -R $USER:$USER $SYSBACKUP
 
 # copies all but hidden files
-rsync -av --exclude='go' --exclude="temp" --exclude="chromium" --exclude="google-chrome" --exclude="cports" --exclude="void-packages" --exclude="*.core" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' * mw@wabbit:/usr/local/backup/.
+rsync -av --exclude='go' --exclude="temp" --exclude="chromium" --exclude="google-chrome" --exclude="cports" --exclude="void-packages" --exclude="*.core" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' --include=".ssh" * mw@wabbit:/usr/local/backup/.
 # do .config too
 # rsync -av --exclude='go' --exclude="temp" --exclude="chromium" --exclude="google-chrome" --exclude="cports" --exclude="void-packages" --exclude="*.core" --exclude=".cache" --exclude=".local" --exclude='*.iso' --exclude='src/' mw@wabbit:/usr/local/backup/.

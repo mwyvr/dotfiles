@@ -1,29 +1,19 @@
 [custom0]
 binding='<Shift><Alt>Return'
 command='foot'
-name='term-system'
+name='terminal-system'
 
 [custom1]
-binding='<Shift><Super>Return'
-command='foot distrobox enter'
-name='term-default-distrobox'
-
-[custom2]
-binding='<Shift><Super>b'
-command='foot ssh -t mw@bugs tmux new -A -s bugs'
-name='tmux-bugs'
-
-[custom3]
-binding='<Shift><Super>w'
-command='foot ssh -t mw@wabbit tmux new -A -s wabbit'
-name='tmux-wabbit'
-
-[custom4]
 binding='<Shift><Super>i'
 command='foot ssh -t mw@wabbit tmux new -A -s soju'
-name='irc-soju'
+name='wabbit-tmux-irc'
 
-[custom6]
-binding='<Shift><Super>p'
-command='foot ssh -t mw@wabbit tmux new -A -s build'
-name='tmux-wabbit pkg-build'
+[custom2]
+binding='<Shift><Super>w'
+command='foot ssh -t mw@wabbit tmux new -A -s wabbit'
+name='wabbit-tmux'
+
+[custom3]
+binding='<Shift><Super>e'
+command='foot ssh -t mw@elron tmux new -A -s elron'
+name='elron-tmux'
