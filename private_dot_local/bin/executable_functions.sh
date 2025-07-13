@@ -14,10 +14,10 @@ fi
 # which su util to use
 DOAS=""
 if command -v sudo >/dev/null 2>&1; then
-    DOAS=$(which sudo)
+    DOAS=sudo
 elif command -v doas >/dev/null 2>&1; then
     # chimera linux by default, others optionally
-    DOAS=$(which doas)
+    DOAS=doas
 fi
 if [ -z "$DOAS" ]; then
     echo "cpugov: No sudo or doas available"
