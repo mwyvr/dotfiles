@@ -54,6 +54,7 @@ auto-format = true # off by default
 name = "go"
 auto-format = true
 formatter = { command = "goimports" }
+language-servers = ["gopls", "golangci-lint2-langserver"]
 
 [[language]]
 name = "gotmpl"
@@ -67,6 +68,19 @@ language-servers = ["gopls", "vscode-html-language-server", "emmet-ls"]
 auto-format=true
 formatter = { command = "gotmplfmt" }
 indent = { tab-width = 2, unit = " " }
+
+[language-server.golangci-lint2-langserver]
+command = "golangci-lint-langserver"
+
+# [language-server.golangci-lint2-langserver.config]
+# command = [
+#   "golangci-lint",
+#   "run",
+#   "--output.json.path",
+#   "stdout",
+#   "--show-stats=false",
+#   "--issues-exit-code=1",
+# ]
 
 
 # ego is erb comparable go templating
