@@ -15,12 +15,11 @@ EOF
 DOAS=""
 
 checkroot() {
-	if command -v sudo &>/dev/null; then
-		DOAS=$(which sudo)
-	elif command -v doas &>/dev/null; then
-		DOAS=$(which doas)
+	if type sudo >/dev/null 2>&1; then
+		DOAS=sudo
+	elif type doas >/dev/null 2>&1; then
+		DOAS=doas
 	fi
-	echo "DOAS $DOAS"
 	if [ -z "$DOAS" ]; then
 		echo "cpugov: No sudo or doas available"
 	fi
