@@ -15,6 +15,13 @@ if [ "$(id -u)" -eq 0 ]; then
     exit 1
 fi
 
+
+# TODO - clean gnome
+zypper rm -u patterns-gnome-gnome_games # patterns-gnome-gnome_imaging
+
+zypper addlock patterns-gnome-gnome_games
+ 
+
 # fix capslock=control for console keymap
 cat <<EOF | sudo tee /usr/share/kbd/keymaps/xkb/us-nocaps.map
 include "us.map"
