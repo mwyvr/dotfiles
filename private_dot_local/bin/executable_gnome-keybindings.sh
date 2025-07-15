@@ -16,6 +16,8 @@ if [ "$1" = "backup" ]; then
     exit 0
 fi
 if [ "$1" = "restore" ]; then
+    # caps lock as ctrl  always
+    dconf write /org/gnome/desktop/input-sources/xkb-options "['caps:ctrl_modifier']"
     dconf reset -f '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/'
     dconf reset -f '/org/gnome/desktop/wm/keybindings/'
     dconf load '/org/gnome/desktop/wm/keybindings/' <$CPATH/wm-keybindings.dconf
