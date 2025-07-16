@@ -30,13 +30,9 @@ EOF
 }
 
 build_in_box() {
-    echo "Assumes an Arch Linux distrobox"
     if [ -z "$CONTAINER_ID" ]; then
         echo "run this in the default container"
         exit 1
-    else
-        $DOAS pacman -Syu base-devel git rust
-        build
     fi
 }
 
@@ -50,6 +46,7 @@ case $ID in
     ;;
 "chimera")
     doas apk add cargo
+    doas apk del helix
     build
     wrap
     ;;
@@ -61,17 +58,21 @@ case $ID in
 "opensuse-tumbleweed")
     DOAS=sudo
     $DOAS zypper in -y cargo
+    $DOAS zypper rm -y helix
     build
     wrap
     ;;
-*)
+"aeon")
     build_in_box
-    echo "Installing Helix (hx) and runtime files on host system"
-    echo "- be sure you have uninstalled the system Helix -"
-    # make it available to host system AND distroboxes by copying it
-    distrobox-host-exec $DOAS sh -c "cp $HOME/.cargo/bin/hx /usr/bin"
-    distrobox-host-exec $DOAS sh -c "mkdir -p /usr/lib/helix"
-    distrobox-host-exec $DOAS sh -c "ln -sv $HOME/src/helix/runtime /usr/lib/helix/"
-    ln -svf $HOME/src/helix/runtime $HOME/.config/helix/
+;;
+*)
+    echo "Unknown distribution [$ID]."
+    # echo "Installing Helix (hx) and runtime files on host system"
+    # echo "- be sure you have uninstalled the system Helix -"
+    # # make it available to host system AND distroboxes by copying it
+    # distrobox-host-exec $DOAS sh -c "cp $HOME/.cargo/bin/hx /usr/bin"
+    # distrobox-host-exec $DOAS sh -c "mkdir -p /usr/lib/helix"
+    # distrobox-host-exec $DOAS sh -c "ln -sv $HOME/src/helix/runtime /usr/lib/helix/"
+    # ln -svf $HOME/src/helix/runtime $HOME/.config/helix/
     ;;
 esac
