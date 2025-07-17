@@ -35,6 +35,9 @@ chimera | freebsd)
         void)
             sudo xbps-install -Suy bsdtar libxkbcommon-x11 xcb-util-image xcb-util-keysyms >/dev/null
             ;;
+        "opensuse-tumbleweed")
+            sudo zypper in -y bsdtar libxkbcommon-x11-0 xcb-util-image-devel xcb-util-keysyms-devel libfontconfig1 libxcb-icccm4 libxcb-render-util0
+        ;;
         esac
         if ! type bsdtar >/dev/null; then
             echo "$0: bsdtar not found on OS [$ID]; install and try again"
