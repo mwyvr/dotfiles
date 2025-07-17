@@ -17,35 +17,47 @@ cd "$DIRPATH" || exit 1
 
 case $ID in
 chimera | freebsd)
-    # chimera is musl libc, WinBox for Linux is glibc, so run on wine
-    WINBOX="$DIRPATH/WinBox.exe"
-    if ! type "$WINBOX" >/dev/null; then
-        fetch -o - https://download.mikrotik.com/routeros/winbox/4.0beta26/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
-        chmod +x "$WINBOX"
-    fi
-    if ! type wine64 >/dev/null; then
-        $ADDCMD --no-interactive wine
-    fi
-    wine64 "$WINBOX"
-    ;;
+  # chimera is musl libc, WinBox for Linux is glibc, so run on wine
+  WINBOX="$DIRPATH/WinBox.exe"
+  if ! type "$WINBOX" >/dev/null; then
+    fetch -o - https://download.mikrotik.com/routeros/winbox/4.0beta26/WinBox_Windows.zip | bsdtar -xvf- -C "$DIRPATH"
+    chmod +x "$WINBOX"
+  fi
+  if ! type wine64 >/dev/null; then
+    $ADDCMD --no-interactive wine
+  fi
+  wine64 "$WINBOX"
+  ;;
 *)
-    # on all other Linux distributions, run the native Linux app
-    if ! type "$WINBOX" >/dev/null; then
-        case $ID in
-        void)
-            sudo xbps-install -Suy bsdtar libxkbcommon-x11 xcb-util-image xcb-util-keysyms >/dev/null
-            ;;
-        "opensuse-tumbleweed")
-            sudo zypper in -y bsdtar libxkbcommon-x11-0 xcb-util-image-devel xcb-util-keysyms-devel libfontconfig1 libxcb-icccm4 libxcb-render-util0
-        ;;
-        esac
-        if ! type bsdtar >/dev/null; then
-            echo "$0: bsdtar not found on OS [$ID]; install and try again"
-            exit 1
-        fi
-        wget -O - https://download.mikrotik.com/routeros/winbox/4.0beta26/WinBox_Linux.zip | bsdtar -xvf- -C "$DIRPATH"
-        chmod +x "$DIRPATH/WinBox"
+  # on all other Linux distributions, run the native Linux app
+  if ! type "$WINBOX" >/dev/null; then
+    case $ID in
+    void)
+      sudo xbps-install -Suy bsdtar libxkbcommon-x11 xcb-util-image xcb-util-keysyms >/dev/null
+      ;;
+    "opensuse-tumbleweed")
+      sudo zypper in -y bsdtar libxkbcommon-x11-0 xcb-util-image-devel xcb-util-keysyms-devel libfontconfig1 libxcb-icccm4 libxcb-render-util0
+      ;;
+    esac
+    if ! type bsdtar >/dev/null; then
+      echo "$0: bsdtar not found on OS [$ID]; install and try again"
+      exit 1
     fi
-    $WINBOX
+    wget -O - https://download.mikrotik.com/routeros/winbox/4.0beta26/WinBox_Linux.zip | bsdtar -xvf- -C "$DIRPATH"
+    chmod +x "$DIRPATH/WinBox"
+  fi
+  case $ID in
+  aeon)
+    if [ -z "${CONTAINER_ID}" ]; then
+      exec "/usr/bin/distrobox-enter" -n base -- "$HOME/.local/bin/WinBox" "$@"
+    elif [ -n "${CONTAINER_ID}" ] && [ "${CONTAINER_ID}" != "base" ]; then
+      exec distrobox-host-exec "$HOME/.local/bin/WinBox" "$@"
+    else
+      exec "$HOME/.local/bin/WinBox" "$@"
+    fi
     ;;
+  *) ;;
+  esac
+  $WINBOX
+  ;;
 esac
