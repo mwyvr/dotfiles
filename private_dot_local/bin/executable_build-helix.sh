@@ -26,6 +26,7 @@ EOF
     $DOAS chmod +x /usr/bin/hx
     $DOAS mv ~/.cargo/bin/hx /usr/bin/helix
     $DOAS mkdir -p /usr/lib64/helix
+    $DOAS rmdir /usr/lib64/helix/runtime
     $DOAS ln -svf $HOME/src/helix/runtime /usr/lib64/helix/
 }
 
@@ -64,6 +65,7 @@ case $ID in
     ;;
 "aeon")
     build_in_box
+    distrobox-export --bin /usr/bin/hx
 ;;
 *)
     echo "Unknown distribution [$ID]."
