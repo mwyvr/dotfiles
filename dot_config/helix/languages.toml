@@ -1,4 +1,6 @@
 # Add only customizations required; system defaults will work for many.
+# See default configs:
+# https://github.com/helix-editor/helix/blob/master/languages.toml
 
 # https://github.com/estin/simple-completion-language-server
 # Added for markdown
@@ -83,10 +85,3 @@ command = "golangci-lint-langserver"
 # ]
 
 
-# ego is erb comparable go templating
-[[language]]
-# not in default helix; co-opting erb setup in ~/.config/helix/runtime/queries/erb
-name = "erb"
-file-types = ["erb", "ego"]
-# auto-format = true
-language-servers = ["gopls", "vscode-html-language-server"]
