@@ -1,16 +1,16 @@
 [custom0]
 binding='<Shift><Alt>Return'
-command='flatpak run app.devsuite.Ptyxis --new-window'
+command='foot'
 name='terminal-system'
 
 [custom1]
 binding='<Shift><Super>i'
-command='flatpak run app.devsuite.Ptyxis -x "ssh -t mw@wabbit tmux new -A -s soju"'
+command='foot ssh -t mw@wabbit tmux new -A -s soju'
 name='wabbit-tmux-irc'
 
 [custom2]
 binding='<Shift><Super>w'
-command='flatpak run app.devsuite.Ptyxis -x "ssh -t mw@wabbit tmux new -A -s wabbit"'
+command='foot ssh -t mw@wabbit tmux new -A -s wabbit'
 name='wabbit-tmux'
 
 [custom3]
@@ -20,10 +20,10 @@ name='elron-tmux'
 
 [custom4]
 binding='<Shift><Super>Return'
-command='flatpak run app.devsuite.Ptyxis -x "distrobox enter base"'
+command='foot distrobox enter base'
 name='terminal-distrobox-base'
 
 [custom5]
 binding='<Shift><Super>b'
-command='flatpak run app.devsuite.Ptyxis -x "ssh -t mw@bugs tmux new -A -s bugs"'
+command='foot ssh -t mw@bugs tmux new -A -s bugs'
 name='bugs-tmux'
