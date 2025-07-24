@@ -1,6 +1,6 @@
 [custom0]
 binding='<Shift><Alt>Return'
-command='foot --new-window'
+command='foot'
 name='terminal-system'
 
 [custom1]
