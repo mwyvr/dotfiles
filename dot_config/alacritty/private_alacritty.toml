@@ -10,7 +10,7 @@ size = 11
 # size = 11
 
 [font.normal]
-family = "monospace"
+family = "RobotoMono Nerd Font Mono"
 
 [font.offset]
 # # vertical spacing, normalizing with foot setup
