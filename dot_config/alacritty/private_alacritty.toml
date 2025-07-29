@@ -6,16 +6,16 @@ opacity = 0.95
 [cursor]
 style = "Block"
 [font]
-size = 11
 # size = 11
+size = 12
 
 [font.normal]
 family = "RobotoMono Nerd Font Mono"
 
 [font.offset]
 # # vertical spacing, normalizing with foot setup
-y = -2
+# y = -2
 
 [general]
 # import = ["~/.config/alacritty/nordfox.toml"]
-import = ["~/.config/alacritty/mui-dark.toml"]
+# import = ["~/.config/alacritty/mui-dark.toml"]
