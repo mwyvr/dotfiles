@@ -1,8 +1,10 @@
-container_name="base"
-{{- if eq .chezmoi.osRelease.id "void"}}
-container_image_default="docker.io/library/archlinux:latest"
-{{- else if eq .chezmoi.osRelease.id "opensuse-tumbleweed"}}
-container_image_default="registry.opensuse.org/opensuse/tumbleweed:latest"
-{{- else if eq .chezmoi.osRelease.id "chimera"}}
-container_image_default="chimeralinux/chimera"
-{{end}}
+{{- if eq .chezmoi.os "linux" }}
+	container_name="base"
+	{{- if eq .chezmoi.osRelease.id "void"}}
+	container_image_default="docker.io/library/archlinux:latest"
+	{{- else if eq .chezmoi.osRelease.id "opensuse-tumbleweed"}}
+	container_image_default="registry.opensuse.org/opensuse/tumbleweed:latest"
+	{{- else if eq .chezmoi.osRelease.id "chimera"}}
+	container_image_default="chimeralinux/chimera"
+	{{end}}
+{{- end }}

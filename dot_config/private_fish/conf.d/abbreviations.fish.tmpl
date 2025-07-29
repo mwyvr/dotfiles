@@ -2,16 +2,18 @@
 alias ls "ls --color=always"
 alias l. "ls -d .*"
 
-{{- if eq .chezmoi.osRelease.id "freebsd" "chimera" "void" }}
-{{- else }}
-abbr -a doas sudo
-{{- end}}
-{{- if eq .chezmoi.osRelease.id "chimera" }}
-abbr -a pkg apk
-{{- end}}
-{{- if eq .chezmoi.osRelease.id "freebsd" }}
-abbr -a apk pkg
-{{- end}}
+{{- if eq .chezmoi.os "linux" }}
+	{{- if eq .chezmoi.osRelease.id "freebsd" "chimera" "void" }}
+	{{- else }}
+	abbr -a doas sudo
+	{{- end}}
+	{{- if eq .chezmoi.osRelease.id "chimera" }}
+	abbr -a pkg apk
+	{{- end}}
+{{- end }}
+	{{- if eq .chezmoi.os "freebsd" }}
+	abbr -a apk pkg
+	{{- end }}
 
 # dotfiles management
 abbr -a cm chezmoi
