@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Install various Language Server Processors for Helix
 
 # WARNING: npm i sometimes seems to leave bash lsp in a bad state - may be a FreeBSD only oddity;
@@ -7,89 +7,92 @@
 . ~/.local/bin/functions.sh
 
 build() {
-    npm update -g
+  npm update -g
 
-    # ansible
-    npm i -g @ansible/ansible-language-server
+  # ansible
+  npm i -g @ansible/ansible-language-server
 
-    # bash / sh
-    # https://github.com/bash-lsp/bash-language-server?tab=readme-ov-file
-    npm i -g bash-language-server
-    go install mvdan.cc/sh/v3/cmd/shfmt@latest
+  # bash / sh
+  # https://github.com/bash-lsp/bash-language-server?tab=readme-ov-file
+  npm i -g bash-language-server
+  go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
-    # go
-    go install golang.org/x/tools/gopls@latest                     # LSP
-    go install github.com/go-delve/delve/cmd/dlv@latest            # Debugger
-    go install golang.org/x/tools/cmd/goimports@latest             # Formatter
-    go install github.com/miekg/gotmplfmt@latest # gotmpl formatter
-    # go install github.com/nametake/golangci-lint-langserver@latest # Linter
-    # get latest version number from: https://golangci-lint.run/welcome/install/#install-from-sources
-    go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.2.2
+  # go
+  go install golang.org/x/tools/gopls@latest          # LSP
+  go install github.com/go-delve/delve/cmd/dlv@latest # Debugger
+  go install golang.org/x/tools/cmd/goimports@latest  # Formatter
+  go install github.com/miekg/gotmplfmt@latest        # gotmpl formatter
+  # go install github.com/nametake/golangci-lint-langserver@latest # Linter
+  # get latest version number from: https://golangci-lint.run/welcome/install/#install-from-sources
+  go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.2.2
 
-    # html, css, json, scss, typescript
-    npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
+  # html, css, json, scss, typescript
+  npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
 
-    # also does Markdown formatting...
-    # npm i -g @fsouza/prettierd
-    npm i -g prettier
+  # also does Markdown formatting...
+  # npm i -g @fsouza/prettierd
+  npm i -g prettier
 
-    # yaml
-    npm i -g yaml-language-server@next
+  # yaml
+  npm i -g yaml-language-server@next
 
-    # word completion and snippets
-    cargo install --git https://github.com/estin/simple-completion-language-server.git
+  # word completion and snippets
+  cargo install --git https://github.com/estin/simple-completion-language-server.git
 
-    # python
-    # python3 get-pip.py --break-system-packages
-    doas apk del pipx
-    doas apk add pipx
-    for pypkg in python-lsp-ruff ruff ruff-lsp black python-lsp-server; do
-        if test -d "$HOME/.local/share/pipx/venvs/$pypkg"; then
-            PIPXCMD="upgrade"
-        else
-            PIPXCMD="install"
-        fi
-        pipx $PIPXCMD $pypkg
-    done
-
-    # spell and grammar
-    if ! type harper-ls; then
-        cargo install harper-ls --locked
+  # python
+  # python3 get-pip.py --break-system-packages
+  doas apk del pipx
+  doas apk add pipx
+  for pypkg in python-lsp-ruff ruff ruff-lsp black python-lsp-server; do
+    if test -d "$HOME/.local/share/pipx/venvs/$pypkg"; then
+      PIPXCMD="upgrade"
+    else
+      PIPXCMD="install"
     fi
+    pipx $PIPXCMD $pypkg
+  done
 
-    # toml
-    if ! type taplo; then
-        cargo install taplo-cli --locked
-    fi
+  # spell and grammar
+  if ! type harper-ls; then
+    cargo install harper-ls --locked
+  fi
+
+  # toml
+  if ! type taplo; then
+    cargo install taplo-cli --locked
+  fi
 }
 
-. /etc/os-release
 LOCAL=~/.local/bin
 
 # first install utils available as packages, then call build
 case $ID in
+Darwin)
+  $ADDCMD go nodejs24 npm11 pipx cargo taplo shellcheck shfmt
+  build
+  ;;
 chimera)
-    $ADDCMD go nodejs pipx cargo bash lazygit taplo
-    # no Haskell on Chimera Linux so...
-    fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
-    # superhtml (zig) nicely provides a musl build
-    fetch -o - https://github.com/kristoff-it/superhtml/releases/latest/download/x86_64-linux-musl.tar.gz | tar zxf - --strip-components 2 -C $LOCAL x86_64-linux-musl/superhtml
-    build
-    ;;
+  $ADDCMD go nodejs pipx cargo bash lazygit taplo
+  # no Haskell on Chimera Linux so...
+  fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
+  # superhtml (zig) nicely provides a musl build
+  fetch -o - https://github.com/kristoff-it/superhtml/releases/latest/download/x86_64-linux-musl.tar.gz | tar zxf - --strip-components 2 -C $LOCAL x86_64-linux-musl/superhtml
+  build
+  ;;
 void)
-    $ADDCMD go nodejs python3-pipx cargo lazygit bash shellcheck taplo
-    build
-    ;;
+  $ADDCMD go nodejs python3-pipx cargo lazygit bash shellcheck taplo
+  build
+  ;;
 "opensuse-tumbleweed")
-    $ADDCMD -y go nodejs-default npm-default cargo lazygit bash ShellCheck taplo
-    build
-    ;;
+  $ADDCMD -y go nodejs-default npm-default cargo lazygit bash ShellCheck taplo
+  build
+  ;;
 freebsd)
-    $ADDCMD -y go node23 npm-node23 py311-pipx rust lazygit bash hs-ShellCheck
-    build
-    ;;
+  $ADDCMD -y go node23 npm-node23 py311-pipx rust lazygit bash hs-ShellCheck
+  build
+  ;;
 *)
-    echo "$0: unsupported OS"
-    exit
-    ;;
+  echo "$0: unsupported OS"
+  exit
+  ;;
 esac

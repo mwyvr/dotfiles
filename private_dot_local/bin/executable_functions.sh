@@ -1,29 +1,48 @@
 #!/bin/sh
 # reusble variables and functions for posix shells, no bashisms
 
-. /etc/os-release
+OS=$(uname)
+case $OS in
+  Linux)
+    . /etc/os-release
+    CPUTYPE=""
+    if lscpu | grep "GenuineIntel" >/dev/null 2>&1; then
+      CPUTYPE="intel"
+    fi
+    if lscpu | grep "AuthenticAMD" >/dev/null 2>&1; then
+      CPUTYPE="amd"
+    fi
+  ;;
+  Darwin)
+    ID="Darwin"
+  ;;
+  *)
+  echo "Unknown operating system: $OS"
+  exit 1
+esac
 
-CPUTYPE=""
-if lscpu | grep "GenuineIntel" >/dev/null 2>&1; then
-  CPUTYPE="intel"
-fi
-if lscpu | grep "AuthenticAMD" >/dev/null 2>&1; then
-  CPUTYPE="amd"
-fi
 
 # which su util to use
 DOAS=""
-if command -v sudo >/dev/null 2>&1; then
+if type sudo >/dev/null 2>&1; then
+  # opensuse, Darwin, etc
   DOAS=sudo
-elif command -v doas >/dev/null 2>&1; then
+elif type doas >/dev/null 2>&1; then
   # chimera linux by default, others optionally
   DOAS=doas
 fi
 if [ -z "$DOAS" ]; then
-  echo "cpugov: No sudo or doas available"
+  echo "No sudo or doas available"
 fi
 
 case $ID in
+  "Darwin")
+  ADDCMD="$DOAS port install"
+  if ! type fetch >/dev/null 2>&1; then
+    $ADDCMD fetch
+  fi
+  FETCHER="fetch -o"
+  ;;
 "chimera")
   ADDCMD="$DOAS apk add"
   FETCHER="fetch -o" # freebsd and chimera, others use wget
