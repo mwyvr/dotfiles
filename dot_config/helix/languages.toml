@@ -28,6 +28,13 @@ command = "superhtml"
 args = [ "lsp" ]
 
 [[language]]
+name = "bash"
+file-types = ["sh", "bash"]
+shebangs = ["sh", "bash", "dash", "zsh"]
+auto-format = true
+formatter = { command = "shfmt", args = ["-i", "2", "-"] } # Example: format with 2-space indentation
+
+[[language]]
 name = "markdown" # marksman isn't directly available on musl libc Linux distribution (Chimera)
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "markdown"] }
