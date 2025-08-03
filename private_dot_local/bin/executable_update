@@ -2,67 +2,65 @@
 # package update/upgrade & fw updates for FreeBSD and various Linux
 # distributions (Chimera Linux, Void Linux, openSUSE Tumbleweed and Aeon
 # Desktop)
-. /etc/os-release
-APP=""
+. ~/.local/bin/functions.sh
 
 do_fw() {
-    # Only installed on my laptops; see https://fwupd.org
-    if type fwupdmgr >/dev/null 2>&1; then
-        echo "Checking firmware"
-        fwupdmgr get-updates && fwupdmgr update
-    fi
+  # Only installed on my laptops; see https://fwupd.org
+  if type fwupdmgr >/dev/null 2>&1; then
+    echo "Checking firmware"
+    fwupdmgr get-updates && fwupdmgr update
+  fi
 }
 
 echo "Checking $ID packages"
 case $ID in
+Darwin)
+  $DOAS port selfupdate
+  $DOAS port upgrade outdated
+  exit
+  ;;
 chimera)
-    APP="apk"
-    doas apk update
-    doas apk upgrade
-    do_fw
-    ;;
+  $DOAS apk update
+  $DOAS apk upgrade
+  do_fw
+  ;;
 freebsd)
-    APP="pkg"
-    doas pkg update
-    doas pkg upgrade
-    ;;
+  $DOAS pkg update
+  $DOAS pkg upgrade
+  ;;
 opensuse-tumbleweed)
-    APP="zypper"
-    sudo zypper dup
-    do_fw
-    ;;
+  $DOAS zypper dup
+  do_fw
+  ;;
 aeon)
-    APP="transactional-update"
-    sudo transactional-update dup
-    # fw updates built in
-    ;;
+  $DOAS transactional-update dup
+  # fw updates built in
+  ;;
 opensuse-microos)
-    # server os
-    APP="transactional-update"
-    sudo transactional-update dup
-    ;;
+  # server os
+  $DOAS transactional-update dup
+  ;;
 void)
-    APP="xbps"
-    sudo xbps-install -Su
-    do_fw
-    ;;
+  $DOAS xbps-install -Su
+  do_fw
+  ;;
 *)
-    echo "Unknown operating system, terminating."
-    exit 1
-    ;;
+  echo "Unknown operating system, terminating."
+  exit 1
+  ;;
 esac
 
 if type flatpak >/dev/null 2>&1; then
-    echo "Checking flatpak"
-    flatpak update -y
+  echo "Checking flatpak"
+  flatpak update -y
 fi
 
 if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
-    if type notify-send >/dev/null 2>&1; then
-        notify-send --transient --app-name="$APP" --urgency=normal "update" "System update script has completed"
-    fi
-    # force update of the status bar
-    if pgrep waybar >/dev/null 2>&1; then
-        pkill -SIGRTMIN+8 waybar
-    fi
+  if type notify-send >/dev/null 2>&1; then
+    notify-send --transient --app-name="Update" --urgency=normal "update" "System update script has completed"
+  fi
+  # force update of the status bar
+  if pgrep waybar >/dev/null 2>&1; then
+    pkill -SIGRTMIN+8 waybar
+  fi
 fi
