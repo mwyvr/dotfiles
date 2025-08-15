@@ -3,24 +3,24 @@
 
 OS=$(uname)
 case $OS in
-  Linux)
-    . /etc/os-release
-    CPUTYPE=""
-    if lscpu | grep "GenuineIntel" >/dev/null 2>&1; then
-      CPUTYPE="intel"
-    fi
-    if lscpu | grep "AuthenticAMD" >/dev/null 2>&1; then
-      CPUTYPE="amd"
-    fi
+Linux)
+  . /etc/os-release
+  CPUTYPE=""
+  if lscpu | grep "GenuineIntel" >/dev/null 2>&1; then
+    CPUTYPE="intel"
+  fi
+  if lscpu | grep "AuthenticAMD" >/dev/null 2>&1; then
+    CPUTYPE="amd"
+  fi
   ;;
-  Darwin)
-    ID="Darwin"
+Darwin)
+  ID="Darwin"
   ;;
-  *)
+*)
   echo "Unknown operating system: $OS"
   exit 1
+  ;;
 esac
-
 
 # which su util to use
 DOAS=""
@@ -36,8 +36,9 @@ if [ -z "$DOAS" ]; then
 fi
 
 case $ID in
-  "Darwin")
+"Darwin")
   ADDCMD="$DOAS port install"
+  RMCMD="$DOAS port uninstall"
   if ! type fetch >/dev/null 2>&1; then
     $ADDCMD fetch
   fi
@@ -45,18 +46,22 @@ case $ID in
   ;;
 "chimera")
   ADDCMD="$DOAS apk add"
+  RMCMD="$DOAS apk del"
   FETCHER="fetch -o" # freebsd and chimera, others use wget
   ;;
 "opensuse-tumbleweed")
   ADDCMD="$DOAS zypper install"
+  RMCMD="$DOAS zypper rm"
   FETCHER="wget -O"
   ;;
 "void")
   ADDCMD="$DOAS xbps-install -Su"
+  RMCMD="$DOAS xbps-remote -ROo"
   FETCHER="wget -O"
   ;;
 "aeon")
   ADDCMD="$DOAS transactional-update pkg install"
+  RMCMD="echo not doing any removal on $ID"
   FETCHER="wget -O"
   ;;
 *)

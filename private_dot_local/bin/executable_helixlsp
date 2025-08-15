@@ -7,7 +7,8 @@
 . ~/.local/bin/functions.sh
 
 build() {
-  npm update -g
+  # npm update -g
+  npm update
 
   # ansible
   npm i -g @ansible/ansible-language-server
@@ -41,8 +42,8 @@ build() {
 
   # python
   # python3 get-pip.py --break-system-packages
-  doas apk del pipx
-  doas apk add pipx
+  $RMCMD pipx
+  $ADDCMD pipx
   for pypkg in python-lsp-ruff ruff ruff-lsp black python-lsp-server; do
     if test -d "$HOME/.local/share/pipx/venvs/$pypkg"; then
       PIPXCMD="upgrade"
