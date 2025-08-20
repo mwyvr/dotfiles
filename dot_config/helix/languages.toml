@@ -39,7 +39,11 @@ name = "markdown" # marksman isn't directly available on musl libc Linux distrib
 auto-format = true
 formatter = { command = "prettier", args = ["--parser", "markdown"] }
 file-types = ["md", "eml"]
-language-servers = ["scls", "harper-ls"]
+language-servers = ["mpls", "scls", "harper-ls"]
+
+# https://github.com/mhersson/mpls
+[language-server.mpls]
+command = "mpls"
 
 # https://github.com/helix-editor/helix/blob/master/languages.toml#L898
 # Customizing so including the default

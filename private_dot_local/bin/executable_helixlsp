@@ -8,7 +8,7 @@
 
 build() {
   # npm update -g
-  npm update
+  $DOAS npm update
 
   # ansible
   npm i -g @ansible/ansible-language-server
@@ -26,6 +26,8 @@ build() {
   # go install github.com/nametake/golangci-lint-langserver@latest # Linter
   # get latest version number from: https://golangci-lint.run/welcome/install/#install-from-sources
   go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.2.2
+  # markdown preview
+  go install github.com/mhersson/mpls@latest
 
   # html, css, json, scss, typescript
   npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
