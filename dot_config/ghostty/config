@@ -9,7 +9,7 @@
 font-family = RobotoMono Nerd Font Mono
 # theme = MaterialDarker
 theme = mui-dark
-
+background-opacity = 0.90
 
 # window-padding-x = 2
 #
