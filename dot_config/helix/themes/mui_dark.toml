@@ -9,7 +9,7 @@
 # UI
 "ui.selection" = { bg = "on-primary" }                                         # only Helix theme attribute that *must* be defined
 "ui.background" = { bg = "surface" }                                           # set bg = "" for transparency 
-"ui.text" = { fg = "on-surface" }                                              # Default text style, overridden with specific rules
+"ui.text" = { fg = "on-surface-variant" }                                              # Default text style, overridden with specific rules
 "ui.text.focus" = { fg = "on-primary-container", bg = "primary-container" }    # Selected line in the file/buffer/jumplist/symbol/etc picker 
 "ui.text.inactive" = { fg = "outline" }                                        # Same as ui.text but when the text is inactive (e.g. suggestions) 
 "ui.text.info" = { fg = "on-surface-variant" }                                 # The key: command text in ui.popup.info boxes 
