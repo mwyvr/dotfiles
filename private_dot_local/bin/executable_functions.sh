@@ -14,7 +14,7 @@ Linux)
   fi
   ;;
 Darwin)
-  ID="Darwin"
+  ID="darwin"
   ;;
 *)
   echo "Unknown operating system: $OS"
@@ -36,7 +36,7 @@ if [ -z "$DOAS" ]; then
 fi
 
 case $ID in
-"Darwin")
+"darwin")
   ADDCMD="$DOAS port install"
   RMCMD="$DOAS port uninstall"
   if ! type fetch >/dev/null 2>&1; then

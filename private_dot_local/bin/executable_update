@@ -14,7 +14,7 @@ do_fw() {
 
 echo "Checking $ID packages"
 case $ID in
-Darwin)
+darwin)
   $DOAS port selfupdate
   $DOAS port upgrade outdated
   exit

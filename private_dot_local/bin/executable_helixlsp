@@ -70,7 +70,7 @@ LOCAL=~/.local/bin
 
 # first install utils available as packages, then call build
 case $ID in
-Darwin)
+darwin)
   $ADDCMD go nodejs24 npm11 pipx cargo taplo shellcheck shfmt
   build
   ;;
