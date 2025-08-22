@@ -11,14 +11,15 @@ IF=wg0
 case $ID in
 darwin)
   # Create an automator.app entry for wgtoggle to make it easy to launch from Spotlight
+  # Notifications require enabling "Script Editor" within System Settings -> Notifications
   if networksetup -showpppoestatus $IF | grep -q "^disconnected"; then
     echo "connecting"
     networksetup -connectpppoeservice $IF
-    afplay /System/Library/Sounds/Purr.aiff
+    osascript -e 'display notification "Wireguard connected" with title "Wireguard"'
   else
     echo "disconnecting"
     networksetup -disconnectpppoeservice $IF
-    afplay /System/Library/Sounds/Pop.aiff
+    osascript -e 'display notification "Wireguard disconnected" with title "Wireguard"'
   fi
   exit
   ;;
