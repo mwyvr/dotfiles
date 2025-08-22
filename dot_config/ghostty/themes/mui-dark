@@ -1,3 +1,4 @@
+# mui-dark palatte, see https://github.com/mwyvr/mui-themes
 palette = 0=#24262B
 palette = 1=#FF5449
 palette = 2=#7D9A59
@@ -15,8 +16,8 @@ palette = 13=#DDBCE0
 palette = 14=#A0D0CB
 palette = 15=#C4C6D0
 background = #111318
-foreground = #e2e2e9
-# cursor-color =
-# cursor-text =
+foreground = #c4c6d0
+cursor-color = #c4c6d0
+cursor-text = #111318
 selection-background = #0a305f
 selection-foreground = #e2e2e9
