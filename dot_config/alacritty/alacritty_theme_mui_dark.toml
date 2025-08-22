@@ -1,0 +1,42 @@
+# Author: Mike Watkins <github@mikewatkins.ca>
+# Matching and other themes can be found at https://github.com/mwyvr/cli-themes.
+
+[colors]
+draw_bold_text_with_bright_colors = false
+
+# [[colors.indexed_colors]]
+# color = "#c9826b"
+# index = 16
+
+# [[colors.indexed_colors]]
+# color = "#bf88bc"
+# index = 17
+
+[colors.primary]
+background = "#111318" # surface
+# foreground = "#e2e2e9" # on-surface
+# dim_foreground = "#c4c6d0" # on-surface-variant
+foreground = "#c4c6d0" # on-surface-variant
+bright_foreground = "#f9f9ff"
+
+## Normal/regular colors (color palette 0-7)
+[colors.normal]
+black = "#24262b"                     # 0; nv-15
+red = "#ff5449"                       # 1; error-60 
+green = "#7d9a59"                     # 2; green-60(green primary)
+yellow = "#a3903f"                    # 3; yellow-60 (yellow primary)
+blue = "#7491c7"                      # 4; primary-60 (blue primary)
+magenta = "#a487a9"                   # 5; tertiary-60 (blue primary)
+cyan = "#6b9995"                      # 6; cyan-60 
+white = "#8f9097"                     # 7; nv-60
+
+## Bright colors (color palette 8-15)
+[colors.bright]
+black = "#44474e"               # 8; nv-30
+red = "#ffb4ab"                 # 9; error-80 
+green = "#b1d18a"               # 10; green-80 (green primary)
+yellow = "#dbc66e"              # 11; yellow-80(yellow primary)
+blue = "#aac7ff"                # 12; primary-80 
+magenta = "#ddbce0"             # 13; tertiary-80 (blue primary)
+cyan = "#a0d0cb"                # 14; cyan-80 
+white = "#c4c6d0"               # 15; nv-80
