@@ -9,15 +9,18 @@
 IF=wg0
 
 case $ID in
-Darwin)
+darwin)
   # Create an automator.app entry for wgtoggle to make it easy to launch from Spotlight
-  if networksetup -showpppoestatus $IF | grep "^disconnected"; then
-    networksetup -connectpppoeservice $IF
+  if networksetup -showpppoestatus $IF | grep -q "^disconnected"; then
     echo "connecting"
+    networksetup -connectpppoeservice $IF
+    afplay /System/Library/Sounds/Purr.aiff
   else
-    networksetup -disconnectpppoeservice $IF
     echo "disconnecting"
+    networksetup -disconnectpppoeservice $IF
+    afplay /System/Library/Sounds/Pop.aiff
   fi
+  exit
   ;;
 *)
   if nmcli connection show --active | grep -qF wg0; then
