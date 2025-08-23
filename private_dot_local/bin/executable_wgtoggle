@@ -19,7 +19,7 @@ darwin)
   else
     echo "disconnecting"
     networksetup -disconnectpppoeservice $IF
-    osascript -e 'display notification "Wireguard disconnected" with title "Wireguard"'
+    osascript -e 'display notification "Wireguard $IF disconnected" with title "Wireguard"'
   fi
   exit
   ;;
