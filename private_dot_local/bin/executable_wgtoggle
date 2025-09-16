@@ -1,5 +1,5 @@
 #!/bin/sh
-# wgtoggle activates or deactivates the wg0 connection
+# wgtoggle activates or deactivates the wireguard connection
 # - wireguard.desktop calls this
 # - updates waybar status if running
 # wg0 must be defined.
@@ -19,23 +19,23 @@ darwin)
   else
     echo "disconnecting"
     networksetup -disconnectpppoeservice $IF
-    osascript -e 'display notification "Wireguard $IF disconnected" with title "Wireguard"'
+    osascript -e 'display notification "Wireguard disconnected" with title "Wireguard"'
   fi
   exit
   ;;
 *)
-  if nmcli connection show --active | grep -qF wg0; then
-    nmcli connection down wg0 >/dev/null 2>&1
+  if nmcli connection show --active | grep -qF $IF; then
+    nmcli connection down $IF >/dev/null 2>&1
     MSG="interface down"
   else
     # knockknock.sh
-    nmcli connection up wg0 >/dev/null 2>&1
+    nmcli connection up $IF >/dev/null 2>&1
     MSG="interface up"
   fi
   if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
     notify-send --transient --app-name=wgtoggle --urgency=normal "wireguard" "$IF $MSG"
     if pgrep waybar >/dev/null 2>&1; then
-      ip add show | grep -qF wg0 && echo "󰦝" || echo "󱦛"
+      ip add show | grep -qF $IF && echo "󰦝" || echo "󱦛"
       pkill -SIGRTMIN+9 waybar
     fi
   fi
