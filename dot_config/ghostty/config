@@ -13,3 +13,4 @@ font-style-bold-italic = "SemiBold Italic"
 font-size = 14
 theme = mui-dark
 background-opacity = 0.94
+term = xterm-256color
