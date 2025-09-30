@@ -1,21 +1,24 @@
 #!/bin/bash
 # Install various Language Server Processors for Helix
 
-# WARNING: npm i sometimes seems to leave bash lsp in a bad state - may be a FreeBSD only oddity;
-# delete and reinstall bash-language-server if you see CPU utilization ramp
-
 . ~/.local/bin/functions.sh
 
 build() {
-  # npm update -g
-  $DOAS npm update
+  # npm / node packages are high opportunity targets for malware, so where
+  # possible a) reduce reliance and b) use socket's wrapper around npm for safety
+  # see: https://socket.dev/blog/introducing-safe-npm
+  # socket npm update -g
+  # $DOAS npm update
 
   # ansible
-  npm i -g @ansible/ansible-language-server
+  # socket npm i -g @ansible/ansible-language-server
 
   # bash / sh
   # https://github.com/bash-lsp/bash-language-server?tab=readme-ov-file
-  npm i -g bash-language-server
+  # disabled in favour of shellcheck
+  # WARNING: npm i sometimes seems to leave bash lsp in a bad state - may be a FreeBSD only oddity;
+  # delete and reinstall bash-language-server if you see CPU utilization ramp
+  socket npm i -g bash-language-server
   go install mvdan.cc/sh/v3/cmd/shfmt@latest
 
   # go
@@ -30,14 +33,14 @@ build() {
   go install github.com/mhersson/mpls@latest
 
   # html, css, json, scss, typescript
-  npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
+  socket npm i -g vscode-langservers-extracted emmet-ls typescript-language-server typescript
 
   # also does Markdown formatting...
-  # npm i -g @fsouza/prettierd
-  npm i -g prettier
+  socket npm i -g @fsouza/prettierd
+  # socket npm i -g prettier
 
   # yaml
-  npm i -g yaml-language-server@next
+  # socket npm i -g yaml-language-server@next
 
   # word completion and snippets
   cargo install --git https://github.com/estin/simple-completion-language-server.git
@@ -51,6 +54,7 @@ build() {
       PIPXCMD="upgrade"
     else
       PIPXCMD="install"
+
     fi
     pipx $PIPXCMD $pypkg
   done
@@ -71,15 +75,21 @@ LOCAL=~/.local/bin
 # first install utils available as packages, then call build
 case $ID in
 darwin)
-  $ADDCMD go nodejs24 npm11 pipx cargo taplo shellcheck shfmt
+  $ADDCMD go nodejs24 npm11 pipx cargo taplo shfmt
+  fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.darwin.aarch64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
+  chmod +x $LOCAL/shellcheck
+  fetch -o - https://github.com/kristoff-it/superhtml/releases/latest/download/aarch64-macos.zip | bsdtar -xvf - -C $LOCAL
+  chmod +x $LOCAL/superhtml
   build
   ;;
 chimera)
   $ADDCMD go nodejs pipx cargo bash lazygit taplo
   # no Haskell on Chimera Linux so...
   fetch -o - https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz | tar Jxf - --strip-components 1 -C $LOCAL shellcheck-stable/shellcheck
+  chmod +x $LOCAL/superhtml
   # superhtml (zig) nicely provides a musl build
   fetch -o - https://github.com/kristoff-it/superhtml/releases/latest/download/x86_64-linux-musl.tar.gz | tar zxf - --strip-components 2 -C $LOCAL x86_64-linux-musl/superhtml
+  chmod +x $LOCAL/superhtml
   build
   ;;
 void)
