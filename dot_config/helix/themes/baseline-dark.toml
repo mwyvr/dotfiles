@@ -1,0 +1,294 @@
+# Author: Mike Watkins <github@mikewatkins.ca>
+# baseline-dark.toml
+
+# ## Syntax Highlighting Scopes
+
+# **Syntax highlighting scopes match tree-sitter scopes**, with the longest matching theme key being used for styling.
+
+# "attribute" - Class attributes, HTML tag attributes
+# "attribute" = { fg = "red"}
+# "type" - Types
+# "type" = { fg = "red" }
+# "type.builtin" - Primitive types
+# "type.parameter" - Generic type parameters
+# "type.enum"
+# "type.enum.variant"
+"operator" = { fg = "outline" }
+# "constructor"
+# "constant"
+"constant" = { fg = "green" }
+# "constant.builtin" - Special language constants
+# "constant.builtin.boolean"
+# "constant.character"
+# "constant.character.escape"
+# "constant.numeric"
+# "constant.numeric.integer"
+# "constant.numeric.float"
+# "string"
+"string" = { fg = "green" }
+# "string.regexp"
+# "string.special"
+# "string.special.path"
+# "string.special.url"
+# "string.special.symbol"
+# "comment"
+"comment" = { fg = "outline-dimmer", modifiers = ["italic"] }
+# "comment.line"
+# "comment.line.documentation"
+# "comment.block"
+"comment.block" = { fg = "outline", modifiers = ["italic"] }
+# "comment.block.documentation"
+# "comment.unused"
+# "variable"
+# "variable.builtin"
+# "variable.parameter"
+"variable.parameter" = { fg = "blue" }
+# "variable.other"
+# "variable.other.member"
+# "variable.other.member.private"
+# "label"
+# "punctuation"
+"punctuation" = { fg = "outline-dimmer" }
+# "punctuation.delimiter"
+# "punctuation.bracket"
+# "punctuation.special"
+# "keyword"
+# "namespace"
+# "keyword.control"
+# "keyword.control.conditional"
+# "keyword.control.repeat"
+# "keyword.control.import"
+# "keyword.control.return"
+# "keyword.control.exception"
+# "keyword.operator"
+# "keyword.directive"
+# "keyword.function"
+# "keyword.function" = { fg = "light-yellow" }
+# "keyword.storage"
+# "keyword.storage.type"
+# "keyword.storage.modifier"
+# "operator"
+# "function"
+"function" = { fg = "on-surface-variant" }
+# "function" = { fg = "light-yellow" }
+# "function.method" = { fg = "light-yellow" }
+# "function.builtin"
+# "function.builtin" = { fg = "on-surface-variant" }
+# "function.method"
+# "function.method" = { fg = "on-surface-variant", bg = "red" }
+# "function.method.private"
+# "function.macro"
+# "function.special"
+# "tag"
+# "tag.builtin"
+# "namespace"
+# "special"
+# "markup"
+# "markup.heading"
+# "markup.heading.marker"
+# "markup.heading.1" through "markup.heading.6"
+# "markup.list"
+# "markup.list.unnumbered"
+# "markup.list.numbered"
+# "markup.list.checked"
+# "markup.list.unchecked"
+# "markup.bold"
+# "markup.italic"
+# "markup.strikethrough"
+# "markup.link"
+# "markup.link.url"
+# "markup.link.label"
+# "markup.link.text"
+# "markup.quote"
+# "markup.raw"
+# "markup.raw.inline"
+# "markup.raw.block"
+# "markup.normal"
+# "markup.normal.completion"
+# "markup.normal.hover"
+# "markup.heading.completion"
+# "markup.heading.hover"
+# "markup.raw.inline.completion"
+# "markup.raw.inline.hover"
+# "diff"
+# "diff.plus"
+# "diff.plus.gutter"
+# "diff.minus"
+# "diff.minus.gutter"
+# "diff.delta"
+# "diff.delta.moved"
+# "diff.delta.conflict"
+# "diff.delta.gutter"
+
+# ## UI Interface Scopes
+# UI
+"ui.selection" = { bg = "on-primary" }                                         # only Helix theme attribute that *must* be defined
+"ui.background" = { bg = "surface" }                                           # set bg = "" for transparency 
+"ui.text" = { fg = "on-surface-variant" }                                              # Default text style, overridden with specific rules
+"ui.text.focus" = { fg = "on-primary-container", bg = "primary-container" }    # Selected line in the file/buffer/jumplist/symbol/etc picker 
+"ui.text.inactive" = { fg = "outline" }                                        # Same as ui.text but when the text is inactive (e.g. suggestions) 
+"ui.text.info" = { fg = "on-surface-variant" }                                 # The key: command text in ui.popup.info boxes 
+"ui.help" = { fg = "primary", bg = "surface-container-high" }                  # Description box for commands 
+"ui.window" = { fg = "surface-container-highest" }                             # Borderlines separating splits # cursor
+"ui.cursor" = { modifiers = ["reversed"] }                                     # inherits selection otherwise 
+"ui.cursor.match" = { fg = "light-yellow" }                                    # highlight the matching bracket/brace or quote 
+"ui.cursorline" = { bg = "surface-container" }                                 # Current cursor line # bufferline 
+"ui.bufferline" = { fg = "outline", bg = "surface-container" }          # if enabled in config 
+"ui.bufferline.active" = { fg = "on-primary-container", bg = "primary-container" }                           # statusline 
+"ui.statusline" = { fg = "outline-brighter", bg = "surface-container" }        # Statusline 
+"ui.statusline.inactive" = { fg = "outline-dimmer", bg = "surface-container" } # Statusline (unfocused document)
+"ui.statusline.normal" = { fg = "primary", bg = "on-primary" }                 # Statusline mode during normal mode (only if editor.color-modes is enabled)
+"ui.statusline.insert" = { fg = "secondary", bg = "on-secondary" }             # Statusline mode during insert mode (only if editor.color-modes is enabled)
+"ui.statusline.select" = { fg = "tertiary", bg = "on-tertiary" }               # Statusline mode during select mode (only if editor.color-modes is enabled) # gutter
+"ui.gutter" = { fg = "outline-variant" }                                       # bg is not set to reduce clutter
+"ui.linenr.selected" = { fg = "primary" }                                      # line number for the line the cursor is o # menus and pop ups 
+"ui.menu" = { fg = "on-surface-variant", bg = "surface-container" }       # command and other menus 
+"ui.menu.selected" = { fg = "on-primary-container", bg = "primary-container" } # selected autocomplete item 
+"ui.menu.scroll" = { fg = "outline", bg = "outline-variant" }                  # scrollbar
+"ui.popup" = { fg = "outline-variant", bg = "surface-container" }         # GoTo/space+ menus, documentation popups 
+"ui.popup.info" = { fg = "primary", bg = "surface-container" }            # editor 
+"ui.virtual.indent-guide" = { fg = "surface-container-highest" }               # Vertical indent width guides
+"ui.virtual.whitespace" = { fg = "surface-container-highest" }                 # when cursor in tab 
+
+# "ui.background"
+# "ui.background.separator"
+# "ui.cursor"
+# "ui.cursor.normal"
+# "ui.cursor.insert"
+# "ui.cursor.select"
+# "ui.cursor.match"
+# "ui.cursor.primary"
+# "ui.cursor.primary.normal"
+# "ui.cursor.primary.insert"
+# "ui.cursor.primary.select"
+# "ui.debug.breakpoint"
+# "ui.debug.active"
+# "ui.gutter"
+# "ui.gutter.selected"
+# "ui.linenr"
+# "ui.linenr.selected"
+# "ui.statusline"
+# "ui.statusline.inactive"
+# "ui.statusline.normal"
+# "ui.statusline.insert"
+# "ui.statusline.select"
+# "ui.statusline.separator"
+# "ui.bufferline"
+# "ui.bufferline.active"
+# "ui.bufferline.background"
+# "ui.popup"
+# "ui.popup.info"
+# "ui.picker.header"
+"ui.picker.header" = { fg = "on-primary", bg = "primary" }
+# "ui.picker.header.column"
+# "ui.picker.header.column.active"
+# "ui.window"
+# "ui.help"
+# "ui.text"
+# "ui.text.focus"
+# "ui.text.inactive"
+# "ui.text.info"
+# "ui.text.directory"
+# "ui.virtual.ruler"
+# "ui.virtual.whitespace"
+# "ui.virtual.indent-guide"
+# "ui.virtual.inlay-hint"
+# "ui.virtual.inlay-hint.parameter"
+# "ui.virtual.inlay-hint.type"
+# "ui.virtual.wrap"
+# "ui.virtual.jump-label"
+# "ui.menu"
+# "ui.menu.selected"
+# "ui.menu.scroll"
+# "ui.selection"
+# "ui.selection.primary"
+# "ui.highlight"
+# "ui.highlight.frameline"
+# "ui.cursorline.primary"
+# "ui.cursorline.secondary"
+# "ui.cursorcolumn.primary"
+# "ui.cursorcolumn.secondary"
+
+# ## Diagnostic Scopes
+
+# "warning"
+"warning" = { fg = "yellow"}
+"error" = { fg = "red"}
+"info" = { fg = "on-surface"}
+"hint" = { fg = "primary"}
+# "diagnostic"
+"diagnostic" = { fg = "on-tertiary-container", bg = "tertiary-container" }
+"diagnostic.warning" = { fg = "on-secondary-container", bg = "secondary-container" }
+"diagnostic.error" = { fg = "on-error-container", bg = "error-container" }
+# "diagnostic.info" = { fg = "on-secondary-container", bg = "secondary-container" }
+# "diagnostic.hint" = { fg = "on-secondary-container", bg = "secondary-container" }
+# "diagnostic.warning" = { underline = { color = "red", style = "curl" } }
+# "diagnostic.unnecessary"
+# "diagnostic.deprecated"
+# "diagnostic.unnecessary" = { fg = "on-error-container", bg = "error-container" }
+# "diagnostic.deprecated" = { fg = "on-error-container", bg = "error-container" }
+# "tabstop"
+
+# ## Style Properties
+
+# Each scope can be styled with:
+# "fg" - Foreground color
+# "bg" - Background color
+# "underline" - Object with "color" and "style" properties
+# "modifiers" - Array of text modifiers
+
+# **Modifiers**: "bold", "dim", "italic", "underlined", "slow_blink", "rapid_blink", "reversed", "hidden", "crossed_out"
+
+# **Underline styles**: "line", "curl", "dashed", "dotted", "double_line"
+
+[palette]
+# surfaces 
+"surface-dim" = "#111318"               # N-6; in this scheme, same as Surface; unused 
+"surface" = "#111318"                   # N-6; rgba(17, 19, 24, 1) the primary editor surface layer; surface neutrals have a weak primary colour tint 
+"surface-bright" = "#37393e"            # N-24; ui.selection 
+"surface-container-lowest" = "#0c0e13"  # N-4; unused
+"surface-container-low" = "#191c20"     # N-10; unused rgba(25, 28, 32, 1);
+"surface-container" = "#1d2024"         # N-12; rgba(29, 32, 36, 1) cursorline, bufferline, statusline 
+"surface-container-high" = "#282a2f"    # N-17; rgba(40, 42, 47, 1) background for all popups, menus, help
+"surface-container-highest" = "#33353a" # N-24; window splitline
+"inverse-surface" = "#e2e2e9"           # N-90; unused 
+"inverse-on-surface" = "#2e3036"        # N-20; unused 
+"inverse-primary" = "#415f91"           # P-40
+"primary" = "#aac7ff"                   # P-80; rgba(170, 199, 255, 1)
+"on-primary" = "#0a305f"                # P-20; rgba(10, 48, 95, 1)
+"primary-container" = "#284777"         # P-30; rgba(40, 71, 119, 1)
+"on-primary-container" = "#d6e3ff"      # P-90; rgba(214, 227, 255, 1)
+"secondary" = "#bec6dc"                 # S-80; 
+"on-secondary" = "#283141"              # S-20;
+"secondary-container" = "#3e4759"       # S-30; rgba(62, 71, 89, 1);
+"on-secondary-container" = "#dae2f9"    # S-90; rgba(218, 226, 249, 1);
+"tertiary" = "#ddbce0"                  # T-80; 
+"on-tertiary" = "#3f2844"               # T-20
+"tertiary-container" = "#573e5c"        # T-30; 
+"on-tertiary-container" = "#fad8fd"     # T-90; 
+"error" = "#ffb4ab"                     # E-80; rgba(255, 180, 171, 1);
+"on-error" = "#690005"                  # E-20; rgba(105, 0, 5, 1);
+"error-container" = "#93000a"           # E-30; rgba(147, 0, 10, 1);
+"on-error-container" = "#ffdad6"        # E-90; rgba(255, 218, 214, 1);
+"on-surface" = "#e2e2e9"                # N-90; rgba(226, 226, 233, 1)
+"on-surface-variant" = "#c4c6d0"        # NV-90; rgba(196, 198, 208, 1) primary text colour 
+"outline-brighter" = "#A9ABB4"          # NV-70; 
+"outline" = "#8e9099"                   # NV-60; rgba(142, 144, 153, 1)
+"outline-dimmer" = "#5B5E66"            # NV-40; comments
+"outline-variant" = "#44474e"           # NV-30; rgba(68, 71, 78, 1) # redefine standard 16 colour names
+"black" = "#24262B"                     # 0; NV-15
+"red" = "#FF5449"                       # 1; Error-60 
+"green" = "#7D9A59"                     # 2; Green-60(green primary)
+"yellow" = "#A3903F"                    # 3; Yellow-60 (yellow primary)
+"blue" = "#7491C7"                      # 4; Primary-60 (blue primary)
+"magenta" = "#A487A9"                   # 5; Tertiary-60 (blue primary)
+"cyan" = "#6B9995"                      # 6; Cyan-60 
+"white" = "#8F9097"                     # 7; NV-60
+"light-black" = "#44474E"               # 8; NV-30
+"light-red" = "#ffb4ab"                 # 9; Error-80 
+"light-green" = "#B1D18A"               # 10; Green-80 (green primary)
+"light-yellow" = "#DBC66E"              # 11; Yellow-80(yellow primary)
+"light-blue" = "#AAC7FF"                # 12; Primary-80 
+"light-magenta" = "#DDBCE0"             # 13; Tertiary-80 (blue primary)
+"light-cyan" = "#A0D0CB"                # 14; Cyan-80 
+"light-white" = "#C4C6D0"               # 15; NV-80
