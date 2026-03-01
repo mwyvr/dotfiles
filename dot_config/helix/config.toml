@@ -4,17 +4,18 @@
 # shift-tab when inserting tabs in the middle of a line (due to "smart tab" feature)
 
 # https://github.com/mwyvr/cli-themes/blob/main/helix/mui_dark.toml
-theme = "mui_dark"
+# theme = "baseline_light"
+theme = "baseline_dark"
 
 [editor]
 bufferline = "multiple"
 cursorline = true
 # line-number = "relative"
-mouse = false
+mouse = true
 true-color = true
 color-modes = true
 # can be annoying
-# end-of-line-diagnostics = "hint"
+end-of-line-diagnostics = "hint"
 
 
 [editor.cursor-shape]
