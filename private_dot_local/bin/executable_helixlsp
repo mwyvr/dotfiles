@@ -3,6 +3,9 @@
 
 . ~/.local/bin/functions.sh
 
+echo "Updating socket cli"
+npm update -g @socketsecurity/cli
+
 build() {
   # npm / node packages are high opportunity targets for malware, so where
   # possible a) reduce reliance and b) use socket's wrapper around npm for safety
@@ -43,20 +46,21 @@ build() {
   # socket npm i -g yaml-language-server@next
 
   # word completion and snippets
-  cargo install --git https://github.com/estin/simple-completion-language-server.git
+  cargo install --force --git https://github.com/estin/simple-completion-language-server.git
 
   # python
   # python3 get-pip.py --break-system-packages
   $RMCMD pipx
   $ADDCMD pipx
-  for pypkg in python-lsp-ruff ruff ruff-lsp black python-lsp-server; do
+  for pypkg in ruff ruff-lsp black python-lsp-server; do
     if test -d "$HOME/.local/share/pipx/venvs/$pypkg"; then
-      PIPXCMD="upgrade"
-    else
-      PIPXCMD="install"
-
+      rm -rf "$HOME/.local/share/pipx/venvs/$pypkg"
     fi
-    pipx $PIPXCMD $pypkg
+    # macOS
+    if test -d "$HOME/.local/pipx/venvs/"; then
+      rm -rf "$HOME/.local/pipx/venvs/$pypkg"
+    fi
+    pipx install $pypkg
   done
 
   # spell and grammar
